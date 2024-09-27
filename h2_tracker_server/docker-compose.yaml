@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16.3
+    ports:
+      - '8090:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: h2_tracker
+      POSTGRES_PASSWORD: "0nlKbhV4AQic7cvvjijMpRbSgz7irDUF"
+    volumes:
+      - h2_tracker_data:/var/lib/postgresql/data
+  redis:
+    image: redis:6.2.6
+    ports:
+      - '8091:6379'
+    command: redis-server --requirepass "p0Fb3TLtdhcmyLCx5thR7BKZRG2l9yBx"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+volumes:
+  h2_tracker_data:

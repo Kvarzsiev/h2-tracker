@@ -1,0 +1,6 @@
+example:
+  - hello:
+pessoa:
+  - insert:
+  - delete:
+  - login:
