@@ -32,9 +32,9 @@ $ flutter run
 
 ## Coding
 
-### Generating Code (run after changes in endpoints or models on the server directory)
+### Generating Code (to run after changes in endpoints or models on the server directory)
 
 ```
-$ cd mypod/mypod_server
+$ cd h2_tracker/h2_tracker_server
 $ serverpod generate
 ```

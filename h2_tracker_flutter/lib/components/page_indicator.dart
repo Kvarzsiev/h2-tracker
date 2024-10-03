@@ -15,24 +15,24 @@ class PageIndicator extends StatelessWidget {
     required this.currentPageIndex,
     required this.onUpdateCurrentPageIndex,
     this.isOnDesktopAndWeb = true,
+    this.canProcceed = false,
   });
 
-  final int currentPageIndex;
   final TabController tabController;
   final void Function(int) onUpdateCurrentPageIndex;
   final bool isOnDesktopAndWeb;
+  final int currentPageIndex;
+  final bool canProcceed;
 
   @override
   Widget build(BuildContext context) {
-    if (!isOnDesktopAndWeb) {
-      return const SizedBox.shrink();
-    }
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           IconButton(
             splashRadius: 16.0,
@@ -53,20 +53,21 @@ class PageIndicator extends StatelessWidget {
             color: colorScheme.surface,
             selectedColor: colorScheme.primary,
           ),
-          IconButton(
-            splashRadius: 16.0,
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              if (currentPageIndex == 2) {
-                return;
-              }
-              onUpdateCurrentPageIndex(currentPageIndex + 1);
-            },
-            icon: const Icon(
-              Icons.arrow_right_rounded,
-              size: 32.0,
+          if (canProcceed)
+            IconButton(
+              splashRadius: 16.0,
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                if (currentPageIndex == 0) {
+                  return;
+                }
+                onUpdateCurrentPageIndex(currentPageIndex - 1);
+              },
+              icon: const Icon(
+                Icons.arrow_left_rounded,
+                size: 32.0,
+              ),
             ),
-          ),
         ],
       ),
     );
