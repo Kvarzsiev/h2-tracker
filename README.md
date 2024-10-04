@@ -1,6 +1,11 @@
 # h2-tracker
 
-My Second Tematic Project for University
+Second Tematic Project for University, a Desktop health tracking program made with Serverpod and Flutter, both in Dart, and PostgreSQL as the database.
+
+Team
+  - Juan Carllo Pereira Ribeiro
+  - Kvarzsiev  
+  - William Tomazini Becker
 
 ## Installing
 
