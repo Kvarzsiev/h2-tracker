@@ -28,12 +28,30 @@ class PageIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        IconButton(
+          splashRadius: 16.0,
+          padding: EdgeInsets.zero,
+          onPressed: () {
+            if (currentPageIndex == 0) {
+              return;
+            }
+            onUpdateCurrentPageIndex(currentPageIndex - 1);
+          },
+          icon: const Icon(
+            Icons.arrow_left_rounded,
+            size: 32.0,
+          ),
+        ),
+        TabPageSelector(
+          controller: tabController,
+          color: colorScheme.surface,
+          selectedColor: colorScheme.primary,
+        ),
+        if (canProcceed)
           IconButton(
             splashRadius: 16.0,
             padding: EdgeInsets.zero,
@@ -48,28 +66,7 @@ class PageIndicator extends StatelessWidget {
               size: 32.0,
             ),
           ),
-          TabPageSelector(
-            controller: tabController,
-            color: colorScheme.surface,
-            selectedColor: colorScheme.primary,
-          ),
-          if (canProcceed)
-            IconButton(
-              splashRadius: 16.0,
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                if (currentPageIndex == 0) {
-                  return;
-                }
-                onUpdateCurrentPageIndex(currentPageIndex - 1);
-              },
-              icon: const Icon(
-                Icons.arrow_left_rounded,
-                size: 32.0,
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 }

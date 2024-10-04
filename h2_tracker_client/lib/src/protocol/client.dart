@@ -11,8 +11,9 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i3;
-import 'protocol.dart' as _i4;
+import 'package:h2_tracker_client/src/protocol/peso.dart' as _i3;
+import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i4;
+import 'protocol.dart' as _i5;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -29,19 +30,41 @@ class EndpointExample extends _i1.EndpointRef {
 }
 
 /// {@category Endpoint}
+class EndpointPeso extends _i1.EndpointRef {
+  EndpointPeso(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'peso';
+
+  _i2.Future<void> insert(
+    _i3.Peso peso,
+    double height,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'peso',
+        'insert',
+        {
+          'peso': peso,
+          'height': height,
+        },
+      );
+}
+
+/// {@category Endpoint}
 class EndpointPessoa extends _i1.EndpointRef {
   EndpointPessoa(_i1.EndpointCaller caller) : super(caller);
 
   @override
   String get name => 'pessoa';
 
-  _i2.Future<void> insert(_i3.Pessoa pessoa) => caller.callServerEndpoint<void>(
+  _i2.Future<_i4.Pessoa> insert(_i4.Pessoa pessoa) =>
+      caller.callServerEndpoint<_i4.Pessoa>(
         'pessoa',
         'insert',
         {'pessoa': pessoa},
       );
 
-  _i2.Future<void> delete(_i3.Pessoa pessoa) => caller.callServerEndpoint<void>(
+  _i2.Future<void> delete(_i4.Pessoa pessoa) => caller.callServerEndpoint<void>(
         'pessoa',
         'delete',
         {'pessoa': pessoa},
@@ -77,7 +100,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i4.Protocol(),
+          _i5.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -88,16 +111,20 @@ class Client extends _i1.ServerpodClientShared {
               disconnectStreamsOnLostInternetConnection,
         ) {
     example = EndpointExample(this);
+    peso = EndpointPeso(this);
     pessoa = EndpointPessoa(this);
   }
 
   late final EndpointExample example;
+
+  late final EndpointPeso peso;
 
   late final EndpointPessoa pessoa;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'example': example,
+        'peso': peso,
         'pessoa': pessoa,
       };
 

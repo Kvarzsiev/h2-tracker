@@ -22,6 +22,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     required this.senha,
     required this.cpf,
     this.historicoPeso,
+    this.historicoDietas,
   });
 
   factory Pessoa({
@@ -33,6 +34,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     required String senha,
     required String cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   }) = _PessoaImpl;
 
   factory Pessoa.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -46,6 +48,9 @@ abstract class Pessoa implements _i1.SerializableModel {
       cpf: jsonSerialization['cpf'] as String,
       historicoPeso: (jsonSerialization['historicoPeso'] as List?)
           ?.map((e) => _i2.Peso.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      historicoDietas: (jsonSerialization['historicoDietas'] as List?)
+          ?.map((e) => _i2.Dieta.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -69,6 +74,8 @@ abstract class Pessoa implements _i1.SerializableModel {
 
   List<_i2.Peso>? historicoPeso;
 
+  List<_i2.Dieta>? historicoDietas;
+
   Pessoa copyWith({
     int? id,
     String? nome,
@@ -78,6 +85,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     String? senha,
     String? cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -91,6 +99,9 @@ abstract class Pessoa implements _i1.SerializableModel {
       'cpf': cpf,
       if (historicoPeso != null)
         'historicoPeso': historicoPeso?.toJson(valueToJson: (v) => v.toJson()),
+      if (historicoDietas != null)
+        'historicoDietas':
+            historicoDietas?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -112,6 +123,7 @@ class _PessoaImpl extends Pessoa {
     required String senha,
     required String cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   }) : super._(
           id: id,
           nome: nome,
@@ -121,6 +133,7 @@ class _PessoaImpl extends Pessoa {
           senha: senha,
           cpf: cpf,
           historicoPeso: historicoPeso,
+          historicoDietas: historicoDietas,
         );
 
   @override
@@ -133,6 +146,7 @@ class _PessoaImpl extends Pessoa {
     String? senha,
     String? cpf,
     Object? historicoPeso = _Undefined,
+    Object? historicoDietas = _Undefined,
   }) {
     return Pessoa(
       id: id is int? ? id : this.id,
@@ -145,6 +159,9 @@ class _PessoaImpl extends Pessoa {
       historicoPeso: historicoPeso is List<_i2.Peso>?
           ? historicoPeso
           : this.historicoPeso?.map((e0) => e0.copyWith()).toList(),
+      historicoDietas: historicoDietas is List<_i2.Dieta>?
+          ? historicoDietas
+          : this.historicoDietas?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

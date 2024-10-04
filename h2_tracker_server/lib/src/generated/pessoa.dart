@@ -23,6 +23,7 @@ abstract class Pessoa extends _i1.TableRow
     required this.senha,
     required this.cpf,
     this.historicoPeso,
+    this.historicoDietas,
   }) : super(id);
 
   factory Pessoa({
@@ -34,6 +35,7 @@ abstract class Pessoa extends _i1.TableRow
     required String senha,
     required String cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   }) = _PessoaImpl;
 
   factory Pessoa.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -47,6 +49,9 @@ abstract class Pessoa extends _i1.TableRow
       cpf: jsonSerialization['cpf'] as String,
       historicoPeso: (jsonSerialization['historicoPeso'] as List?)
           ?.map((e) => _i2.Peso.fromJson((e as Map<String, dynamic>)))
+          .toList(),
+      historicoDietas: (jsonSerialization['historicoDietas'] as List?)
+          ?.map((e) => _i2.Dieta.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
@@ -69,6 +74,8 @@ abstract class Pessoa extends _i1.TableRow
 
   List<_i2.Peso>? historicoPeso;
 
+  List<_i2.Dieta>? historicoDietas;
+
   @override
   _i1.Table get table => t;
 
@@ -81,6 +88,7 @@ abstract class Pessoa extends _i1.TableRow
     String? senha,
     String? cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -94,6 +102,9 @@ abstract class Pessoa extends _i1.TableRow
       'cpf': cpf,
       if (historicoPeso != null)
         'historicoPeso': historicoPeso?.toJson(valueToJson: (v) => v.toJson()),
+      if (historicoDietas != null)
+        'historicoDietas':
+            historicoDietas?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -110,11 +121,20 @@ abstract class Pessoa extends _i1.TableRow
       if (historicoPeso != null)
         'historicoPeso':
             historicoPeso?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (historicoDietas != null)
+        'historicoDietas':
+            historicoDietas?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static PessoaInclude include({_i2.PesoIncludeList? historicoPeso}) {
-    return PessoaInclude._(historicoPeso: historicoPeso);
+  static PessoaInclude include({
+    _i2.PesoIncludeList? historicoPeso,
+    _i2.DietaIncludeList? historicoDietas,
+  }) {
+    return PessoaInclude._(
+      historicoPeso: historicoPeso,
+      historicoDietas: historicoDietas,
+    );
   }
 
   static PessoaIncludeList includeList({
@@ -155,6 +175,7 @@ class _PessoaImpl extends Pessoa {
     required String senha,
     required String cpf,
     List<_i2.Peso>? historicoPeso,
+    List<_i2.Dieta>? historicoDietas,
   }) : super._(
           id: id,
           nome: nome,
@@ -164,6 +185,7 @@ class _PessoaImpl extends Pessoa {
           senha: senha,
           cpf: cpf,
           historicoPeso: historicoPeso,
+          historicoDietas: historicoDietas,
         );
 
   @override
@@ -176,6 +198,7 @@ class _PessoaImpl extends Pessoa {
     String? senha,
     String? cpf,
     Object? historicoPeso = _Undefined,
+    Object? historicoDietas = _Undefined,
   }) {
     return Pessoa(
       id: id is int? ? id : this.id,
@@ -188,6 +211,9 @@ class _PessoaImpl extends Pessoa {
       historicoPeso: historicoPeso is List<_i2.Peso>?
           ? historicoPeso
           : this.historicoPeso?.map((e0) => e0.copyWith()).toList(),
+      historicoDietas: historicoDietas is List<_i2.Dieta>?
+          ? historicoDietas
+          : this.historicoDietas?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -236,6 +262,10 @@ class PessoaTable extends _i1.Table {
 
   _i1.ManyRelation<_i2.PesoTable>? _historicoPeso;
 
+  _i2.DietaTable? ___historicoDietas;
+
+  _i1.ManyRelation<_i2.DietaTable>? _historicoDietas;
+
   _i2.PesoTable get __historicoPeso {
     if (___historicoPeso != null) return ___historicoPeso!;
     ___historicoPeso = _i1.createRelationTable(
@@ -247,6 +277,19 @@ class PessoaTable extends _i1.Table {
           _i2.PesoTable(tableRelation: foreignTableRelation),
     );
     return ___historicoPeso!;
+  }
+
+  _i2.DietaTable get __historicoDietas {
+    if (___historicoDietas != null) return ___historicoDietas!;
+    ___historicoDietas = _i1.createRelationTable(
+      relationFieldName: '__historicoDietas',
+      field: Pessoa.t.id,
+      foreignField: _i2.Dieta.t.pessoaId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.DietaTable(tableRelation: foreignTableRelation),
+    );
+    return ___historicoDietas!;
   }
 
   _i1.ManyRelation<_i2.PesoTable> get historicoPeso {
@@ -267,6 +310,24 @@ class PessoaTable extends _i1.Table {
     return _historicoPeso!;
   }
 
+  _i1.ManyRelation<_i2.DietaTable> get historicoDietas {
+    if (_historicoDietas != null) return _historicoDietas!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'historicoDietas',
+      field: Pessoa.t.id,
+      foreignField: _i2.Dieta.t.pessoaId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.DietaTable(tableRelation: foreignTableRelation),
+    );
+    _historicoDietas = _i1.ManyRelation<_i2.DietaTable>(
+      tableWithRelations: relationTable,
+      table: _i2.DietaTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _historicoDietas!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
@@ -283,19 +344,31 @@ class PessoaTable extends _i1.Table {
     if (relationField == 'historicoPeso') {
       return __historicoPeso;
     }
+    if (relationField == 'historicoDietas') {
+      return __historicoDietas;
+    }
     return null;
   }
 }
 
 class PessoaInclude extends _i1.IncludeObject {
-  PessoaInclude._({_i2.PesoIncludeList? historicoPeso}) {
+  PessoaInclude._({
+    _i2.PesoIncludeList? historicoPeso,
+    _i2.DietaIncludeList? historicoDietas,
+  }) {
     _historicoPeso = historicoPeso;
+    _historicoDietas = historicoDietas;
   }
 
   _i2.PesoIncludeList? _historicoPeso;
 
+  _i2.DietaIncludeList? _historicoDietas;
+
   @override
-  Map<String, _i1.Include?> get includes => {'historicoPeso': _historicoPeso};
+  Map<String, _i1.Include?> get includes => {
+        'historicoPeso': _historicoPeso,
+        'historicoDietas': _historicoDietas,
+      };
 
   @override
   _i1.Table get table => Pessoa.t;
@@ -503,6 +576,27 @@ class PessoaAttachRepository {
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }
+
+  Future<void> historicoDietas(
+    _i1.DatabaseAccessor databaseAccessor,
+    Pessoa pessoa,
+    List<_i2.Dieta> dieta, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (dieta.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('dieta.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $dieta = dieta.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
+    await databaseAccessor.db.update<_i2.Dieta>(
+      $dieta,
+      columns: [_i2.Dieta.t.pessoaId],
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
 }
 
 class PessoaAttachRowRepository {
@@ -525,6 +619,27 @@ class PessoaAttachRowRepository {
     await databaseAccessor.db.updateRow<_i2.Peso>(
       $peso,
       columns: [_i2.Peso.t.pessoaId],
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<void> historicoDietas(
+    _i1.DatabaseAccessor databaseAccessor,
+    Pessoa pessoa,
+    _i2.Dieta dieta, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (dieta.id == null) {
+      throw ArgumentError.notNull('dieta.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $dieta = dieta.copyWith(pessoaId: pessoa.id);
+    await databaseAccessor.db.updateRow<_i2.Dieta>(
+      $dieta,
+      columns: [_i2.Dieta.t.pessoaId],
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }

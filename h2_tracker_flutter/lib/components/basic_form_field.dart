@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:h2_tracker_flutter/utils/decimal_text_input_formatter.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+enum InputType { email, height, weigth, age, text, cpf }
 
 class BasicFormField extends StatelessWidget {
   const BasicFormField(
@@ -7,12 +9,12 @@ class BasicFormField extends StatelessWidget {
       required this.label,
       this.controller,
       this.obscureText = false,
-      this.textInputType = TextInputType.text});
+      this.textInputType = InputType.text});
 
   final String label;
   final TextEditingController? controller;
   final bool obscureText;
-  final TextInputType textInputType;
+  final InputType textInputType;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +36,29 @@ class BasicFormField extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Insira algum valor!';
             }
+
+            if (textInputType == InputType.email) {
+              if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+                  .hasMatch(value)) {
+                return 'Insira um email válido!';
+              }
+            }
+
             return null;
           },
           inputFormatters: [
-            if (textInputType == TextInputType.number) ...[
-              DecimalTextInputFormatter(decimalRange: 2)
-            ]
+            if (textInputType == InputType.cpf)
+              MaskTextInputFormatter(
+                  mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')}),
+            if (textInputType == InputType.height)
+              MaskTextInputFormatter(
+                  mask: "###", filter: {"#": RegExp(r'[0-9]')}),
+            if (textInputType == InputType.weigth)
+              MaskTextInputFormatter(
+                  mask: "###,##", filter: {"#": RegExp(r'[0-9]')}),
+            if (textInputType == InputType.age)
+              MaskTextInputFormatter(
+                  mask: "###", filter: {"#": RegExp(r'[0-9]')}),
           ],
         ),
       ],

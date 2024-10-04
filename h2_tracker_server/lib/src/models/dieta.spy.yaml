@@ -7,10 +7,10 @@
 # your yaml-files.
 
 # Name of the class to generate.
-class: Pessoa
+class: Dieta
 
 # Add the table key, if this class represents a row in the database.
-table: pessoa
+table: dieta
 
 # The fields (and columns if connected to the database) of the class. Supported types are
 # `bool`, `int`, `double`, `String`, `UuidValue`, `Duration`, `DateTime`, `ByteData`,
@@ -18,11 +18,9 @@ table: pessoa
 # You can also add lists of objects and types have support for null safety.
 # Eg. `List<int>?` or `List<MyOtherClass?>`.
 fields:
-  nome: String
-  altura: double
-  idade: int
-  email: String
-  senha: String
-  cpf: String
-  historicoPeso: List<Peso>?, relation(name=pessoa_pesos)
-  historicoDietas: List<Dieta>?, relation(name=pessoa_dietas)
+  caloriasMaximasDia: int
+  objetivo: String
+  descricao: String
+  dataFim: DateTime
+  pessoaId: int, relation(name=pessoa_dietas, parent=pessoa, onDelete=Cascade)
+  refeicoes: List<Refeicao>?, relation(name=dieta_refeicoes)

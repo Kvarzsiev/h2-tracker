@@ -1,8 +1,8 @@
 import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:flutter/material.dart';
+import 'package:h2_tracker_flutter/views/home_view.dart';
+import 'package:h2_tracker_flutter/views/login_view.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
-
-import 'views/start_view.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
 // anywhere in our app. The client is generated from your server code.
@@ -22,7 +22,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Serverpod Demo',
+      title: 'Healthy Habits Tracker',
+      routes: {
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => const HomeView(),
+      },
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: const ColorScheme(
@@ -53,7 +57,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const StartPage(),
+      home: const LoginPage(),
     );
   }
 }

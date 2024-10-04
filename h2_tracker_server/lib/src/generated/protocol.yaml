@@ -1,5 +1,7 @@
 example:
   - hello:
+peso:
+  - insert:
 pessoa:
   - insert:
   - delete:

@@ -11,8 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/example_endpoint.dart' as _i2;
-import '../endpoints/pessoa_endpoint.dart' as _i3;
-import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i4;
+import '../endpoints/peso_endpoint.dart' as _i3;
+import '../endpoints/pessoa_endpoint.dart' as _i4;
+import 'package:h2_tracker_server/src/generated/peso.dart' as _i5;
+import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i6;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -24,7 +26,13 @@ class Endpoints extends _i1.EndpointDispatch {
           'example',
           null,
         ),
-      'pessoa': _i3.PessoaEndpoint()
+      'peso': _i3.PesoEndpoint()
+        ..initialize(
+          server,
+          'peso',
+          null,
+        ),
+      'pessoa': _i4.PessoaEndpoint()
         ..initialize(
           server,
           'pessoa',
@@ -55,6 +63,36 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
+    connectors['peso'] = _i1.EndpointConnector(
+      name: 'peso',
+      endpoint: endpoints['peso']!,
+      methodConnectors: {
+        'insert': _i1.MethodConnector(
+          name: 'insert',
+          params: {
+            'peso': _i1.ParameterDescription(
+              name: 'peso',
+              type: _i1.getType<_i5.Peso>(),
+              nullable: false,
+            ),
+            'height': _i1.ParameterDescription(
+              name: 'height',
+              type: _i1.getType<double>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['peso'] as _i3.PesoEndpoint).insert(
+            session,
+            params['peso'],
+            params['height'],
+          ),
+        )
+      },
+    );
     connectors['pessoa'] = _i1.EndpointConnector(
       name: 'pessoa',
       endpoint: endpoints['pessoa']!,
@@ -64,7 +102,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i4.Pessoa>(),
+              type: _i1.getType<_i6.Pessoa>(),
               nullable: false,
             )
           },
@@ -72,7 +110,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i3.PessoaEndpoint).insert(
+              (endpoints['pessoa'] as _i4.PessoaEndpoint).insert(
             session,
             params['pessoa'],
           ),
@@ -82,7 +120,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i4.Pessoa>(),
+              type: _i1.getType<_i6.Pessoa>(),
               nullable: false,
             )
           },
@@ -90,7 +128,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i3.PessoaEndpoint).delete(
+              (endpoints['pessoa'] as _i4.PessoaEndpoint).delete(
             session,
             params['pessoa'],
           ),
@@ -113,7 +151,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i3.PessoaEndpoint).login(
+              (endpoints['pessoa'] as _i4.PessoaEndpoint).login(
             session,
             params['email'],
             params['password'],

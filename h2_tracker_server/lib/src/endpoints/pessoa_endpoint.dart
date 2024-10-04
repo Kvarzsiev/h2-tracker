@@ -2,8 +2,8 @@ import 'package:h2_tracker_server/src/generated/pessoa.dart';
 import 'package:serverpod/serverpod.dart';
 
 class PessoaEndpoint extends Endpoint {
-  Future<void> insert(Session session, Pessoa pessoa) async {
-    await Pessoa.db.insertRow(session, pessoa);
+  Future<Pessoa> insert(Session session, Pessoa pessoa) async {
+    return await Pessoa.db.insertRow(session, pessoa);
   }
 
   Future<void> delete(Session session, Pessoa pessoa) async {
