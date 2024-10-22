@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:h2_tracker_flutter/components/app_bar.dart';
+import 'package:h2_tracker_flutter/views/exercises_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -8,22 +10,41 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
+  final PageController _pageViewController = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageViewController.dispose();
+  }
+
+  void _updateCurrentPage(int newIndex) {
+    _pageViewController.animateToPage(
+      newIndex,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('AAAAAAAAAAAAAAAAAAA você está logado seja bem vindo'),
-          const Divider(
-            height: 16,
+      appBar: H2AppBar(updatePage: _updateCurrentPage),
+      body: PageView(
+        controller: _pageViewController,
+        children: const <Widget>[
+          ExercisesView(),
+          Center(
+            child: Text('Dieta e Alimentação'),
           ),
-          FilledButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-              child: const Text('Deslogar'))
+          Center(
+            child: Text('Dados e Estatísticas'),
+          ),
         ],
       ),
     );
