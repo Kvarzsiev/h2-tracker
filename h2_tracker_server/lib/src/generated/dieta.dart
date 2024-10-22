@@ -12,16 +12,16 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Dieta extends _i1.TableRow implements _i1.ProtocolSerialization {
+abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
   Dieta._({
-    int? id,
+    this.id,
     required this.caloriasMaximasDia,
     required this.objetivo,
     required this.descricao,
     required this.dataFim,
     required this.pessoaId,
     this.refeicoes,
-  }) : super(id);
+  });
 
   factory Dieta({
     int? id,
@@ -50,6 +50,9 @@ abstract class Dieta extends _i1.TableRow implements _i1.ProtocolSerialization {
   static final t = DietaTable();
 
   static const db = DietaRepository._();
+
+  @override
+  int? id;
 
   int caloriasMaximasDia;
 

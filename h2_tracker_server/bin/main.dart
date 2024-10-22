@@ -1,7 +1,9 @@
 import 'package:h2_tracker_server/server.dart';
 
-/// This is the starting point for your Serverpod server. Typically, there is
-/// no need to modify this file.
-void main(List<String> args) {
-  run(args);
+void main(List<String> args) async {
+  try {
+    run(args);
+  } catch (e) {
+    print('Erro ao iniciar o servidor: $e');
+  }
 }

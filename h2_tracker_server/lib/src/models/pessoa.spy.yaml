@@ -24,5 +24,7 @@ fields:
   email: String
   senha: String
   cpf: String
+  objetivo: String
   historicoPeso: List<Peso>?, relation(name=pessoa_pesos)
   historicoDietas: List<Dieta>?, relation(name=pessoa_dietas)
+  

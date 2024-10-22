@@ -11,15 +11,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 
-abstract class Refeicao extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
   Refeicao._({
-    int? id,
+    this.id,
     required this.calorias,
     required this.proteinas,
     required this.descricao,
     required this.dietaId,
-  }) : super(id);
+  });
 
   factory Refeicao({
     int? id,
@@ -42,6 +41,9 @@ abstract class Refeicao extends _i1.TableRow
   static final t = RefeicaoTable();
 
   static const db = RefeicaoRepository._();
+
+  @override
+  int? id;
 
   int calorias;
 

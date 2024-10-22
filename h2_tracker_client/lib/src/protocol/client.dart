@@ -70,11 +70,11 @@ class EndpointPessoa extends _i1.EndpointRef {
         {'pessoa': pessoa},
       );
 
-  _i2.Future<void> login(
+  _i2.Future<_i4.Pessoa?> login(
     String email,
     String password,
   ) =>
-      caller.callServerEndpoint<void>(
+      caller.callServerEndpoint<_i4.Pessoa?>(
         'pessoa',
         'login',
         {

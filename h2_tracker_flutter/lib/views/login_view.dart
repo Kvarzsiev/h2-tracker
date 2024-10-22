@@ -20,6 +20,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   bool _isLogin = true;
   bool _isLoading = false;
   int _currentPageIndex = 0;
+  bool _obscureText = true; // Inicialmente, a senha está oculta
 
   final _pageViewController = PageController();
   late TabController _tabController;
@@ -36,8 +37,37 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   final UserStateService _userStateService = UserStateService();
 
+  void _showErrorMessage(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Future<void> _login() async {
-    await client.pessoa.login(_emailController.text, _passwordController.text);
+    try {
+      final pessoaLogada = await client.pessoa
+          .login(_emailController.text, _passwordController.text);
+
+      if (pessoaLogada != null) {
+        Navigator.pushReplacementNamed(
+          context,
+          '/home',
+          arguments: pessoaLogada,
+        );
+      } else {
+        _showErrorMessage('Email ou senha inválidos. Tente novamente.');
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      _showErrorMessage('Erro ao fazer login. Tente novamente.');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _registerUser() async {
@@ -46,6 +76,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         altura: double.parse(_heightController.text),
         idade: int.parse(_ageController.text),
         email: _emailController.text,
+        objetivo: dropdownValue,
         senha: _passwordController.text,
         cpf: _cpfController.text);
 
@@ -157,72 +188,90 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           SizedBox(
             width: MediaQuery.sizeOf(context).width * .3,
             child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                          color: Colors.lightBlue[400],
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10))),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          'Entrar',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.lightBlue[400],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        'Entrar',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                      height: 16), // Espaço entre o título e o campo de email
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                    ),
+                  ),
+                  const SizedBox(height: 16), // Espaço entre email e senha
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: _obscureText,
+                    decoration: InputDecoration(
+                      labelText: 'Senha',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24), // Espaço entre senha e botões
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: FilledButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLogin = false;
+                            });
+                          },
+                          child: const Text('Realizar Cadastro'),
                         ),
                       ),
-                    ),
-                    BasicFormField(
-                        label: 'Email', controller: _emailController),
-                    BasicFormField(
-                        label: 'Senha', controller: _passwordController),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: FilledButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isLogin = false;
-                                });
-                              },
-                              child: const Text('Realizar Cadastro'),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: FilledButton(
-                              onPressed: () async {
-                                // Validate returns true if the form is valid, or false otherwise.
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                  await _login();
-
-                                  Navigator.pushReplacementNamed(
-                                      // ignore: use_build_context_synchronously
-                                      context,
-                                      '/home');
-
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                }
-                              },
-                              child: const Text('Realizar Login'),
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: FilledButton(
+                          onPressed: () async {
+                            // Validate returns true if the form is valid
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              await _login();
+                            }
+                          },
+                          child: _isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : const Text('Realizar Login'),
+                        ),
                       ),
-                    ),
-                  ],
-                )),
-          )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -398,7 +447,6 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   padding: const EdgeInsets.all(8),
                   isExpanded: true,
                   onChanged: (String? value) {
-                    // This is called when the user selects an item.
                     setState(() {
                       dropdownValue = value!;
                     });
@@ -458,8 +506,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     setState(() {
                       _isLoading = false;
                     });
-                    // ignore: use_build_context_synchronously
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.pushReplacementNamed(
+                      context,
+                      '/home',
+                      arguments: _userStateService.user,
+                    );
                   }
                 },
                 child: const Text('Finalizar Cadastro'),

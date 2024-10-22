@@ -21,6 +21,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     required this.email,
     required this.senha,
     required this.cpf,
+    required this.objetivo,
     this.historicoPeso,
     this.historicoDietas,
   });
@@ -33,6 +34,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     required String email,
     required String senha,
     required String cpf,
+    required String objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   }) = _PessoaImpl;
@@ -46,6 +48,7 @@ abstract class Pessoa implements _i1.SerializableModel {
       email: jsonSerialization['email'] as String,
       senha: jsonSerialization['senha'] as String,
       cpf: jsonSerialization['cpf'] as String,
+      objetivo: jsonSerialization['objetivo'] as String,
       historicoPeso: (jsonSerialization['historicoPeso'] as List?)
           ?.map((e) => _i2.Peso.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -72,6 +75,8 @@ abstract class Pessoa implements _i1.SerializableModel {
 
   String cpf;
 
+  String objetivo;
+
   List<_i2.Peso>? historicoPeso;
 
   List<_i2.Dieta>? historicoDietas;
@@ -84,6 +89,7 @@ abstract class Pessoa implements _i1.SerializableModel {
     String? email,
     String? senha,
     String? cpf,
+    String? objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   });
@@ -97,6 +103,7 @@ abstract class Pessoa implements _i1.SerializableModel {
       'email': email,
       'senha': senha,
       'cpf': cpf,
+      'objetivo': objetivo,
       if (historicoPeso != null)
         'historicoPeso': historicoPeso?.toJson(valueToJson: (v) => v.toJson()),
       if (historicoDietas != null)
@@ -122,6 +129,7 @@ class _PessoaImpl extends Pessoa {
     required String email,
     required String senha,
     required String cpf,
+    required String objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   }) : super._(
@@ -132,6 +140,7 @@ class _PessoaImpl extends Pessoa {
           email: email,
           senha: senha,
           cpf: cpf,
+          objetivo: objetivo,
           historicoPeso: historicoPeso,
           historicoDietas: historicoDietas,
         );
@@ -145,6 +154,7 @@ class _PessoaImpl extends Pessoa {
     String? email,
     String? senha,
     String? cpf,
+    String? objetivo,
     Object? historicoPeso = _Undefined,
     Object? historicoDietas = _Undefined,
   }) {
@@ -156,6 +166,7 @@ class _PessoaImpl extends Pessoa {
       email: email ?? this.email,
       senha: senha ?? this.senha,
       cpf: cpf ?? this.cpf,
+      objetivo: objetivo ?? this.objetivo,
       historicoPeso: historicoPeso is List<_i2.Peso>?
           ? historicoPeso
           : this.historicoPeso?.map((e0) => e0.copyWith()).toList(),

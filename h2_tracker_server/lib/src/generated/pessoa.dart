@@ -12,19 +12,19 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Pessoa extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Pessoa implements _i1.TableRow, _i1.ProtocolSerialization {
   Pessoa._({
-    int? id,
+    this.id,
     required this.nome,
     required this.altura,
     required this.idade,
     required this.email,
     required this.senha,
     required this.cpf,
+    required this.objetivo,
     this.historicoPeso,
     this.historicoDietas,
-  }) : super(id);
+  });
 
   factory Pessoa({
     int? id,
@@ -34,6 +34,7 @@ abstract class Pessoa extends _i1.TableRow
     required String email,
     required String senha,
     required String cpf,
+    required String objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   }) = _PessoaImpl;
@@ -47,6 +48,7 @@ abstract class Pessoa extends _i1.TableRow
       email: jsonSerialization['email'] as String,
       senha: jsonSerialization['senha'] as String,
       cpf: jsonSerialization['cpf'] as String,
+      objetivo: jsonSerialization['objetivo'] as String,
       historicoPeso: (jsonSerialization['historicoPeso'] as List?)
           ?.map((e) => _i2.Peso.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -60,6 +62,9 @@ abstract class Pessoa extends _i1.TableRow
 
   static const db = PessoaRepository._();
 
+  @override
+  int? id;
+
   String nome;
 
   double altura;
@@ -71,6 +76,8 @@ abstract class Pessoa extends _i1.TableRow
   String senha;
 
   String cpf;
+
+  String objetivo;
 
   List<_i2.Peso>? historicoPeso;
 
@@ -87,6 +94,7 @@ abstract class Pessoa extends _i1.TableRow
     String? email,
     String? senha,
     String? cpf,
+    String? objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   });
@@ -100,6 +108,7 @@ abstract class Pessoa extends _i1.TableRow
       'email': email,
       'senha': senha,
       'cpf': cpf,
+      'objetivo': objetivo,
       if (historicoPeso != null)
         'historicoPeso': historicoPeso?.toJson(valueToJson: (v) => v.toJson()),
       if (historicoDietas != null)
@@ -118,6 +127,7 @@ abstract class Pessoa extends _i1.TableRow
       'email': email,
       'senha': senha,
       'cpf': cpf,
+      'objetivo': objetivo,
       if (historicoPeso != null)
         'historicoPeso':
             historicoPeso?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
@@ -174,6 +184,7 @@ class _PessoaImpl extends Pessoa {
     required String email,
     required String senha,
     required String cpf,
+    required String objetivo,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
   }) : super._(
@@ -184,6 +195,7 @@ class _PessoaImpl extends Pessoa {
           email: email,
           senha: senha,
           cpf: cpf,
+          objetivo: objetivo,
           historicoPeso: historicoPeso,
           historicoDietas: historicoDietas,
         );
@@ -197,6 +209,7 @@ class _PessoaImpl extends Pessoa {
     String? email,
     String? senha,
     String? cpf,
+    String? objetivo,
     Object? historicoPeso = _Undefined,
     Object? historicoDietas = _Undefined,
   }) {
@@ -208,6 +221,7 @@ class _PessoaImpl extends Pessoa {
       email: email ?? this.email,
       senha: senha ?? this.senha,
       cpf: cpf ?? this.cpf,
+      objetivo: objetivo ?? this.objetivo,
       historicoPeso: historicoPeso is List<_i2.Peso>?
           ? historicoPeso
           : this.historicoPeso?.map((e0) => e0.copyWith()).toList(),
@@ -244,6 +258,10 @@ class PessoaTable extends _i1.Table {
       'cpf',
       this,
     );
+    objetivo = _i1.ColumnString(
+      'objetivo',
+      this,
+    );
   }
 
   late final _i1.ColumnString nome;
@@ -257,6 +275,8 @@ class PessoaTable extends _i1.Table {
   late final _i1.ColumnString senha;
 
   late final _i1.ColumnString cpf;
+
+  late final _i1.ColumnString objetivo;
 
   _i2.PesoTable? ___historicoPeso;
 
@@ -337,6 +357,7 @@ class PessoaTable extends _i1.Table {
         email,
         senha,
         cpf,
+        objetivo,
       ];
 
   @override
