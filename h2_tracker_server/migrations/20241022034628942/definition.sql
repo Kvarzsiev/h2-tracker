@@ -1,6 +1,105 @@
 BEGIN;
 
 --
+-- Class Dieta as table dieta
+--
+CREATE TABLE "dieta" (
+    "id" bigserial PRIMARY KEY,
+    "caloriasMaximasDia" bigint NOT NULL,
+    "objetivo" text NOT NULL,
+    "descricao" text NOT NULL,
+    "dataFim" timestamp without time zone NOT NULL,
+    "pessoaId" bigint NOT NULL
+);
+
+--
+-- Class Exercicio as table exercicio
+--
+CREATE TABLE "exercicio" (
+    "id" bigserial PRIMARY KEY,
+    "nome" text NOT NULL,
+    "grupoMuscular" text NOT NULL,
+    "descricao" text NOT NULL
+);
+
+--
+-- Class Peso as table peso
+--
+CREATE TABLE "peso" (
+    "id" bigserial PRIMARY KEY,
+    "peso" double precision NOT NULL,
+    "imc" double precision NOT NULL,
+    "dataPesagem" timestamp without time zone NOT NULL,
+    "pessoaId" bigint NOT NULL
+);
+
+--
+-- Class Pessoa as table pessoa
+--
+CREATE TABLE "pessoa" (
+    "id" bigserial PRIMARY KEY,
+    "nome" text NOT NULL,
+    "altura" double precision NOT NULL,
+    "idade" bigint NOT NULL,
+    "email" text NOT NULL,
+    "senha" text NOT NULL,
+    "cpf" text NOT NULL
+);
+
+--
+-- Class Refeicao as table refeicao
+--
+CREATE TABLE "refeicao" (
+    "id" bigserial PRIMARY KEY,
+    "calorias" bigint NOT NULL,
+    "proteinas" bigint NOT NULL,
+    "descricao" text NOT NULL,
+    "dietaId" bigint NOT NULL
+);
+
+--
+-- Class Treino as table treino
+--
+CREATE TABLE "treino" (
+    "id" bigserial PRIMARY KEY,
+    "descricao" text NOT NULL,
+    "objetivo" text NOT NULL
+);
+
+--
+-- Class TreinoExercicio as table treino_exercicio
+--
+CREATE TABLE "treino_exercicio" (
+    "id" bigserial PRIMARY KEY,
+    "repeticoes" bigint NOT NULL,
+    "series" bigint NOT NULL,
+    "treinoId" bigint NOT NULL,
+    "exercicioId" bigint NOT NULL,
+    "_treinoTreinoexerciciosTreinoId" bigint
+);
+
+--
+-- Class TreinoExercicioHistorico as table treino_exercicio_historico
+--
+CREATE TABLE "treino_exercicio_historico" (
+    "id" bigserial PRIMARY KEY,
+    "progressao" text NOT NULL,
+    "treinoExercicioId" bigint NOT NULL,
+    "_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId" bigint
+);
+
+--
+-- Class TreinoHistorico as table treino_historico
+--
+CREATE TABLE "treino_historico" (
+    "id" bigserial PRIMARY KEY,
+    "horarioInicio" timestamp without time zone NOT NULL,
+    "horarioFim" timestamp without time zone NOT NULL,
+    "treinoId" bigint NOT NULL,
+    "_treinoTreinohistoricosTreinoId" bigint
+);
+
+--
 -- Class CloudStorageEntry as table serverpod_cloud_storage
 --
 CREATE TABLE "serverpod_cloud_storage" (
@@ -207,6 +306,90 @@ CREATE INDEX "serverpod_session_log_touched_idx" ON "serverpod_session_log" USIN
 CREATE INDEX "serverpod_session_log_isopen_idx" ON "serverpod_session_log" USING btree ("isOpen");
 
 --
+-- Foreign relations for "dieta" table
+--
+ALTER TABLE ONLY "dieta"
+    ADD CONSTRAINT "dieta_fk_0"
+    FOREIGN KEY("pessoaId")
+    REFERENCES "pessoa"("id")
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "peso" table
+--
+ALTER TABLE ONLY "peso"
+    ADD CONSTRAINT "peso_fk_0"
+    FOREIGN KEY("pessoaId")
+    REFERENCES "pessoa"("id")
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "refeicao" table
+--
+ALTER TABLE ONLY "refeicao"
+    ADD CONSTRAINT "refeicao_fk_0"
+    FOREIGN KEY("dietaId")
+    REFERENCES "dieta"("id")
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "treino_exercicio" table
+--
+ALTER TABLE ONLY "treino_exercicio"
+    ADD CONSTRAINT "treino_exercicio_fk_0"
+    FOREIGN KEY("treinoId")
+    REFERENCES "treino"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "treino_exercicio"
+    ADD CONSTRAINT "treino_exercicio_fk_1"
+    FOREIGN KEY("exercicioId")
+    REFERENCES "exercicio"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "treino_exercicio"
+    ADD CONSTRAINT "treino_exercicio_fk_2"
+    FOREIGN KEY("_treinoTreinoexerciciosTreinoId")
+    REFERENCES "treino"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "treino_exercicio_historico" table
+--
+ALTER TABLE ONLY "treino_exercicio_historico"
+    ADD CONSTRAINT "treino_exercicio_historico_fk_0"
+    FOREIGN KEY("treinoExercicioId")
+    REFERENCES "treino_exercicio"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "treino_exercicio_historico"
+    ADD CONSTRAINT "treino_exercicio_historico_fk_1"
+    FOREIGN KEY("_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId")
+    REFERENCES "treino_exercicio"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "treino_historico" table
+--
+ALTER TABLE ONLY "treino_historico"
+    ADD CONSTRAINT "treino_historico_fk_0"
+    FOREIGN KEY("treinoId")
+    REFERENCES "treino"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+ALTER TABLE ONLY "treino_historico"
+    ADD CONSTRAINT "treino_historico_fk_1"
+    FOREIGN KEY("_treinoTreinohistoricosTreinoId")
+    REFERENCES "treino"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
 -- Foreign relations for "serverpod_log" table
 --
 ALTER TABLE ONLY "serverpod_log"
@@ -241,9 +424,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR h2_tracker
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('h2_tracker', '20240927181141269', now())
+    VALUES ('h2_tracker', '20241022034628942', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20240927181141269', "timestamp" = now();
+    DO UPDATE SET "version" = '20241022034628942', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

@@ -10,8 +10,14 @@ class PessoaEndpoint extends Endpoint {
     await Pessoa.db.deleteRow(session, pessoa);
   }
 
-  Future<void> login(Session session, String email, String password) async {
-    await Pessoa.db.find(session,
+  Future<Pessoa> login(Session session, String email, String password) async {
+    final user = await Pessoa.db.findFirstRow(session,
         where: (tb) => (tb.email.equals(email)) & (tb.senha.equals(password)));
+
+    if (user != null) {
+      return user;
+    } else {
+      throw Exception('Não autorizado');
+    }
   }
 }

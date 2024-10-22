@@ -5,6 +5,7 @@ import 'package:h2_tracker_flutter/components/page_indicator.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 import 'package:intl/intl.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,7 +19,6 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _registerFormKey = GlobalKey<FormState>();
 
   bool _isLogin = true;
-  bool _isLoading = false;
   int _currentPageIndex = 0;
 
   final _pageViewController = PageController();
@@ -37,7 +37,25 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final UserStateService _userStateService = UserStateService();
 
   Future<void> _login() async {
-    await client.pessoa.login(_emailController.text, _passwordController.text);
+    try {
+      final user = await client.pessoa
+          .login(_emailController.text, _passwordController.text);
+
+      setState(() {
+        _userStateService.user = user;
+      });
+    } on Exception {
+      final snackBar = SnackBar(
+        content: const Text('Credenciais Inválidas!'),
+        backgroundColor: Colors.redAccent[400],
+      );
+
+      setState(() {
+        _userStateService.user = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Future<void> _registerUser() async {
@@ -106,45 +124,43 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isLoading
-          ? const CircularProgressIndicator()
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (_isLogin)
-                  _loginWidget(context)
-                else
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width * .5,
-                    child: Form(
-                      key: _registerFormKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (_isLogin)
+            _loginWidget(context)
+          else
+            SizedBox(
+              width: MediaQuery.sizeOf(context).width * .5,
+              child: Form(
+                key: _registerFormKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * .6,
+                      width: MediaQuery.sizeOf(context).width * .3,
+                      child: PageView(
+                        controller: _pageViewController,
+                        onPageChanged: _handlePageViewChanged,
                         children: [
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).height * .6,
-                            width: MediaQuery.sizeOf(context).width * .3,
-                            child: PageView(
-                              controller: _pageViewController,
-                              onPageChanged: _handlePageViewChanged,
-                              children: [
-                                _registerEmailAndPassword(),
-                                _physiologicData(context),
-                                _objectiveAndTime(context)
-                              ],
-                            ),
-                          ),
+                          _registerEmailAndPassword(),
+                          _physiologicData(context),
+                          _objectiveAndTime(context)
                         ],
                       ),
                     ),
-                  ),
-                Container(
-                    width: MediaQuery.sizeOf(context).width * .5,
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlueAccent[100],
-                    ))
-              ],
+                  ],
+                ),
+              ),
             ),
+          Container(
+              width: MediaQuery.sizeOf(context).width * .5,
+              decoration: BoxDecoration(
+                color: Colors.lightBlueAccent[100],
+              ))
+        ],
+      ),
     );
   }
 
@@ -175,54 +191,63 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       ),
                     ),
                     BasicFormField(
-                        label: 'Email', controller: _emailController),
-                    BasicFormField(
-                        label: 'Senha', controller: _passwordController),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: FilledButton(
-                              onPressed: () {
-                                setState(() {
-                                  _isLogin = false;
-                                });
-                              },
-                              child: const Text('Realizar Cadastro'),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: FilledButton(
-                              onPressed: () async {
-                                // Validate returns true if the form is valid, or false otherwise.
-                                if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                  await _login();
-
-                                  Navigator.pushReplacementNamed(
-                                      // ignore: use_build_context_synchronously
-                                      context,
-                                      '/home');
-
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                }
-                              },
-                              child: const Text('Realizar Login'),
-                            ),
-                          ),
-                        ],
-                      ),
+                      label: 'Email',
+                      controller: _emailController,
+                      textInputType: InputType.email,
                     ),
+                    BasicFormField(
+                      label: 'Senha',
+                      controller: _passwordController,
+                      obscureText: true,
+                    ),
+                    _actionButtons(context),
                   ],
                 )),
           )
+        ],
+      ),
+    );
+  }
+
+  Padding _actionButtons(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: FilledButton(
+              onPressed: () {
+                setState(() {
+                  _isLogin = false;
+                });
+              },
+              child: const Text('Realizar Cadastro'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: FilledButton(
+              onPressed: () async {
+                // Validate returns true if the form is valid, or false otherwise.
+                if (_formKey.currentState!.validate()) {
+                  context.loaderOverlay.show();
+
+                  await _login();
+
+                  if (_userStateService.user != null) {
+                    Navigator.pushReplacementNamed(
+                        // ignore: use_build_context_synchronously
+                        context,
+                        '/home');
+                  }
+
+                  context.loaderOverlay.hide();
+                }
+              },
+              child: const Text('Realizar Login'),
+            ),
+          ),
         ],
       ),
     );
@@ -431,7 +456,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
         TextFormField(
           controller: _dateController, // Assign the controller
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Select Date',
             suffixIcon: Icon(Icons.calendar_today), // Calendar icon
           ),
@@ -449,15 +474,11 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 onPressed: () async {
                   // Validate returns true if the form is valid, or false otherwise.
                   if (_registerFormKey.currentState!.validate()) {
-                    setState(() {
-                      _isLoading = true;
-                    });
+                    context.loaderOverlay.show();
 
                     await _registerUser();
 
-                    setState(() {
-                      _isLoading = false;
-                    });
+                    context.loaderOverlay.hide();
                     // ignore: use_build_context_synchronously
                     Navigator.pushReplacementNamed(context, '/home');
                   }

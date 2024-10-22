@@ -2,6 +2,7 @@ import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_flutter/views/home_view.dart';
 import 'package:h2_tracker_flutter/views/login_view.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
 // Sets up a singleton client object that can be used to talk to the server from
@@ -21,43 +22,65 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Healthy Habits Tracker',
-      routes: {
-        '/login': (context) => const LoginPage(),
-        '/home': (context) => const HomeView(),
-      },
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: const ColorScheme(
-            brightness: Brightness.light,
-            primary: Colors.blue,
-            onPrimary: Colors.white,
-            secondary: Colors.blue,
-            onSecondary: Colors.white,
-            error: Colors.red,
-            onError: Colors.white,
-            surface: Colors.white,
-            onSurface: Colors.blue),
-        primarySwatch: Colors.blue,
-        textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.blue),
-        inputDecorationTheme: InputDecorationTheme(
-          enabledBorder: InputBorder.none,
-          focusedBorder: InputBorder.none,
-          filled: true,
-          fillColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
-        ),
-        filledButtonTheme: FilledButtonThemeData(
-          style: ButtonStyle(
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+    final size = MediaQuery.sizeOf(context);
+
+    return GlobalLoaderOverlay(
+      child: MaterialApp(
+        title: 'Healthy Habits Tracker',
+        routes: {
+          '/login': (context) => const LoginPage(),
+          '/home': (context) => const HomeView(),
+        },
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: const ColorScheme(
+              brightness: Brightness.light,
+              primary: Colors.blue,
+              onPrimary: Colors.white,
+              secondary: Colors.blue,
+              onSecondary: Colors.white,
+              error: Colors.red,
+              onError: Colors.white,
+              surface: Colors.white,
+              onSurface: Colors.blue),
+          primarySwatch: Colors.blue,
+          textSelectionTheme:
+              const TextSelectionThemeData(cursorColor: Colors.blue),
+          inputDecorationTheme: InputDecorationTheme(
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            filled: true,
+            fillColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.blue,
+            toolbarHeight: size.height * .1,
+            iconTheme: IconThemeData(
+              size: (size.height * .64 < 32) ? 32 : size.height * .64,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          textButtonTheme: const TextButtonThemeData(
+            style: ButtonStyle(
+              iconSize: WidgetStatePropertyAll(32),
+              iconColor: WidgetStatePropertyAll(Colors.white),
+              textStyle: WidgetStatePropertyAll(
+                TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+          ),
+          filledButtonTheme: FilledButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ),
         ),
+        home: const LoginPage(),
       ),
-      home: const LoginPage(),
     );
   }
 }

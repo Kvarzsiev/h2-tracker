@@ -1,0 +1,347 @@
+/* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */
+/*   To generate run: "serverpod generate"    */
+
+// ignore_for_file: implementation_imports
+// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: public_member_api_docs
+// ignore_for_file: type_literal_in_constant_pattern
+// ignore_for_file: use_super_parameters
+
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:serverpod/serverpod.dart' as _i1;
+
+abstract class Exercicio extends _i1.TableRow
+    implements _i1.ProtocolSerialization {
+  Exercicio._({
+    int? id,
+    required this.nome,
+    required this.grupoMuscular,
+    required this.descricao,
+  }) : super(id);
+
+  factory Exercicio({
+    int? id,
+    required String nome,
+    required String grupoMuscular,
+    required String descricao,
+  }) = _ExercicioImpl;
+
+  factory Exercicio.fromJson(Map<String, dynamic> jsonSerialization) {
+    return Exercicio(
+      id: jsonSerialization['id'] as int?,
+      nome: jsonSerialization['nome'] as String,
+      grupoMuscular: jsonSerialization['grupoMuscular'] as String,
+      descricao: jsonSerialization['descricao'] as String,
+    );
+  }
+
+  static final t = ExercicioTable();
+
+  static const db = ExercicioRepository._();
+
+  String nome;
+
+  String grupoMuscular;
+
+  String descricao;
+
+  @override
+  _i1.Table get table => t;
+
+  Exercicio copyWith({
+    int? id,
+    String? nome,
+    String? grupoMuscular,
+    String? descricao,
+  });
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'nome': nome,
+      'grupoMuscular': grupoMuscular,
+      'descricao': descricao,
+    };
+  }
+
+  @override
+  Map<String, dynamic> toJsonForProtocol() {
+    return {
+      if (id != null) 'id': id,
+      'nome': nome,
+      'grupoMuscular': grupoMuscular,
+      'descricao': descricao,
+    };
+  }
+
+  static ExercicioInclude include() {
+    return ExercicioInclude._();
+  }
+
+  static ExercicioIncludeList includeList({
+    _i1.WhereExpressionBuilder<ExercicioTable>? where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ExercicioTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ExercicioTable>? orderByList,
+    ExercicioInclude? include,
+  }) {
+    return ExercicioIncludeList._(
+      where: where,
+      limit: limit,
+      offset: offset,
+      orderBy: orderBy?.call(Exercicio.t),
+      orderDescending: orderDescending,
+      orderByList: orderByList?.call(Exercicio.t),
+      include: include,
+    );
+  }
+
+  @override
+  String toString() {
+    return _i1.SerializationManager.encode(this);
+  }
+}
+
+class _Undefined {}
+
+class _ExercicioImpl extends Exercicio {
+  _ExercicioImpl({
+    int? id,
+    required String nome,
+    required String grupoMuscular,
+    required String descricao,
+  }) : super._(
+          id: id,
+          nome: nome,
+          grupoMuscular: grupoMuscular,
+          descricao: descricao,
+        );
+
+  @override
+  Exercicio copyWith({
+    Object? id = _Undefined,
+    String? nome,
+    String? grupoMuscular,
+    String? descricao,
+  }) {
+    return Exercicio(
+      id: id is int? ? id : this.id,
+      nome: nome ?? this.nome,
+      grupoMuscular: grupoMuscular ?? this.grupoMuscular,
+      descricao: descricao ?? this.descricao,
+    );
+  }
+}
+
+class ExercicioTable extends _i1.Table {
+  ExercicioTable({super.tableRelation}) : super(tableName: 'exercicio') {
+    nome = _i1.ColumnString(
+      'nome',
+      this,
+    );
+    grupoMuscular = _i1.ColumnString(
+      'grupoMuscular',
+      this,
+    );
+    descricao = _i1.ColumnString(
+      'descricao',
+      this,
+    );
+  }
+
+  late final _i1.ColumnString nome;
+
+  late final _i1.ColumnString grupoMuscular;
+
+  late final _i1.ColumnString descricao;
+
+  @override
+  List<_i1.Column> get columns => [
+        id,
+        nome,
+        grupoMuscular,
+        descricao,
+      ];
+}
+
+class ExercicioInclude extends _i1.IncludeObject {
+  ExercicioInclude._();
+
+  @override
+  Map<String, _i1.Include?> get includes => {};
+
+  @override
+  _i1.Table get table => Exercicio.t;
+}
+
+class ExercicioIncludeList extends _i1.IncludeList {
+  ExercicioIncludeList._({
+    _i1.WhereExpressionBuilder<ExercicioTable>? where,
+    super.limit,
+    super.offset,
+    super.orderBy,
+    super.orderDescending,
+    super.orderByList,
+    super.include,
+  }) {
+    super.where = where?.call(Exercicio.t);
+  }
+
+  @override
+  Map<String, _i1.Include?> get includes => include?.includes ?? {};
+
+  @override
+  _i1.Table get table => Exercicio.t;
+}
+
+class ExercicioRepository {
+  const ExercicioRepository._();
+
+  Future<List<Exercicio>> find(
+    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.WhereExpressionBuilder<ExercicioTable>? where,
+    int? limit,
+    int? offset,
+    _i1.OrderByBuilder<ExercicioTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ExercicioTable>? orderByList,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.find<Exercicio>(
+      where: where?.call(Exercicio.t),
+      orderBy: orderBy?.call(Exercicio.t),
+      orderByList: orderByList?.call(Exercicio.t),
+      orderDescending: orderDescending,
+      limit: limit,
+      offset: offset,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<Exercicio?> findFirstRow(
+    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.WhereExpressionBuilder<ExercicioTable>? where,
+    int? offset,
+    _i1.OrderByBuilder<ExercicioTable>? orderBy,
+    bool orderDescending = false,
+    _i1.OrderByListBuilder<ExercicioTable>? orderByList,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.findFirstRow<Exercicio>(
+      where: where?.call(Exercicio.t),
+      orderBy: orderBy?.call(Exercicio.t),
+      orderByList: orderByList?.call(Exercicio.t),
+      orderDescending: orderDescending,
+      offset: offset,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<Exercicio?> findById(
+    _i1.DatabaseAccessor databaseAccessor,
+    int id, {
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.findById<Exercicio>(
+      id,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<List<Exercicio>> insert(
+    _i1.DatabaseAccessor databaseAccessor,
+    List<Exercicio> rows, {
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.insert<Exercicio>(
+      rows,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<Exercicio> insertRow(
+    _i1.DatabaseAccessor databaseAccessor,
+    Exercicio row, {
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.insertRow<Exercicio>(
+      row,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<List<Exercicio>> update(
+    _i1.DatabaseAccessor databaseAccessor,
+    List<Exercicio> rows, {
+    _i1.ColumnSelections<ExercicioTable>? columns,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.update<Exercicio>(
+      rows,
+      columns: columns?.call(Exercicio.t),
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<Exercicio> updateRow(
+    _i1.DatabaseAccessor databaseAccessor,
+    Exercicio row, {
+    _i1.ColumnSelections<ExercicioTable>? columns,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.updateRow<Exercicio>(
+      row,
+      columns: columns?.call(Exercicio.t),
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<List<Exercicio>> delete(
+    _i1.DatabaseAccessor databaseAccessor,
+    List<Exercicio> rows, {
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.delete<Exercicio>(
+      rows,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<Exercicio> deleteRow(
+    _i1.DatabaseAccessor databaseAccessor,
+    Exercicio row, {
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.deleteRow<Exercicio>(
+      row,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<List<Exercicio>> deleteWhere(
+    _i1.DatabaseAccessor databaseAccessor, {
+    required _i1.WhereExpressionBuilder<ExercicioTable> where,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.deleteWhere<Exercicio>(
+      where: where(Exercicio.t),
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+
+  Future<int> count(
+    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.WhereExpressionBuilder<ExercicioTable>? where,
+    int? limit,
+    _i1.Transaction? transaction,
+  }) async {
+    return databaseAccessor.db.count<Exercicio>(
+      where: where?.call(Exercicio.t),
+      limit: limit,
+      transaction: transaction ?? databaseAccessor.transaction,
+    );
+  }
+}
