@@ -3,6 +3,7 @@ import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/components/basic_form_field.dart';
 import 'package:h2_tracker_flutter/components/page_indicator.dart';
 import 'package:h2_tracker_flutter/components/select_goal.dart';
+import 'package:h2_tracker_flutter/functions/show_snack_bar.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 import 'package:intl/intl.dart';
@@ -45,16 +46,14 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _userStateService.user = user;
       });
     } on Exception {
-      final snackBar = SnackBar(
-        content: const Text('Credenciais Inválidas!'),
-        backgroundColor: Colors.redAccent[400],
-      );
-
       setState(() {
         _userStateService.user = null;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackBar(
+          context: context,
+          message: 'Credenciais Inválidas!',
+          status: SnackBarStatus.error);
     }
   }
 

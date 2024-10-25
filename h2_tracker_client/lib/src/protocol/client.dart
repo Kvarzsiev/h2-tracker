@@ -15,8 +15,7 @@ import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i3;
 import 'package:h2_tracker_client/src/protocol/peso.dart' as _i4;
 import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i5;
 import 'package:h2_tracker_client/src/protocol/treino.dart' as _i6;
-import 'package:h2_tracker_client/src/protocol/treino_exercicio.dart' as _i7;
-import 'protocol.dart' as _i8;
+import 'protocol.dart' as _i7;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -120,6 +119,13 @@ class EndpointPessoa extends _i1.EndpointRef {
           'password': password,
         },
       );
+
+  _i2.Future<List<_i6.Treino>> readUserTrainings(int userId) =>
+      caller.callServerEndpoint<List<_i6.Treino>>(
+        'pessoa',
+        'readUserTrainings',
+        {'userId': userId},
+      );
 }
 
 /// {@category Endpoint}
@@ -129,24 +135,16 @@ class EndpointTreino extends _i1.EndpointRef {
   @override
   String get name => 'treino';
 
-  _i2.Future<void> insert(
-    _i6.Treino treino,
-    List<_i7.TreinoExercicio> exercises,
-  ) =>
-      caller.callServerEndpoint<void>(
+  _i2.Future<void> insert(_i6.Treino treino) => caller.callServerEndpoint<void>(
         'treino',
         'insert',
-        {
-          'treino': treino,
-          'exercises': exercises,
-        },
+        {'treino': treino},
       );
 
-  _i2.Future<List<_i6.Treino>> read(int userId) =>
-      caller.callServerEndpoint<List<_i6.Treino>>(
+  _i2.Future<void> update(_i6.Treino treino) => caller.callServerEndpoint<void>(
         'treino',
-        'read',
-        {'userId': userId},
+        'update',
+        {'treino': treino},
       );
 
   _i2.Future<_i6.Treino?> findById(int id) =>
@@ -179,7 +177,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i8.Protocol(),
+          _i7.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,

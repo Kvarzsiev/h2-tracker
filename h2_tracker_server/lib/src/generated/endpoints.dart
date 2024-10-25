@@ -19,7 +19,6 @@ import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i7;
 import 'package:h2_tracker_server/src/generated/peso.dart' as _i8;
 import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i9;
 import 'package:h2_tracker_server/src/generated/treino.dart' as _i10;
-import 'package:h2_tracker_server/src/generated/treino_exercicio.dart' as _i11;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -235,6 +234,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['password'],
           ),
         ),
+        'readUserTrainings': _i1.MethodConnector(
+          name: 'readUserTrainings',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['pessoa'] as _i5.PessoaEndpoint).readUserTrainings(
+            session,
+            params['userId'],
+          ),
+        ),
       },
     );
     connectors['treino'] = _i1.EndpointConnector(
@@ -248,12 +265,7 @@ class Endpoints extends _i1.EndpointDispatch {
               name: 'treino',
               type: _i1.getType<_i10.Treino>(),
               nullable: false,
-            ),
-            'exercises': _i1.ParameterDescription(
-              name: 'exercises',
-              type: _i1.getType<List<_i11.TreinoExercicio>>(),
-              nullable: false,
-            ),
+            )
           },
           call: (
             _i1.Session session,
@@ -262,15 +274,14 @@ class Endpoints extends _i1.EndpointDispatch {
               (endpoints['treino'] as _i6.TreinoEndpoint).insert(
             session,
             params['treino'],
-            params['exercises'],
           ),
         ),
-        'read': _i1.MethodConnector(
-          name: 'read',
+        'update': _i1.MethodConnector(
+          name: 'update',
           params: {
-            'userId': _i1.ParameterDescription(
-              name: 'userId',
-              type: _i1.getType<int>(),
+            'treino': _i1.ParameterDescription(
+              name: 'treino',
+              type: _i1.getType<_i10.Treino>(),
               nullable: false,
             )
           },
@@ -278,9 +289,9 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treino'] as _i6.TreinoEndpoint).read(
+              (endpoints['treino'] as _i6.TreinoEndpoint).update(
             session,
-            params['userId'],
+            params['treino'],
           ),
         ),
         'findById': _i1.MethodConnector(

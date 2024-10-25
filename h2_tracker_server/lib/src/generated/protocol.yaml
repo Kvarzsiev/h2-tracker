@@ -11,8 +11,9 @@ pessoa:
   - insert:
   - delete:
   - login:
+  - readUserTrainings:
 treino:
   - insert:
-  - read:
+  - update:
   - findById:
   - delete:

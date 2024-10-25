@@ -36,6 +36,15 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
 
   List<Exercicio> _exercises = [];
 
+  void _navigateToRailIndex(int index, dynamic navigationArg) {
+    setState(() {
+      _selectedIndex = index;
+      _navigationArg = navigationArg;
+    });
+  }
+
+  dynamic _navigationArg;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,11 +53,8 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
       body: Row(children: <Widget>[
         NavigationRail(
           selectedIndex: _selectedIndex,
-          onDestinationSelected: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+          onDestinationSelected: (int index) =>
+              _navigateToRailIndex(index, null),
           extended: true,
           destinations: const <NavigationRailDestination>[
             NavigationRailDestination(
@@ -60,16 +66,16 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
               ),
             ),
             NavigationRailDestination(
-              icon: Icon(Icons.add),
-              selectedIcon: Icon(Icons.add),
+              icon: Icon(Icons.edit_calendar_rounded),
+              selectedIcon: Icon(Icons.edit_calendar_rounded),
               label: Text(
-                'Criar Novo Treino',
+                'Criar / ver Treino',
                 style: TextStyle(fontSize: 16),
               ),
             ),
             NavigationRailDestination(
-              icon: Icon(Icons.search_rounded),
-              selectedIcon: Icon(Icons.search_rounded),
+              icon: Icon(Icons.calendar_today_rounded),
+              selectedIcon: Icon(Icons.calendar_today_rounded),
               label: Text(
                 'Consultar Treinos',
                 style: TextStyle(fontSize: 16),
@@ -88,11 +94,14 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
         const VerticalDivider(thickness: 1, width: 1),
         // This is the main content.
         if (_selectedIndex == 0)
-          Expanded(child: Container())
+          const Expanded(child: Text('Historico'))
         else if (_selectedIndex == 1)
-          const TrainingView()
+          TrainingView(
+            navigateToRailIndex: _navigateToRailIndex,
+            treino: _navigationArg is Treino ? _navigationArg : null,
+          )
         else if (_selectedIndex == 2)
-          const UserTrainingsView()
+          UserTrainingsView(navigateToRailIndex: _navigateToRailIndex)
         else if (_selectedIndex == 3)
           Expanded(
             child: GridView.count(

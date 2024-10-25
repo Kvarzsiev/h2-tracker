@@ -2,22 +2,29 @@ import 'package:h2_tracker_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class TreinoEndpoint extends Endpoint {
-  Future<void> insert(
-      Session session, Treino treino, List<TreinoExercicio> exercises) async {
-    final treinoInstance = await Treino.db.insertRow(session, treino);
-
-    for (final exercise in exercises) {
-      exercise.treinoId = treinoInstance.id!;
-    }
-
-    await TreinoExercicio.db.insert(session, exercises);
+  Future<void> insert(Session session, Treino treino) async {
+    await Treino.db.insertRow(session, treino);
   }
 
-  Future<List<Treino>> read(Session session, int userId) async {
-    //final user = await Pessoa.db.findFirstRow(session,
-    //    where: (tb) => (tb.email.equals(email)) & (tb.senha.equals(password)));
+  Future<void> update(Session session, Treino treino) async {
+    print(treino);
 
-    return await Treino.db.find(session);
+    await Treino.db.updateRow(session, treino);
+
+    if (treino.treinoExercicios != null &&
+        treino.treinoExercicios!.isNotEmpty) {
+      final exerciciosAntigos = treino.treinoExercicios!
+          .where((treinoExercicio) => treinoExercicio.id != null)
+          .toList();
+
+      await TreinoExercicio.db.update(session, exerciciosAntigos);
+
+      final novosExercicios = treino.treinoExercicios!
+          .where((treinoExercicio) => treinoExercicio.id == null)
+          .toList();
+
+      await TreinoExercicio.db.insert(session, novosExercicios);
+    }
   }
 
   Future<Treino?> findById(Session session, int id) async {

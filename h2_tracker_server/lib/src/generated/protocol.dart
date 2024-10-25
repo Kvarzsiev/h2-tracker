@@ -23,8 +23,7 @@ import 'treino_exercicio_historico.dart' as _i10;
 import 'treino_historico.dart' as _i11;
 import 'protocol.dart' as _i12;
 import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i13;
-import 'package:h2_tracker_server/src/generated/treino_exercicio.dart' as _i14;
-import 'package:h2_tracker_server/src/generated/treino.dart' as _i15;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i14;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -408,7 +407,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         )
       ],
@@ -475,7 +474,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         ),
         _i2.ForeignKeyDefinition(
@@ -541,7 +540,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         )
       ],
@@ -602,7 +601,7 @@ class Protocol extends _i1.SerializationManagerServer {
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
         )
       ],
@@ -733,13 +732,8 @@ class Protocol extends _i1.SerializationManagerServer {
       return (data as List).map((e) => deserialize<_i13.Exercicio>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i14.TreinoExercicio>) {
-      return (data as List)
-          .map((e) => deserialize<_i14.TreinoExercicio>(e))
-          .toList() as dynamic;
-    }
-    if (t == List<_i15.Treino>) {
-      return (data as List).map((e) => deserialize<_i15.Treino>(e)).toList()
+    if (t == List<_i14.Treino>) {
+      return (data as List).map((e) => deserialize<_i14.Treino>(e)).toList()
           as dynamic;
     }
     try {
