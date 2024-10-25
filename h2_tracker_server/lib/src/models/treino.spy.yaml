@@ -20,5 +20,6 @@ table: treino
 fields:
   descricao: String
   objetivo: String
-  treinoExercicios: List<TreinoExercicio>?, relation
-  treinoHistoricos: List<TreinoHistorico>?, relation
+  pessoa: Pessoa?, relation(name=pessoa_treinos)
+  treinoExercicios: List<TreinoExercicio>?, relation(name=treino_treino_exercicio)
+  treinoHistoricos: List<TreinoHistorico>?, relation(name=treino_treino_historico)

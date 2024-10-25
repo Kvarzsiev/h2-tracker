@@ -11,10 +11,15 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import '../endpoints/example_endpoint.dart' as _i2;
-import '../endpoints/peso_endpoint.dart' as _i3;
-import '../endpoints/pessoa_endpoint.dart' as _i4;
-import 'package:h2_tracker_server/src/generated/peso.dart' as _i5;
-import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i6;
+import '../endpoints/exercicio_endpoint.dart' as _i3;
+import '../endpoints/peso_endpoint.dart' as _i4;
+import '../endpoints/pessoa_endpoint.dart' as _i5;
+import '../endpoints/treino_endpoint.dart' as _i6;
+import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i7;
+import 'package:h2_tracker_server/src/generated/peso.dart' as _i8;
+import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i9;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i10;
+import 'package:h2_tracker_server/src/generated/treino_exercicio.dart' as _i11;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -26,16 +31,28 @@ class Endpoints extends _i1.EndpointDispatch {
           'example',
           null,
         ),
-      'peso': _i3.PesoEndpoint()
+      'exercicio': _i3.ExercicioEndpoint()
+        ..initialize(
+          server,
+          'exercicio',
+          null,
+        ),
+      'peso': _i4.PesoEndpoint()
         ..initialize(
           server,
           'peso',
           null,
         ),
-      'pessoa': _i4.PessoaEndpoint()
+      'pessoa': _i5.PessoaEndpoint()
         ..initialize(
           server,
           'pessoa',
+          null,
+        ),
+      'treino': _i6.TreinoEndpoint()
+        ..initialize(
+          server,
+          'treino',
           null,
         ),
     };
@@ -63,6 +80,67 @@ class Endpoints extends _i1.EndpointDispatch {
         )
       },
     );
+    connectors['exercicio'] = _i1.EndpointConnector(
+      name: 'exercicio',
+      endpoint: endpoints['exercicio']!,
+      methodConnectors: {
+        'insert': _i1.MethodConnector(
+          name: 'insert',
+          params: {
+            'exercicio': _i1.ParameterDescription(
+              name: 'exercicio',
+              type: _i1.getType<_i7.Exercicio>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['exercicio'] as _i3.ExercicioEndpoint).insert(
+            session,
+            params['exercicio'],
+          ),
+        ),
+        'read': _i1.MethodConnector(
+          name: 'read',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['exercicio'] as _i3.ExercicioEndpoint).read(session),
+        ),
+        'delete': _i1.MethodConnector(
+          name: 'delete',
+          params: {
+            'exercicio': _i1.ParameterDescription(
+              name: 'exercicio',
+              type: _i1.getType<_i7.Exercicio>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['exercicio'] as _i3.ExercicioEndpoint).delete(
+            session,
+            params['exercicio'],
+          ),
+        ),
+        'insertDefault': _i1.MethodConnector(
+          name: 'insertDefault',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['exercicio'] as _i3.ExercicioEndpoint)
+                  .insertDefault(session),
+        ),
+      },
+    );
     connectors['peso'] = _i1.EndpointConnector(
       name: 'peso',
       endpoint: endpoints['peso']!,
@@ -72,7 +150,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'peso': _i1.ParameterDescription(
               name: 'peso',
-              type: _i1.getType<_i5.Peso>(),
+              type: _i1.getType<_i8.Peso>(),
               nullable: false,
             ),
             'height': _i1.ParameterDescription(
@@ -85,7 +163,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['peso'] as _i3.PesoEndpoint).insert(
+              (endpoints['peso'] as _i4.PesoEndpoint).insert(
             session,
             params['peso'],
             params['height'],
@@ -102,7 +180,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i6.Pessoa>(),
+              type: _i1.getType<_i9.Pessoa>(),
               nullable: false,
             )
           },
@@ -110,7 +188,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i4.PessoaEndpoint).insert(
+              (endpoints['pessoa'] as _i5.PessoaEndpoint).insert(
             session,
             params['pessoa'],
           ),
@@ -120,7 +198,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i6.Pessoa>(),
+              type: _i1.getType<_i9.Pessoa>(),
               nullable: false,
             )
           },
@@ -128,7 +206,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i4.PessoaEndpoint).delete(
+              (endpoints['pessoa'] as _i5.PessoaEndpoint).delete(
             session,
             params['pessoa'],
           ),
@@ -151,10 +229,94 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i4.PessoaEndpoint).login(
+              (endpoints['pessoa'] as _i5.PessoaEndpoint).login(
             session,
             params['email'],
             params['password'],
+          ),
+        ),
+      },
+    );
+    connectors['treino'] = _i1.EndpointConnector(
+      name: 'treino',
+      endpoint: endpoints['treino']!,
+      methodConnectors: {
+        'insert': _i1.MethodConnector(
+          name: 'insert',
+          params: {
+            'treino': _i1.ParameterDescription(
+              name: 'treino',
+              type: _i1.getType<_i10.Treino>(),
+              nullable: false,
+            ),
+            'exercises': _i1.ParameterDescription(
+              name: 'exercises',
+              type: _i1.getType<List<_i11.TreinoExercicio>>(),
+              nullable: false,
+            ),
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treino'] as _i6.TreinoEndpoint).insert(
+            session,
+            params['treino'],
+            params['exercises'],
+          ),
+        ),
+        'read': _i1.MethodConnector(
+          name: 'read',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treino'] as _i6.TreinoEndpoint).read(
+            session,
+            params['userId'],
+          ),
+        ),
+        'findById': _i1.MethodConnector(
+          name: 'findById',
+          params: {
+            'id': _i1.ParameterDescription(
+              name: 'id',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treino'] as _i6.TreinoEndpoint).findById(
+            session,
+            params['id'],
+          ),
+        ),
+        'delete': _i1.MethodConnector(
+          name: 'delete',
+          params: {
+            'treino': _i1.ParameterDescription(
+              name: 'treino',
+              type: _i1.getType<_i10.Treino>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treino'] as _i6.TreinoEndpoint).delete(
+            session,
+            params['treino'],
           ),
         ),
       },

@@ -77,8 +77,6 @@ abstract class TreinoExercicio extends _i1.TableRow
 
   List<_i2.TreinoExercicioHistorico>? treinoExercicioHistoricos;
 
-  int? _treinoTreinoexerciciosTreinoId;
-
   @override
   _i1.Table get table => t;
 
@@ -105,8 +103,6 @@ abstract class TreinoExercicio extends _i1.TableRow
       if (treinoExercicioHistoricos != null)
         'treinoExercicioHistoricos':
             treinoExercicioHistoricos?.toJson(valueToJson: (v) => v.toJson()),
-      if (_treinoTreinoexerciciosTreinoId != null)
-        '_treinoTreinoexerciciosTreinoId': _treinoTreinoexerciciosTreinoId,
     };
   }
 
@@ -215,56 +211,6 @@ class _TreinoExercicioImpl extends TreinoExercicio {
   }
 }
 
-class TreinoExercicioImplicit extends _TreinoExercicioImpl {
-  TreinoExercicioImplicit._({
-    int? id,
-    required int repeticoes,
-    required int series,
-    required int treinoId,
-    _i2.Treino? treino,
-    required int exercicioId,
-    _i2.Exercicio? exercicio,
-    List<_i2.TreinoExercicioHistorico>? treinoExercicioHistoricos,
-    this.$_treinoTreinoexerciciosTreinoId,
-  }) : super(
-          id: id,
-          repeticoes: repeticoes,
-          series: series,
-          treinoId: treinoId,
-          treino: treino,
-          exercicioId: exercicioId,
-          exercicio: exercicio,
-          treinoExercicioHistoricos: treinoExercicioHistoricos,
-        );
-
-  factory TreinoExercicioImplicit(
-    TreinoExercicio treinoExercicio, {
-    int? $_treinoTreinoexerciciosTreinoId,
-  }) {
-    return TreinoExercicioImplicit._(
-      id: treinoExercicio.id,
-      repeticoes: treinoExercicio.repeticoes,
-      series: treinoExercicio.series,
-      treinoId: treinoExercicio.treinoId,
-      treino: treinoExercicio.treino,
-      exercicioId: treinoExercicio.exercicioId,
-      exercicio: treinoExercicio.exercicio,
-      treinoExercicioHistoricos: treinoExercicio.treinoExercicioHistoricos,
-      $_treinoTreinoexerciciosTreinoId: $_treinoTreinoexerciciosTreinoId,
-    );
-  }
-
-  int? $_treinoTreinoexerciciosTreinoId;
-
-  @override
-  Map<String, dynamic> toJson() {
-    var jsonMap = super.toJson();
-    jsonMap.addAll(
-        {'_treinoTreinoexerciciosTreinoId': $_treinoTreinoexerciciosTreinoId});
-    return jsonMap;
-  }
-}
-
 class TreinoExercicioTable extends _i1.Table {
   TreinoExercicioTable({super.tableRelation})
       : super(tableName: 'treino_exercicio') {
@@ -282,10 +228,6 @@ class TreinoExercicioTable extends _i1.Table {
     );
     exercicioId = _i1.ColumnInt(
       'exercicioId',
-      this,
-    );
-    $_treinoTreinoexerciciosTreinoId = _i1.ColumnInt(
-      '_treinoTreinoexerciciosTreinoId',
       this,
     );
   }
@@ -306,8 +248,6 @@ class TreinoExercicioTable extends _i1.Table {
 
   _i1.ManyRelation<_i2.TreinoExercicioHistoricoTable>?
       _treinoExercicioHistoricos;
-
-  late final _i1.ColumnInt $_treinoTreinoexerciciosTreinoId;
 
   _i2.TreinoTable get treino {
     if (_treino != null) return _treino!;
@@ -341,8 +281,7 @@ class TreinoExercicioTable extends _i1.Table {
     ___treinoExercicioHistoricos = _i1.createRelationTable(
       relationFieldName: '__treinoExercicioHistoricos',
       field: TreinoExercicio.t.id,
-      foreignField: _i2.TreinoExercicioHistorico.t
-          .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
+      foreignField: _i2.TreinoExercicioHistorico.t.treinoExercicioId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) => _i2.TreinoExercicioHistoricoTable(
           tableRelation: foreignTableRelation),
@@ -356,8 +295,7 @@ class TreinoExercicioTable extends _i1.Table {
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'treinoExercicioHistoricos',
       field: TreinoExercicio.t.id,
-      foreignField: _i2.TreinoExercicioHistorico.t
-          .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
+      foreignField: _i2.TreinoExercicioHistorico.t.treinoExercicioId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) => _i2.TreinoExercicioHistoricoTable(
           tableRelation: foreignTableRelation),
@@ -378,7 +316,6 @@ class TreinoExercicioTable extends _i1.Table {
         series,
         treinoId,
         exercicioId,
-        $_treinoTreinoexerciciosTreinoId,
       ];
 
   @override
@@ -624,18 +561,11 @@ class TreinoExercicioAttachRepository {
     }
 
     var $treinoExercicioHistorico = treinoExercicioHistorico
-        .map((e) => _i2.TreinoExercicioHistoricoImplicit(
-              e,
-              $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId:
-                  treinoExercicio.id,
-            ))
+        .map((e) => e.copyWith(treinoExercicioId: treinoExercicio.id))
         .toList();
     await databaseAccessor.db.update<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
-      columns: [
-        _i2.TreinoExercicioHistorico.t
-            .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId
-      ],
+      columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }
@@ -699,17 +629,11 @@ class TreinoExercicioAttachRowRepository {
       throw ArgumentError.notNull('treinoExercicio.id');
     }
 
-    var $treinoExercicioHistorico = _i2.TreinoExercicioHistoricoImplicit(
-      treinoExercicioHistorico,
-      $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId:
-          treinoExercicio.id,
-    );
+    var $treinoExercicioHistorico = treinoExercicioHistorico.copyWith(
+        treinoExercicioId: treinoExercicio.id);
     await databaseAccessor.db.updateRow<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
-      columns: [
-        _i2.TreinoExercicioHistorico.t
-            .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId
-      ],
+      columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }
@@ -728,17 +652,11 @@ class TreinoExercicioDetachRepository {
     }
 
     var $treinoExercicioHistorico = treinoExercicioHistorico
-        .map((e) => _i2.TreinoExercicioHistoricoImplicit(
-              e,
-              $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId: null,
-            ))
+        .map((e) => e.copyWith(treinoExercicioId: null))
         .toList();
     await databaseAccessor.db.update<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
-      columns: [
-        _i2.TreinoExercicioHistorico.t
-            .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId
-      ],
+      columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }
@@ -756,16 +674,11 @@ class TreinoExercicioDetachRowRepository {
       throw ArgumentError.notNull('treinoExercicioHistorico.id');
     }
 
-    var $treinoExercicioHistorico = _i2.TreinoExercicioHistoricoImplicit(
-      treinoExercicioHistorico,
-      $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId: null,
-    );
+    var $treinoExercicioHistorico =
+        treinoExercicioHistorico.copyWith(treinoExercicioId: null);
     await databaseAccessor.db.updateRow<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
-      columns: [
-        _i2.TreinoExercicioHistorico.t
-            .$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId
-      ],
+      columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
       transaction: transaction ?? databaseAccessor.transaction,
     );
   }

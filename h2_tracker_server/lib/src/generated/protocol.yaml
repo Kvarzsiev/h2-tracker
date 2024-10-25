@@ -1,8 +1,18 @@
 example:
   - hello:
+exercicio:
+  - insert:
+  - read:
+  - delete:
+  - insertDefault:
 peso:
   - insert:
 pessoa:
   - insert:
   - delete:
   - login:
+treino:
+  - insert:
+  - read:
+  - findById:
+  - delete:

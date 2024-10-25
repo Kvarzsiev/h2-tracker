@@ -20,6 +20,6 @@ table: treino_exercicio
 fields:
   repeticoes: int
   series: int
-  treino: Treino?, relation
+  treino: Treino?, relation(name=treino_treino_exercicio)
   exercicio: Exercicio?, relation
-  treinoExercicioHistoricos: List<TreinoExercicioHistorico>?, relation
+  treinoExercicioHistoricos: List<TreinoExercicioHistorico>?, relation(name=treino_exercicio_treino_exercicio_historico)

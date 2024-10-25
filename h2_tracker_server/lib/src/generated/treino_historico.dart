@@ -57,8 +57,6 @@ abstract class TreinoHistorico extends _i1.TableRow
 
   _i2.Treino? treino;
 
-  int? _treinoTreinohistoricosTreinoId;
-
   @override
   _i1.Table get table => t;
 
@@ -77,8 +75,6 @@ abstract class TreinoHistorico extends _i1.TableRow
       'horarioFim': horarioFim.toJson(),
       'treinoId': treinoId,
       if (treino != null) 'treino': treino?.toJson(),
-      if (_treinoTreinohistoricosTreinoId != null)
-        '_treinoTreinohistoricosTreinoId': _treinoTreinohistoricosTreinoId,
     };
   }
 
@@ -158,47 +154,6 @@ class _TreinoHistoricoImpl extends TreinoHistorico {
   }
 }
 
-class TreinoHistoricoImplicit extends _TreinoHistoricoImpl {
-  TreinoHistoricoImplicit._({
-    int? id,
-    required DateTime horarioInicio,
-    required DateTime horarioFim,
-    required int treinoId,
-    _i2.Treino? treino,
-    this.$_treinoTreinohistoricosTreinoId,
-  }) : super(
-          id: id,
-          horarioInicio: horarioInicio,
-          horarioFim: horarioFim,
-          treinoId: treinoId,
-          treino: treino,
-        );
-
-  factory TreinoHistoricoImplicit(
-    TreinoHistorico treinoHistorico, {
-    int? $_treinoTreinohistoricosTreinoId,
-  }) {
-    return TreinoHistoricoImplicit._(
-      id: treinoHistorico.id,
-      horarioInicio: treinoHistorico.horarioInicio,
-      horarioFim: treinoHistorico.horarioFim,
-      treinoId: treinoHistorico.treinoId,
-      treino: treinoHistorico.treino,
-      $_treinoTreinohistoricosTreinoId: $_treinoTreinohistoricosTreinoId,
-    );
-  }
-
-  int? $_treinoTreinohistoricosTreinoId;
-
-  @override
-  Map<String, dynamic> toJson() {
-    var jsonMap = super.toJson();
-    jsonMap.addAll(
-        {'_treinoTreinohistoricosTreinoId': $_treinoTreinohistoricosTreinoId});
-    return jsonMap;
-  }
-}
-
 class TreinoHistoricoTable extends _i1.Table {
   TreinoHistoricoTable({super.tableRelation})
       : super(tableName: 'treino_historico') {
@@ -214,10 +169,6 @@ class TreinoHistoricoTable extends _i1.Table {
       'treinoId',
       this,
     );
-    $_treinoTreinohistoricosTreinoId = _i1.ColumnInt(
-      '_treinoTreinohistoricosTreinoId',
-      this,
-    );
   }
 
   late final _i1.ColumnDateTime horarioInicio;
@@ -227,8 +178,6 @@ class TreinoHistoricoTable extends _i1.Table {
   late final _i1.ColumnInt treinoId;
 
   _i2.TreinoTable? _treino;
-
-  late final _i1.ColumnInt $_treinoTreinohistoricosTreinoId;
 
   _i2.TreinoTable get treino {
     if (_treino != null) return _treino!;
@@ -249,7 +198,6 @@ class TreinoHistoricoTable extends _i1.Table {
         horarioInicio,
         horarioFim,
         treinoId,
-        $_treinoTreinohistoricosTreinoId,
       ];
 
   @override

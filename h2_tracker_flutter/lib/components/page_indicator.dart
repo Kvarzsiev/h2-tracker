@@ -44,6 +44,7 @@ class PageIndicator extends StatelessWidget {
           icon: const Icon(
             Icons.arrow_left_rounded,
             size: 32.0,
+            color: Colors.blue,
           ),
         ),
         TabPageSelector(
@@ -64,6 +65,7 @@ class PageIndicator extends StatelessWidget {
             icon: const Icon(
               Icons.arrow_left_rounded,
               size: 32.0,
+              color: Colors.blue,
             ),
           ),
       ],

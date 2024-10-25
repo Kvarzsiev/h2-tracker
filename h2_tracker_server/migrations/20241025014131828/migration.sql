@@ -63,7 +63,8 @@ CREATE TABLE "refeicao" (
 CREATE TABLE "treino" (
     "id" bigserial PRIMARY KEY,
     "descricao" text NOT NULL,
-    "objetivo" text NOT NULL
+    "objetivo" text NOT NULL,
+    "pessoaId" bigint NOT NULL
 );
 
 --
@@ -74,8 +75,7 @@ CREATE TABLE "treino_exercicio" (
     "repeticoes" bigint NOT NULL,
     "series" bigint NOT NULL,
     "treinoId" bigint NOT NULL,
-    "exercicioId" bigint NOT NULL,
-    "_treinoTreinoexerciciosTreinoId" bigint
+    "exercicioId" bigint NOT NULL
 );
 
 --
@@ -84,8 +84,7 @@ CREATE TABLE "treino_exercicio" (
 CREATE TABLE "treino_exercicio_historico" (
     "id" bigserial PRIMARY KEY,
     "progressao" text NOT NULL,
-    "treinoExercicioId" bigint NOT NULL,
-    "_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId" bigint
+    "treinoExercicioId" bigint NOT NULL
 );
 
 --
@@ -95,8 +94,7 @@ CREATE TABLE "treino_historico" (
     "id" bigserial PRIMARY KEY,
     "horarioInicio" timestamp without time zone NOT NULL,
     "horarioFim" timestamp without time zone NOT NULL,
-    "treinoId" bigint NOT NULL,
-    "_treinoTreinohistoricosTreinoId" bigint
+    "treinoId" bigint NOT NULL
 );
 
 --
@@ -338,6 +336,16 @@ ALTER TABLE ONLY "refeicao"
 --
 -- ACTION CREATE FOREIGN KEY
 --
+ALTER TABLE ONLY "treino"
+    ADD CONSTRAINT "treino_fk_0"
+    FOREIGN KEY("pessoaId")
+    REFERENCES "pessoa"("id")
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION;
+
+--
+-- ACTION CREATE FOREIGN KEY
+--
 ALTER TABLE ONLY "treino_exercicio"
     ADD CONSTRAINT "treino_exercicio_fk_0"
     FOREIGN KEY("treinoId")
@@ -350,12 +358,6 @@ ALTER TABLE ONLY "treino_exercicio"
     REFERENCES "exercicio"("id")
     ON DELETE NO ACTION
     ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_exercicio"
-    ADD CONSTRAINT "treino_exercicio_fk_2"
-    FOREIGN KEY("_treinoTreinoexerciciosTreinoId")
-    REFERENCES "treino"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
 
 --
 -- ACTION CREATE FOREIGN KEY
@@ -366,12 +368,6 @@ ALTER TABLE ONLY "treino_exercicio_historico"
     REFERENCES "treino_exercicio"("id")
     ON DELETE NO ACTION
     ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_exercicio_historico"
-    ADD CONSTRAINT "treino_exercicio_historico_fk_1"
-    FOREIGN KEY("_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId")
-    REFERENCES "treino_exercicio"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
 
 --
 -- ACTION CREATE FOREIGN KEY
@@ -379,12 +375,6 @@ ALTER TABLE ONLY "treino_exercicio_historico"
 ALTER TABLE ONLY "treino_historico"
     ADD CONSTRAINT "treino_historico_fk_0"
     FOREIGN KEY("treinoId")
-    REFERENCES "treino"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_historico"
-    ADD CONSTRAINT "treino_historico_fk_1"
-    FOREIGN KEY("_treinoTreinohistoricosTreinoId")
     REFERENCES "treino"("id")
     ON DELETE NO ACTION
     ON UPDATE NO ACTION;
@@ -424,9 +414,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR h2_tracker
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('h2_tracker', '20241022034628942', now())
+    VALUES ('h2_tracker', '20241025014131828', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241022034628942', "timestamp" = now();
+    DO UPDATE SET "version" = '20241025014131828', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

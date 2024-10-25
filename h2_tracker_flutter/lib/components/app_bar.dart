@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_flutter/components/highlight.dart';
+import 'package:h2_tracker_flutter/service/user_state_service.dart';
 
 class H2AppBar extends StatefulWidget implements PreferredSizeWidget {
   const H2AppBar({super.key, required this.updatePage});
@@ -16,12 +17,34 @@ class H2AppBar extends StatefulWidget implements PreferredSizeWidget {
 class H2AppBarState extends State<H2AppBar> {
   int index = 0;
 
+  final _userStateService = UserStateService();
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text(
-        'Healthy Habits Tracker',
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'Healthy Habits Tracker',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              'Bem Vindo(a) ${_userStateService.user?.nome}!',
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16),
+            ),
+          ),
+        ],
       ),
       actions: [
         SizedBox(

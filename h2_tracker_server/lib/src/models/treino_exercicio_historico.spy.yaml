@@ -20,4 +20,4 @@ table: treino_exercicio_historico
 fields:
   ### Kg, ângulo, duração, tal e tal
   progressao: String
-  treinoExercicio: TreinoExercicio?, relation
+  treinoExercicio: TreinoExercicio?, relation(name=treino_exercicio_treino_exercicio_historico)

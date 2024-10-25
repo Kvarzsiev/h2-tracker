@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/components/basic_form_field.dart';
 import 'package:h2_tracker_flutter/components/page_indicator.dart';
+import 'package:h2_tracker_flutter/components/select_goal.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 import 'package:intl/intl.dart';
@@ -31,7 +32,6 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _ageController = TextEditingController();
-  String dropdownValue = 'PERDA_DE_PESO';
   final _dateController = TextEditingController();
 
   final UserStateService _userStateService = UserStateService();
@@ -113,6 +113,14 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         _dateController.text = DateFormat('dd-MM-yyyy').format(picked);
       });
     }
+  }
+
+  String dropdownValue = 'PERDA_DE_PESO';
+
+  void _updateDropdownValue(String newValue) {
+    setState(() {
+      dropdownValue = newValue;
+    });
   }
 
   @override
@@ -327,12 +335,15 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
           padding: const EdgeInsets.only(bottom: 16),
           child: DecoratedBox(
             decoration: BoxDecoration(
-                color: Colors.lightBlue[400],
-                borderRadius: const BorderRadius.all(Radius.circular(10))),
+              color: Colors.lightBlue[400],
+              borderRadius: const BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
             child: const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                'Dados Cadastrais',
+                'Dados Fisiológicos',
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
@@ -409,62 +420,27 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             child: const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                'Dados Cadastrais',
+                'Objetivo',
                 style: TextStyle(fontSize: 20, color: Colors.white),
               ),
             ),
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: DropdownButton<String>(
-                  value: dropdownValue,
-                  padding: const EdgeInsets.all(8),
-                  isExpanded: true,
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue = value!;
-                    });
-                  },
-                  focusColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
-                  items: const [
-                    DropdownMenuItem<String>(
-                      key: Key('PERDA_DE_PESO'),
-                      value: 'PERDA_DE_PESO',
-                      child: Text('Perda de Peso'),
-                    ),
-                    DropdownMenuItem<String>(
-                      key: Key('GANHO_DE_PESO'),
-                      value: 'GANHO_DE_PESO',
-                      child: Text('Ganho de Peso'),
-                    ),
-                    DropdownMenuItem<String>(
-                      key: Key('GANHO_DE_MASSA_MAGRA'),
-                      value: 'GANHO_DE_MASSA_MAGRA',
-                      child: Text('Ganho de Massa Magra'),
-                    ),
-                    DropdownMenuItem<String>(
-                      key: Key('MANUTENCAO_DE_PESO'),
-                      value: 'MANUTENCAO_DE_PESO',
-                      child: Text('Manutenção de Peso'),
-                    )
-                  ]),
+        SelectGoal(updateValue: _updateDropdownValue),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: TextFormField(
+            controller: _dateController, // Assign the controller
+            decoration: const InputDecoration(
+              labelText: 'Select Date',
+              suffixIcon: Icon(Icons.calendar_today), // Calendar icon
             ),
-          ],
-        ),
-        TextFormField(
-          controller: _dateController, // Assign the controller
-          decoration: const InputDecoration(
-            labelText: 'Select Date',
-            suffixIcon: Icon(Icons.calendar_today), // Calendar icon
+            readOnly: true, // Make the field read-only
+            onTap: () {
+              // Step 3: Show the date picker when the field is tapped
+              _selectDate(context);
+            },
           ),
-          readOnly: true, // Make the field read-only
-          onTap: () {
-            // Step 3: Show the date picker when the field is tapped
-            _selectDate(context);
-          },
         ),
         Row(
           children: [

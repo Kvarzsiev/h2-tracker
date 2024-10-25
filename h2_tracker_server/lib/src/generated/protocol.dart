@@ -22,6 +22,9 @@ import 'treino_exercicio.dart' as _i9;
 import 'treino_exercicio_historico.dart' as _i10;
 import 'treino_historico.dart' as _i11;
 import 'protocol.dart' as _i12;
+import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i13;
+import 'package:h2_tracker_server/src/generated/treino_exercicio.dart' as _i14;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i15;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -390,8 +393,25 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'String',
         ),
+        _i2.ColumnDefinition(
+          name: 'pessoaId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
       ],
-      foreignKeys: [],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'treino_fk_0',
+          columns: ['pessoaId'],
+          referenceTable: 'pessoa',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.noAction,
+          matchType: null,
+        )
+      ],
       indexes: [
         _i2.IndexDefinition(
           indexName: 'treino_pkey',
@@ -446,12 +466,6 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'int',
         ),
-        _i2.ColumnDefinition(
-          name: '_treinoTreinoexerciciosTreinoId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -468,16 +482,6 @@ class Protocol extends _i1.SerializationManagerServer {
           constraintName: 'treino_exercicio_fk_1',
           columns: ['exercicioId'],
           referenceTable: 'exercicio',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'treino_exercicio_fk_2',
-          columns: ['_treinoTreinoexerciciosTreinoId'],
-          referenceTable: 'treino',
           referenceTableSchema: 'public',
           referenceColumns: ['id'],
           onUpdate: _i2.ForeignKeyAction.noAction,
@@ -528,12 +532,6 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'int',
         ),
-        _i2.ColumnDefinition(
-          name: '_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -545,19 +543,7 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.noAction,
           matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'treino_exercicio_historico_fk_1',
-          columns: [
-            '_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId'
-          ],
-          referenceTable: 'treino_exercicio',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
+        )
       ],
       indexes: [
         _i2.IndexDefinition(
@@ -607,12 +593,6 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'int',
         ),
-        _i2.ColumnDefinition(
-          name: '_treinoTreinohistoricosTreinoId',
-          columnType: _i2.ColumnType.bigint,
-          isNullable: true,
-          dartType: 'int?',
-        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -624,17 +604,7 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.noAction,
           matchType: null,
-        ),
-        _i2.ForeignKeyDefinition(
-          constraintName: 'treino_historico_fk_1',
-          columns: ['_treinoTreinohistoricosTreinoId'],
-          referenceTable: 'treino',
-          referenceTableSchema: 'public',
-          referenceColumns: ['id'],
-          onUpdate: _i2.ForeignKeyAction.noAction,
-          onDelete: _i2.ForeignKeyAction.noAction,
-          matchType: null,
-        ),
+        )
       ],
       indexes: [
         _i2.IndexDefinition(
@@ -733,6 +703,11 @@ class Protocol extends _i1.SerializationManagerServer {
           ? (data as List).map((e) => deserialize<_i12.Dieta>(e)).toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<_i12.Treino>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i12.Treino>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i12.TreinoExercicio>?>()) {
       return (data != null
           ? (data as List)
@@ -753,6 +728,19 @@ class Protocol extends _i1.SerializationManagerServer {
               .map((e) => deserialize<_i12.TreinoExercicioHistorico>(e))
               .toList()
           : null) as dynamic;
+    }
+    if (t == List<_i13.Exercicio>) {
+      return (data as List).map((e) => deserialize<_i13.Exercicio>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i14.TreinoExercicio>) {
+      return (data as List)
+          .map((e) => deserialize<_i14.TreinoExercicio>(e))
+          .toList() as dynamic;
+    }
+    if (t == List<_i15.Treino>) {
+      return (data as List).map((e) => deserialize<_i15.Treino>(e)).toList()
+          as dynamic;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);

@@ -52,8 +52,6 @@ abstract class TreinoExercicioHistorico extends _i1.TableRow
 
   _i2.TreinoExercicio? treinoExercicio;
 
-  int? _treinoExercicioTreinoexerciciohistoricosTreinoExercicioId;
-
   @override
   _i1.Table get table => t;
 
@@ -70,9 +68,6 @@ abstract class TreinoExercicioHistorico extends _i1.TableRow
       'progressao': progressao,
       'treinoExercicioId': treinoExercicioId,
       if (treinoExercicio != null) 'treinoExercicio': treinoExercicio?.toJson(),
-      if (_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId != null)
-        '_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId':
-            _treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
     };
   }
 
@@ -151,47 +146,6 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
   }
 }
 
-class TreinoExercicioHistoricoImplicit extends _TreinoExercicioHistoricoImpl {
-  TreinoExercicioHistoricoImplicit._({
-    int? id,
-    required String progressao,
-    required int treinoExercicioId,
-    _i2.TreinoExercicio? treinoExercicio,
-    this.$_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
-  }) : super(
-          id: id,
-          progressao: progressao,
-          treinoExercicioId: treinoExercicioId,
-          treinoExercicio: treinoExercicio,
-        );
-
-  factory TreinoExercicioHistoricoImplicit(
-    TreinoExercicioHistorico treinoExercicioHistorico, {
-    int? $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
-  }) {
-    return TreinoExercicioHistoricoImplicit._(
-      id: treinoExercicioHistorico.id,
-      progressao: treinoExercicioHistorico.progressao,
-      treinoExercicioId: treinoExercicioHistorico.treinoExercicioId,
-      treinoExercicio: treinoExercicioHistorico.treinoExercicio,
-      $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId:
-          $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
-    );
-  }
-
-  int? $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId;
-
-  @override
-  Map<String, dynamic> toJson() {
-    var jsonMap = super.toJson();
-    jsonMap.addAll({
-      '_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId':
-          $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId
-    });
-    return jsonMap;
-  }
-}
-
 class TreinoExercicioHistoricoTable extends _i1.Table {
   TreinoExercicioHistoricoTable({super.tableRelation})
       : super(tableName: 'treino_exercicio_historico') {
@@ -203,10 +157,6 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
       'treinoExercicioId',
       this,
     );
-    $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId = _i1.ColumnInt(
-      '_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId',
-      this,
-    );
   }
 
   /// Kg, ângulo, duração, tal e tal
@@ -215,9 +165,6 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
   late final _i1.ColumnInt treinoExercicioId;
 
   _i2.TreinoExercicioTable? _treinoExercicio;
-
-  late final _i1.ColumnInt
-      $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId;
 
   _i2.TreinoExercicioTable get treinoExercicio {
     if (_treinoExercicio != null) return _treinoExercicio!;
@@ -237,7 +184,6 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
         id,
         progressao,
         treinoExercicioId,
-        $_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId,
       ];
 
   @override
