@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-enum InputType { email, height, weigth, age, text, cpf }
+enum InputType { email, height, weigth, age, text, cpf, smallNumber }
 
 class BasicFormField extends StatelessWidget {
   const BasicFormField(
       {super.key,
-      required this.label,
+      this.label,
       this.controller,
       this.obscureText = false,
       this.textInputType = InputType.text});
 
-  final String label;
+  final String? label;
   final TextEditingController? controller;
   final bool obscureText;
   final InputType textInputType;
@@ -21,13 +21,14 @@ class BasicFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 16),
+        if (label != null)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              label!,
+              style: const TextStyle(fontSize: 16),
+            ),
           ),
-        ),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
@@ -56,7 +57,8 @@ class BasicFormField extends StatelessWidget {
             if (textInputType == InputType.weigth)
               MaskTextInputFormatter(
                   mask: "###,##", filter: {"#": RegExp(r'[0-9]')}),
-            if (textInputType == InputType.age)
+            if (textInputType == InputType.age ||
+                textInputType == InputType.smallNumber)
               MaskTextInputFormatter(
                   mask: "###", filter: {"#": RegExp(r'[0-9]')}),
           ],

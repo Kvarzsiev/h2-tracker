@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_flutter/components/app_bar.dart';
-import 'package:h2_tracker_flutter/views/exercises_view.dart';
+import 'package:h2_tracker_flutter/views/exercises_and_trainings/exercises_main_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -38,7 +38,7 @@ class HomeViewState extends State<HomeView> {
       body: PageView(
         controller: _pageViewController,
         children: const <Widget>[
-          ExercisesView(),
+          ExercisesMainView(),
           Center(
             child: Text('Dieta e Alimentação'),
           ),

@@ -8,24 +8,29 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Treino extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Treino implements _i1.TableRow, _i1.ProtocolSerialization {
   Treino._({
-    int? id,
+    this.id,
     required this.descricao,
     required this.objetivo,
+    required this.pessoaId,
+    this.pessoa,
     this.treinoExercicios,
     this.treinoHistoricos,
-  }) : super(id);
+  });
 
   factory Treino({
     int? id,
     required String descricao,
     required String objetivo,
+    required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   }) = _TreinoImpl;
@@ -35,6 +40,11 @@ abstract class Treino extends _i1.TableRow
       id: jsonSerialization['id'] as int?,
       descricao: jsonSerialization['descricao'] as String,
       objetivo: jsonSerialization['objetivo'] as String,
+      pessoaId: jsonSerialization['pessoaId'] as int,
+      pessoa: jsonSerialization['pessoa'] == null
+          ? null
+          : _i2.Pessoa.fromJson(
+              (jsonSerialization['pessoa'] as Map<String, dynamic>)),
       treinoExercicios: (jsonSerialization['treinoExercicios'] as List?)
           ?.map(
               (e) => _i2.TreinoExercicio.fromJson((e as Map<String, dynamic>)))
@@ -50,9 +60,16 @@ abstract class Treino extends _i1.TableRow
 
   static const db = TreinoRepository._();
 
+  @override
+  int? id;
+
   String descricao;
 
   String objetivo;
+
+  int pessoaId;
+
+  _i2.Pessoa? pessoa;
 
   List<_i2.TreinoExercicio>? treinoExercicios;
 
@@ -65,6 +82,8 @@ abstract class Treino extends _i1.TableRow
     int? id,
     String? descricao,
     String? objetivo,
+    int? pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   });
@@ -74,6 +93,8 @@ abstract class Treino extends _i1.TableRow
       if (id != null) 'id': id,
       'descricao': descricao,
       'objetivo': objetivo,
+      'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJson(),
       if (treinoExercicios != null)
         'treinoExercicios':
             treinoExercicios?.toJson(valueToJson: (v) => v.toJson()),
@@ -89,6 +110,8 @@ abstract class Treino extends _i1.TableRow
       if (id != null) 'id': id,
       'descricao': descricao,
       'objetivo': objetivo,
+      'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJsonForProtocol(),
       if (treinoExercicios != null)
         'treinoExercicios':
             treinoExercicios?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
@@ -99,10 +122,12 @@ abstract class Treino extends _i1.TableRow
   }
 
   static TreinoInclude include({
+    _i2.PessoaInclude? pessoa,
     _i2.TreinoExercicioIncludeList? treinoExercicios,
     _i2.TreinoHistoricoIncludeList? treinoHistoricos,
   }) {
     return TreinoInclude._(
+      pessoa: pessoa,
       treinoExercicios: treinoExercicios,
       treinoHistoricos: treinoHistoricos,
     );
@@ -141,12 +166,16 @@ class _TreinoImpl extends Treino {
     int? id,
     required String descricao,
     required String objetivo,
+    required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   }) : super._(
           id: id,
           descricao: descricao,
           objetivo: objetivo,
+          pessoaId: pessoaId,
+          pessoa: pessoa,
           treinoExercicios: treinoExercicios,
           treinoHistoricos: treinoHistoricos,
         );
@@ -156,6 +185,8 @@ class _TreinoImpl extends Treino {
     Object? id = _Undefined,
     String? descricao,
     String? objetivo,
+    int? pessoaId,
+    Object? pessoa = _Undefined,
     Object? treinoExercicios = _Undefined,
     Object? treinoHistoricos = _Undefined,
   }) {
@@ -163,6 +194,8 @@ class _TreinoImpl extends Treino {
       id: id is int? ? id : this.id,
       descricao: descricao ?? this.descricao,
       objetivo: objetivo ?? this.objetivo,
+      pessoaId: pessoaId ?? this.pessoaId,
+      pessoa: pessoa is _i2.Pessoa? ? pessoa : this.pessoa?.copyWith(),
       treinoExercicios: treinoExercicios is List<_i2.TreinoExercicio>?
           ? treinoExercicios
           : this.treinoExercicios?.map((e0) => e0.copyWith()).toList(),
@@ -183,11 +216,19 @@ class TreinoTable extends _i1.Table {
       'objetivo',
       this,
     );
+    pessoaId = _i1.ColumnInt(
+      'pessoaId',
+      this,
+    );
   }
 
   late final _i1.ColumnString descricao;
 
   late final _i1.ColumnString objetivo;
+
+  late final _i1.ColumnInt pessoaId;
+
+  _i2.PessoaTable? _pessoa;
 
   _i2.TreinoExercicioTable? ___treinoExercicios;
 
@@ -197,12 +238,25 @@ class TreinoTable extends _i1.Table {
 
   _i1.ManyRelation<_i2.TreinoHistoricoTable>? _treinoHistoricos;
 
+  _i2.PessoaTable get pessoa {
+    if (_pessoa != null) return _pessoa!;
+    _pessoa = _i1.createRelationTable(
+      relationFieldName: 'pessoa',
+      field: Treino.t.pessoaId,
+      foreignField: _i2.Pessoa.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.PessoaTable(tableRelation: foreignTableRelation),
+    );
+    return _pessoa!;
+  }
+
   _i2.TreinoExercicioTable get __treinoExercicios {
     if (___treinoExercicios != null) return ___treinoExercicios!;
     ___treinoExercicios = _i1.createRelationTable(
       relationFieldName: '__treinoExercicios',
       field: Treino.t.id,
-      foreignField: _i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId,
+      foreignField: _i2.TreinoExercicio.t.treinoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.TreinoExercicioTable(tableRelation: foreignTableRelation),
@@ -215,7 +269,7 @@ class TreinoTable extends _i1.Table {
     ___treinoHistoricos = _i1.createRelationTable(
       relationFieldName: '__treinoHistoricos',
       field: Treino.t.id,
-      foreignField: _i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId,
+      foreignField: _i2.TreinoHistorico.t.treinoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.TreinoHistoricoTable(tableRelation: foreignTableRelation),
@@ -228,7 +282,7 @@ class TreinoTable extends _i1.Table {
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'treinoExercicios',
       field: Treino.t.id,
-      foreignField: _i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId,
+      foreignField: _i2.TreinoExercicio.t.treinoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.TreinoExercicioTable(tableRelation: foreignTableRelation),
@@ -246,7 +300,7 @@ class TreinoTable extends _i1.Table {
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'treinoHistoricos',
       field: Treino.t.id,
-      foreignField: _i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId,
+      foreignField: _i2.TreinoHistorico.t.treinoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.TreinoHistoricoTable(tableRelation: foreignTableRelation),
@@ -264,10 +318,14 @@ class TreinoTable extends _i1.Table {
         id,
         descricao,
         objetivo,
+        pessoaId,
       ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'pessoa') {
+      return pessoa;
+    }
     if (relationField == 'treinoExercicios') {
       return __treinoExercicios;
     }
@@ -280,12 +338,16 @@ class TreinoTable extends _i1.Table {
 
 class TreinoInclude extends _i1.IncludeObject {
   TreinoInclude._({
+    _i2.PessoaInclude? pessoa,
     _i2.TreinoExercicioIncludeList? treinoExercicios,
     _i2.TreinoHistoricoIncludeList? treinoHistoricos,
   }) {
+    _pessoa = pessoa;
     _treinoExercicios = treinoExercicios;
     _treinoHistoricos = treinoHistoricos;
   }
+
+  _i2.PessoaInclude? _pessoa;
 
   _i2.TreinoExercicioIncludeList? _treinoExercicios;
 
@@ -293,6 +355,7 @@ class TreinoInclude extends _i1.IncludeObject {
 
   @override
   Map<String, _i1.Include?> get includes => {
+        'pessoa': _pessoa,
         'treinoExercicios': _treinoExercicios,
         'treinoHistoricos': _treinoHistoricos,
       };
@@ -333,7 +396,7 @@ class TreinoRepository {
   final detachRow = const TreinoDetachRowRepository._();
 
   Future<List<Treino>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoTable>? where,
     int? limit,
     int? offset,
@@ -343,20 +406,20 @@ class TreinoRepository {
     _i1.Transaction? transaction,
     TreinoInclude? include,
   }) async {
-    return databaseAccessor.db.find<Treino>(
+    return session.db.find<Treino>(
       where: where?.call(Treino.t),
       orderBy: orderBy?.call(Treino.t),
       orderByList: orderByList?.call(Treino.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Treino?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoTable>? where,
     int? offset,
     _i1.OrderByBuilder<TreinoTable>? orderBy,
@@ -365,121 +428,121 @@ class TreinoRepository {
     _i1.Transaction? transaction,
     TreinoInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Treino>(
+    return session.db.findFirstRow<Treino>(
       where: where?.call(Treino.t),
       orderBy: orderBy?.call(Treino.t),
       orderByList: orderByList?.call(Treino.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Treino?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     TreinoInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Treino>(
+    return session.db.findById<Treino>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Treino>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Treino> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Treino>(
+    return session.db.insert<Treino>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Treino> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Treino>(
+    return session.db.insertRow<Treino>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Treino>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Treino> rows, {
     _i1.ColumnSelections<TreinoTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Treino>(
+    return session.db.update<Treino>(
       rows,
       columns: columns?.call(Treino.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Treino> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino row, {
     _i1.ColumnSelections<TreinoTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Treino>(
+    return session.db.updateRow<Treino>(
       row,
       columns: columns?.call(Treino.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Treino>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Treino> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Treino>(
+    return session.db.delete<Treino>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Treino> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Treino>(
+    return session.db.deleteRow<Treino>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Treino>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<TreinoTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Treino>(
+    return session.db.deleteWhere<Treino>(
       where: where(Treino.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Treino>(
+    return session.db.count<Treino>(
       where: where?.call(Treino.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -488,7 +551,7 @@ class TreinoAttachRepository {
   const TreinoAttachRepository._();
 
   Future<void> treinoExercicios(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino treino,
     List<_i2.TreinoExercicio> treinoExercicio, {
     _i1.Transaction? transaction,
@@ -500,21 +563,17 @@ class TreinoAttachRepository {
       throw ArgumentError.notNull('treino.id');
     }
 
-    var $treinoExercicio = treinoExercicio
-        .map((e) => _i2.TreinoExercicioImplicit(
-              e,
-              $_treinoTreinoexerciciosTreinoId: treino.id,
-            ))
-        .toList();
-    await databaseAccessor.db.update<_i2.TreinoExercicio>(
+    var $treinoExercicio =
+        treinoExercicio.map((e) => e.copyWith(treinoId: treino.id)).toList();
+    await session.db.update<_i2.TreinoExercicio>(
       $treinoExercicio,
-      columns: [_i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoExercicio.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinoHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino treino,
     List<_i2.TreinoHistorico> treinoHistorico, {
     _i1.Transaction? transaction,
@@ -526,16 +585,12 @@ class TreinoAttachRepository {
       throw ArgumentError.notNull('treino.id');
     }
 
-    var $treinoHistorico = treinoHistorico
-        .map((e) => _i2.TreinoHistoricoImplicit(
-              e,
-              $_treinoTreinohistoricosTreinoId: treino.id,
-            ))
-        .toList();
-    await databaseAccessor.db.update<_i2.TreinoHistorico>(
+    var $treinoHistorico =
+        treinoHistorico.map((e) => e.copyWith(treinoId: treino.id)).toList();
+    await session.db.update<_i2.TreinoHistorico>(
       $treinoHistorico,
-      columns: [_i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoHistorico.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -543,8 +598,29 @@ class TreinoAttachRepository {
 class TreinoAttachRowRepository {
   const TreinoAttachRowRepository._();
 
+  Future<void> pessoa(
+    _i1.Session session,
+    Treino treino,
+    _i2.Pessoa pessoa, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treino.id == null) {
+      throw ArgumentError.notNull('treino.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $treino = treino.copyWith(pessoaId: pessoa.id);
+    await session.db.updateRow<Treino>(
+      $treino,
+      columns: [Treino.t.pessoaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
   Future<void> treinoExercicios(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino treino,
     _i2.TreinoExercicio treinoExercicio, {
     _i1.Transaction? transaction,
@@ -556,19 +632,16 @@ class TreinoAttachRowRepository {
       throw ArgumentError.notNull('treino.id');
     }
 
-    var $treinoExercicio = _i2.TreinoExercicioImplicit(
-      treinoExercicio,
-      $_treinoTreinoexerciciosTreinoId: treino.id,
-    );
-    await databaseAccessor.db.updateRow<_i2.TreinoExercicio>(
+    var $treinoExercicio = treinoExercicio.copyWith(treinoId: treino.id);
+    await session.db.updateRow<_i2.TreinoExercicio>(
       $treinoExercicio,
-      columns: [_i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoExercicio.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinoHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Treino treino,
     _i2.TreinoHistorico treinoHistorico, {
     _i1.Transaction? transaction,
@@ -580,14 +653,11 @@ class TreinoAttachRowRepository {
       throw ArgumentError.notNull('treino.id');
     }
 
-    var $treinoHistorico = _i2.TreinoHistoricoImplicit(
-      treinoHistorico,
-      $_treinoTreinohistoricosTreinoId: treino.id,
-    );
-    await databaseAccessor.db.updateRow<_i2.TreinoHistorico>(
+    var $treinoHistorico = treinoHistorico.copyWith(treinoId: treino.id);
+    await session.db.updateRow<_i2.TreinoHistorico>(
       $treinoHistorico,
-      columns: [_i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoHistorico.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -596,7 +666,7 @@ class TreinoDetachRepository {
   const TreinoDetachRepository._();
 
   Future<void> treinoExercicios(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.TreinoExercicio> treinoExercicio, {
     _i1.Transaction? transaction,
   }) async {
@@ -604,21 +674,17 @@ class TreinoDetachRepository {
       throw ArgumentError.notNull('treinoExercicio.id');
     }
 
-    var $treinoExercicio = treinoExercicio
-        .map((e) => _i2.TreinoExercicioImplicit(
-              e,
-              $_treinoTreinoexerciciosTreinoId: null,
-            ))
-        .toList();
-    await databaseAccessor.db.update<_i2.TreinoExercicio>(
+    var $treinoExercicio =
+        treinoExercicio.map((e) => e.copyWith(treinoId: null)).toList();
+    await session.db.update<_i2.TreinoExercicio>(
       $treinoExercicio,
-      columns: [_i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoExercicio.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinoHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.TreinoHistorico> treinoHistorico, {
     _i1.Transaction? transaction,
   }) async {
@@ -626,16 +692,12 @@ class TreinoDetachRepository {
       throw ArgumentError.notNull('treinoHistorico.id');
     }
 
-    var $treinoHistorico = treinoHistorico
-        .map((e) => _i2.TreinoHistoricoImplicit(
-              e,
-              $_treinoTreinohistoricosTreinoId: null,
-            ))
-        .toList();
-    await databaseAccessor.db.update<_i2.TreinoHistorico>(
+    var $treinoHistorico =
+        treinoHistorico.map((e) => e.copyWith(treinoId: null)).toList();
+    await session.db.update<_i2.TreinoHistorico>(
       $treinoHistorico,
-      columns: [_i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoHistorico.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -644,7 +706,7 @@ class TreinoDetachRowRepository {
   const TreinoDetachRowRepository._();
 
   Future<void> treinoExercicios(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.TreinoExercicio treinoExercicio, {
     _i1.Transaction? transaction,
   }) async {
@@ -652,19 +714,16 @@ class TreinoDetachRowRepository {
       throw ArgumentError.notNull('treinoExercicio.id');
     }
 
-    var $treinoExercicio = _i2.TreinoExercicioImplicit(
-      treinoExercicio,
-      $_treinoTreinoexerciciosTreinoId: null,
-    );
-    await databaseAccessor.db.updateRow<_i2.TreinoExercicio>(
+    var $treinoExercicio = treinoExercicio.copyWith(treinoId: null);
+    await session.db.updateRow<_i2.TreinoExercicio>(
       $treinoExercicio,
-      columns: [_i2.TreinoExercicio.t.$_treinoTreinoexerciciosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoExercicio.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinoHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.TreinoHistorico treinoHistorico, {
     _i1.Transaction? transaction,
   }) async {
@@ -672,14 +731,11 @@ class TreinoDetachRowRepository {
       throw ArgumentError.notNull('treinoHistorico.id');
     }
 
-    var $treinoHistorico = _i2.TreinoHistoricoImplicit(
-      treinoHistorico,
-      $_treinoTreinohistoricosTreinoId: null,
-    );
-    await databaseAccessor.db.updateRow<_i2.TreinoHistorico>(
+    var $treinoHistorico = treinoHistorico.copyWith(treinoId: null);
+    await session.db.updateRow<_i2.TreinoHistorico>(
       $treinoHistorico,
-      columns: [_i2.TreinoHistorico.t.$_treinoTreinohistoricosTreinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      columns: [_i2.TreinoHistorico.t.treinoId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }

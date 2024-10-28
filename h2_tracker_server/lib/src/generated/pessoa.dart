@@ -8,14 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Pessoa extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Pessoa implements _i1.TableRow, _i1.ProtocolSerialization {
   Pessoa._({
-    int? id,
+    this.id,
     required this.nome,
     required this.altura,
     required this.idade,
@@ -24,7 +25,8 @@ abstract class Pessoa extends _i1.TableRow
     required this.cpf,
     this.historicoPeso,
     this.historicoDietas,
-  }) : super(id);
+    this.treinos,
+  });
 
   factory Pessoa({
     int? id,
@@ -36,6 +38,7 @@ abstract class Pessoa extends _i1.TableRow
     required String cpf,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
+    List<_i2.Treino>? treinos,
   }) = _PessoaImpl;
 
   factory Pessoa.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -53,12 +56,18 @@ abstract class Pessoa extends _i1.TableRow
       historicoDietas: (jsonSerialization['historicoDietas'] as List?)
           ?.map((e) => _i2.Dieta.fromJson((e as Map<String, dynamic>)))
           .toList(),
+      treinos: (jsonSerialization['treinos'] as List?)
+          ?.map((e) => _i2.Treino.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
   static final t = PessoaTable();
 
   static const db = PessoaRepository._();
+
+  @override
+  int? id;
 
   String nome;
 
@@ -76,6 +85,8 @@ abstract class Pessoa extends _i1.TableRow
 
   List<_i2.Dieta>? historicoDietas;
 
+  List<_i2.Treino>? treinos;
+
   @override
   _i1.Table get table => t;
 
@@ -89,6 +100,7 @@ abstract class Pessoa extends _i1.TableRow
     String? cpf,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
+    List<_i2.Treino>? treinos,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -105,6 +117,8 @@ abstract class Pessoa extends _i1.TableRow
       if (historicoDietas != null)
         'historicoDietas':
             historicoDietas?.toJson(valueToJson: (v) => v.toJson()),
+      if (treinos != null)
+        'treinos': treinos?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -124,16 +138,20 @@ abstract class Pessoa extends _i1.TableRow
       if (historicoDietas != null)
         'historicoDietas':
             historicoDietas?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
+      if (treinos != null)
+        'treinos': treinos?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
   static PessoaInclude include({
     _i2.PesoIncludeList? historicoPeso,
     _i2.DietaIncludeList? historicoDietas,
+    _i2.TreinoIncludeList? treinos,
   }) {
     return PessoaInclude._(
       historicoPeso: historicoPeso,
       historicoDietas: historicoDietas,
+      treinos: treinos,
     );
   }
 
@@ -176,6 +194,7 @@ class _PessoaImpl extends Pessoa {
     required String cpf,
     List<_i2.Peso>? historicoPeso,
     List<_i2.Dieta>? historicoDietas,
+    List<_i2.Treino>? treinos,
   }) : super._(
           id: id,
           nome: nome,
@@ -186,6 +205,7 @@ class _PessoaImpl extends Pessoa {
           cpf: cpf,
           historicoPeso: historicoPeso,
           historicoDietas: historicoDietas,
+          treinos: treinos,
         );
 
   @override
@@ -199,6 +219,7 @@ class _PessoaImpl extends Pessoa {
     String? cpf,
     Object? historicoPeso = _Undefined,
     Object? historicoDietas = _Undefined,
+    Object? treinos = _Undefined,
   }) {
     return Pessoa(
       id: id is int? ? id : this.id,
@@ -214,6 +235,9 @@ class _PessoaImpl extends Pessoa {
       historicoDietas: historicoDietas is List<_i2.Dieta>?
           ? historicoDietas
           : this.historicoDietas?.map((e0) => e0.copyWith()).toList(),
+      treinos: treinos is List<_i2.Treino>?
+          ? treinos
+          : this.treinos?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }
@@ -266,6 +290,10 @@ class PessoaTable extends _i1.Table {
 
   _i1.ManyRelation<_i2.DietaTable>? _historicoDietas;
 
+  _i2.TreinoTable? ___treinos;
+
+  _i1.ManyRelation<_i2.TreinoTable>? _treinos;
+
   _i2.PesoTable get __historicoPeso {
     if (___historicoPeso != null) return ___historicoPeso!;
     ___historicoPeso = _i1.createRelationTable(
@@ -290,6 +318,19 @@ class PessoaTable extends _i1.Table {
           _i2.DietaTable(tableRelation: foreignTableRelation),
     );
     return ___historicoDietas!;
+  }
+
+  _i2.TreinoTable get __treinos {
+    if (___treinos != null) return ___treinos!;
+    ___treinos = _i1.createRelationTable(
+      relationFieldName: '__treinos',
+      field: Pessoa.t.id,
+      foreignField: _i2.Treino.t.pessoaId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.TreinoTable(tableRelation: foreignTableRelation),
+    );
+    return ___treinos!;
   }
 
   _i1.ManyRelation<_i2.PesoTable> get historicoPeso {
@@ -328,6 +369,24 @@ class PessoaTable extends _i1.Table {
     return _historicoDietas!;
   }
 
+  _i1.ManyRelation<_i2.TreinoTable> get treinos {
+    if (_treinos != null) return _treinos!;
+    var relationTable = _i1.createRelationTable(
+      relationFieldName: 'treinos',
+      field: Pessoa.t.id,
+      foreignField: _i2.Treino.t.pessoaId,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.TreinoTable(tableRelation: foreignTableRelation),
+    );
+    _treinos = _i1.ManyRelation<_i2.TreinoTable>(
+      tableWithRelations: relationTable,
+      table: _i2.TreinoTable(
+          tableRelation: relationTable.tableRelation!.lastRelation),
+    );
+    return _treinos!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
@@ -347,6 +406,9 @@ class PessoaTable extends _i1.Table {
     if (relationField == 'historicoDietas') {
       return __historicoDietas;
     }
+    if (relationField == 'treinos') {
+      return __treinos;
+    }
     return null;
   }
 }
@@ -355,19 +417,24 @@ class PessoaInclude extends _i1.IncludeObject {
   PessoaInclude._({
     _i2.PesoIncludeList? historicoPeso,
     _i2.DietaIncludeList? historicoDietas,
+    _i2.TreinoIncludeList? treinos,
   }) {
     _historicoPeso = historicoPeso;
     _historicoDietas = historicoDietas;
+    _treinos = treinos;
   }
 
   _i2.PesoIncludeList? _historicoPeso;
 
   _i2.DietaIncludeList? _historicoDietas;
 
+  _i2.TreinoIncludeList? _treinos;
+
   @override
   Map<String, _i1.Include?> get includes => {
         'historicoPeso': _historicoPeso,
         'historicoDietas': _historicoDietas,
+        'treinos': _treinos,
       };
 
   @override
@@ -401,8 +468,12 @@ class PessoaRepository {
 
   final attachRow = const PessoaAttachRowRepository._();
 
+  final detach = const PessoaDetachRepository._();
+
+  final detachRow = const PessoaDetachRowRepository._();
+
   Future<List<Pessoa>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? limit,
     int? offset,
@@ -412,20 +483,20 @@ class PessoaRepository {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.find<Pessoa>(
+    return session.db.find<Pessoa>(
       where: where?.call(Pessoa.t),
       orderBy: orderBy?.call(Pessoa.t),
       orderByList: orderByList?.call(Pessoa.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Pessoa?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? offset,
     _i1.OrderByBuilder<PessoaTable>? orderBy,
@@ -434,121 +505,121 @@ class PessoaRepository {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Pessoa>(
+    return session.db.findFirstRow<Pessoa>(
       where: where?.call(Pessoa.t),
       orderBy: orderBy?.call(Pessoa.t),
       orderByList: orderByList?.call(Pessoa.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Pessoa?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Pessoa>(
+    return session.db.findById<Pessoa>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Pessoa>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Pessoa>(
+    return session.db.insert<Pessoa>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Pessoa>(
+    return session.db.insertRow<Pessoa>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.ColumnSelections<PessoaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Pessoa>(
+    return session.db.update<Pessoa>(
       rows,
       columns: columns?.call(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.ColumnSelections<PessoaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Pessoa>(
+    return session.db.updateRow<Pessoa>(
       row,
       columns: columns?.call(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Pessoa>(
+    return session.db.delete<Pessoa>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Pessoa>(
+    return session.db.deleteRow<Pessoa>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<PessoaTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Pessoa>(
+    return session.db.deleteWhere<Pessoa>(
       where: where(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Pessoa>(
+    return session.db.count<Pessoa>(
       where: where?.call(Pessoa.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -557,7 +628,7 @@ class PessoaAttachRepository {
   const PessoaAttachRepository._();
 
   Future<void> historicoPeso(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     List<_i2.Peso> peso, {
     _i1.Transaction? transaction,
@@ -570,15 +641,15 @@ class PessoaAttachRepository {
     }
 
     var $peso = peso.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
-    await databaseAccessor.db.update<_i2.Peso>(
+    await session.db.update<_i2.Peso>(
       $peso,
       columns: [_i2.Peso.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> historicoDietas(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     List<_i2.Dieta> dieta, {
     _i1.Transaction? transaction,
@@ -591,10 +662,31 @@ class PessoaAttachRepository {
     }
 
     var $dieta = dieta.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
-    await databaseAccessor.db.update<_i2.Dieta>(
+    await session.db.update<_i2.Dieta>(
       $dieta,
       columns: [_i2.Dieta.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<void> treinos(
+    _i1.Session session,
+    Pessoa pessoa,
+    List<_i2.Treino> treino, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treino.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('treino.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $treino = treino.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
+    await session.db.update<_i2.Treino>(
+      $treino,
+      columns: [_i2.Treino.t.pessoaId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -603,7 +695,7 @@ class PessoaAttachRowRepository {
   const PessoaAttachRowRepository._();
 
   Future<void> historicoPeso(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     _i2.Peso peso, {
     _i1.Transaction? transaction,
@@ -616,15 +708,15 @@ class PessoaAttachRowRepository {
     }
 
     var $peso = peso.copyWith(pessoaId: pessoa.id);
-    await databaseAccessor.db.updateRow<_i2.Peso>(
+    await session.db.updateRow<_i2.Peso>(
       $peso,
       columns: [_i2.Peso.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> historicoDietas(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     _i2.Dieta dieta, {
     _i1.Transaction? transaction,
@@ -637,10 +729,73 @@ class PessoaAttachRowRepository {
     }
 
     var $dieta = dieta.copyWith(pessoaId: pessoa.id);
-    await databaseAccessor.db.updateRow<_i2.Dieta>(
+    await session.db.updateRow<_i2.Dieta>(
       $dieta,
       columns: [_i2.Dieta.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<void> treinos(
+    _i1.Session session,
+    Pessoa pessoa,
+    _i2.Treino treino, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treino.id == null) {
+      throw ArgumentError.notNull('treino.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $treino = treino.copyWith(pessoaId: pessoa.id);
+    await session.db.updateRow<_i2.Treino>(
+      $treino,
+      columns: [_i2.Treino.t.pessoaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class PessoaDetachRepository {
+  const PessoaDetachRepository._();
+
+  Future<void> treinos(
+    _i1.Session session,
+    List<_i2.Treino> treino, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treino.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('treino.id');
+    }
+
+    var $treino = treino.map((e) => e.copyWith(pessoaId: null)).toList();
+    await session.db.update<_i2.Treino>(
+      $treino,
+      columns: [_i2.Treino.t.pessoaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class PessoaDetachRowRepository {
+  const PessoaDetachRowRepository._();
+
+  Future<void> treinos(
+    _i1.Session session,
+    _i2.Treino treino, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treino.id == null) {
+      throw ArgumentError.notNull('treino.id');
+    }
+
+    var $treino = treino.copyWith(pessoaId: null);
+    await session.db.updateRow<_i2.Treino>(
+      $treino,
+      columns: [_i2.Treino.t.pessoaId],
+      transaction: transaction ?? session.transaction,
     );
   }
 }

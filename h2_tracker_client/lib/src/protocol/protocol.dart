@@ -21,6 +21,8 @@ import 'treino_exercicio.dart' as _i8;
 import 'treino_exercicio_historico.dart' as _i9;
 import 'treino_historico.dart' as _i10;
 import 'protocol.dart' as _i11;
+import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i12;
+import 'package:h2_tracker_client/src/protocol/treino.dart' as _i13;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -115,6 +117,11 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<_i11.Dieta>(e)).toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<_i11.Treino>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i11.Treino>(e)).toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i11.TreinoExercicio>?>()) {
       return (data != null
           ? (data as List)
@@ -135,6 +142,14 @@ class Protocol extends _i1.SerializationManager {
               .map((e) => deserialize<_i11.TreinoExercicioHistorico>(e))
               .toList()
           : null) as dynamic;
+    }
+    if (t == List<_i12.Exercicio>) {
+      return (data as List).map((e) => deserialize<_i12.Exercicio>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i13.Treino>) {
+      return (data as List).map((e) => deserialize<_i13.Treino>(e)).toList()
+          as dynamic;
     }
     return super.deserialize<T>(data, t);
   }

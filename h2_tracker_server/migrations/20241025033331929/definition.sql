@@ -1,7 +1,7 @@
 BEGIN;
 
 --
--- ACTION CREATE TABLE
+-- Class Dieta as table dieta
 --
 CREATE TABLE "dieta" (
     "id" bigserial PRIMARY KEY,
@@ -13,7 +13,7 @@ CREATE TABLE "dieta" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class Exercicio as table exercicio
 --
 CREATE TABLE "exercicio" (
     "id" bigserial PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE "exercicio" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class Peso as table peso
 --
 CREATE TABLE "peso" (
     "id" bigserial PRIMARY KEY,
@@ -34,7 +34,7 @@ CREATE TABLE "peso" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class Pessoa as table pessoa
 --
 CREATE TABLE "pessoa" (
     "id" bigserial PRIMARY KEY,
@@ -47,7 +47,7 @@ CREATE TABLE "pessoa" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class Refeicao as table refeicao
 --
 CREATE TABLE "refeicao" (
     "id" bigserial PRIMARY KEY,
@@ -58,49 +58,47 @@ CREATE TABLE "refeicao" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class Treino as table treino
 --
 CREATE TABLE "treino" (
     "id" bigserial PRIMARY KEY,
     "descricao" text NOT NULL,
-    "objetivo" text NOT NULL
+    "objetivo" text NOT NULL,
+    "pessoaId" bigint NOT NULL
 );
 
 --
--- ACTION CREATE TABLE
+-- Class TreinoExercicio as table treino_exercicio
 --
 CREATE TABLE "treino_exercicio" (
     "id" bigserial PRIMARY KEY,
     "repeticoes" bigint NOT NULL,
     "series" bigint NOT NULL,
     "treinoId" bigint NOT NULL,
-    "exercicioId" bigint NOT NULL,
-    "_treinoTreinoexerciciosTreinoId" bigint
+    "exercicioId" bigint NOT NULL
 );
 
 --
--- ACTION CREATE TABLE
+-- Class TreinoExercicioHistorico as table treino_exercicio_historico
 --
 CREATE TABLE "treino_exercicio_historico" (
     "id" bigserial PRIMARY KEY,
     "progressao" text NOT NULL,
-    "treinoExercicioId" bigint NOT NULL,
-    "_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId" bigint
+    "treinoExercicioId" bigint NOT NULL
 );
 
 --
--- ACTION CREATE TABLE
+-- Class TreinoHistorico as table treino_historico
 --
 CREATE TABLE "treino_historico" (
     "id" bigserial PRIMARY KEY,
     "horarioInicio" timestamp without time zone NOT NULL,
     "horarioFim" timestamp without time zone NOT NULL,
-    "treinoId" bigint NOT NULL,
-    "_treinoTreinohistoricosTreinoId" bigint
+    "treinoId" bigint NOT NULL
 );
 
 --
--- ACTION CREATE TABLE
+-- Class CloudStorageEntry as table serverpod_cloud_storage
 --
 CREATE TABLE "serverpod_cloud_storage" (
     "id" bigserial PRIMARY KEY,
@@ -117,7 +115,7 @@ CREATE UNIQUE INDEX "serverpod_cloud_storage_path_idx" ON "serverpod_cloud_stora
 CREATE INDEX "serverpod_cloud_storage_expiration" ON "serverpod_cloud_storage" USING btree ("expiration");
 
 --
--- ACTION CREATE TABLE
+-- Class CloudStorageDirectUploadEntry as table serverpod_cloud_storage_direct_upload
 --
 CREATE TABLE "serverpod_cloud_storage_direct_upload" (
     "id" bigserial PRIMARY KEY,
@@ -131,7 +129,7 @@ CREATE TABLE "serverpod_cloud_storage_direct_upload" (
 CREATE UNIQUE INDEX "serverpod_cloud_storage_direct_upload_storage_path" ON "serverpod_cloud_storage_direct_upload" USING btree ("storageId", "path");
 
 --
--- ACTION CREATE TABLE
+-- Class FutureCallEntry as table serverpod_future_call
 --
 CREATE TABLE "serverpod_future_call" (
     "id" bigserial PRIMARY KEY,
@@ -148,7 +146,7 @@ CREATE INDEX "serverpod_future_call_serverId_idx" ON "serverpod_future_call" USI
 CREATE INDEX "serverpod_future_call_identifier_idx" ON "serverpod_future_call" USING btree ("identifier");
 
 --
--- ACTION CREATE TABLE
+-- Class ServerHealthConnectionInfo as table serverpod_health_connection_info
 --
 CREATE TABLE "serverpod_health_connection_info" (
     "id" bigserial PRIMARY KEY,
@@ -164,7 +162,7 @@ CREATE TABLE "serverpod_health_connection_info" (
 CREATE UNIQUE INDEX "serverpod_health_connection_info_timestamp_idx" ON "serverpod_health_connection_info" USING btree ("timestamp", "serverId", "granularity");
 
 --
--- ACTION CREATE TABLE
+-- Class ServerHealthMetric as table serverpod_health_metric
 --
 CREATE TABLE "serverpod_health_metric" (
     "id" bigserial PRIMARY KEY,
@@ -180,7 +178,7 @@ CREATE TABLE "serverpod_health_metric" (
 CREATE UNIQUE INDEX "serverpod_health_metric_timestamp_idx" ON "serverpod_health_metric" USING btree ("timestamp", "serverId", "name", "granularity");
 
 --
--- ACTION CREATE TABLE
+-- Class LogEntry as table serverpod_log
 --
 CREATE TABLE "serverpod_log" (
     "id" bigserial PRIMARY KEY,
@@ -200,7 +198,7 @@ CREATE TABLE "serverpod_log" (
 CREATE INDEX "serverpod_log_sessionLogId_idx" ON "serverpod_log" USING btree ("sessionLogId");
 
 --
--- ACTION CREATE TABLE
+-- Class MessageLogEntry as table serverpod_message_log
 --
 CREATE TABLE "serverpod_message_log" (
     "id" bigserial PRIMARY KEY,
@@ -217,7 +215,7 @@ CREATE TABLE "serverpod_message_log" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class MethodInfo as table serverpod_method
 --
 CREATE TABLE "serverpod_method" (
     "id" bigserial PRIMARY KEY,
@@ -229,7 +227,7 @@ CREATE TABLE "serverpod_method" (
 CREATE UNIQUE INDEX "serverpod_method_endpoint_method_idx" ON "serverpod_method" USING btree ("endpoint", "method");
 
 --
--- ACTION CREATE TABLE
+-- Class DatabaseMigrationVersion as table serverpod_migrations
 --
 CREATE TABLE "serverpod_migrations" (
     "id" bigserial PRIMARY KEY,
@@ -242,7 +240,7 @@ CREATE TABLE "serverpod_migrations" (
 CREATE UNIQUE INDEX "serverpod_migrations_ids" ON "serverpod_migrations" USING btree ("module");
 
 --
--- ACTION CREATE TABLE
+-- Class QueryLogEntry as table serverpod_query_log
 --
 CREATE TABLE "serverpod_query_log" (
     "id" bigserial PRIMARY KEY,
@@ -262,7 +260,7 @@ CREATE TABLE "serverpod_query_log" (
 CREATE INDEX "serverpod_query_log_sessionLogId_idx" ON "serverpod_query_log" USING btree ("sessionLogId");
 
 --
--- ACTION CREATE TABLE
+-- Class ReadWriteTestEntry as table serverpod_readwrite_test
 --
 CREATE TABLE "serverpod_readwrite_test" (
     "id" bigserial PRIMARY KEY,
@@ -270,7 +268,7 @@ CREATE TABLE "serverpod_readwrite_test" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class RuntimeSettings as table serverpod_runtime_settings
 --
 CREATE TABLE "serverpod_runtime_settings" (
     "id" bigserial PRIMARY KEY,
@@ -281,7 +279,7 @@ CREATE TABLE "serverpod_runtime_settings" (
 );
 
 --
--- ACTION CREATE TABLE
+-- Class SessionLogEntry as table serverpod_session_log
 --
 CREATE TABLE "serverpod_session_log" (
     "id" bigserial PRIMARY KEY,
@@ -306,7 +304,7 @@ CREATE INDEX "serverpod_session_log_touched_idx" ON "serverpod_session_log" USIN
 CREATE INDEX "serverpod_session_log_isopen_idx" ON "serverpod_session_log" USING btree ("isOpen");
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "dieta" table
 --
 ALTER TABLE ONLY "dieta"
     ADD CONSTRAINT "dieta_fk_0"
@@ -316,7 +314,7 @@ ALTER TABLE ONLY "dieta"
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "peso" table
 --
 ALTER TABLE ONLY "peso"
     ADD CONSTRAINT "peso_fk_0"
@@ -326,7 +324,7 @@ ALTER TABLE ONLY "peso"
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "refeicao" table
 --
 ALTER TABLE ONLY "refeicao"
     ADD CONSTRAINT "refeicao_fk_0"
@@ -336,13 +334,23 @@ ALTER TABLE ONLY "refeicao"
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "treino" table
+--
+ALTER TABLE ONLY "treino"
+    ADD CONSTRAINT "treino_fk_0"
+    FOREIGN KEY("pessoaId")
+    REFERENCES "pessoa"("id")
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION;
+
+--
+-- Foreign relations for "treino_exercicio" table
 --
 ALTER TABLE ONLY "treino_exercicio"
     ADD CONSTRAINT "treino_exercicio_fk_0"
     FOREIGN KEY("treinoId")
     REFERENCES "treino"("id")
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION;
 ALTER TABLE ONLY "treino_exercicio"
     ADD CONSTRAINT "treino_exercicio_fk_1"
@@ -350,47 +358,29 @@ ALTER TABLE ONLY "treino_exercicio"
     REFERENCES "exercicio"("id")
     ON DELETE NO ACTION
     ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_exercicio"
-    ADD CONSTRAINT "treino_exercicio_fk_2"
-    FOREIGN KEY("_treinoTreinoexerciciosTreinoId")
-    REFERENCES "treino"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "treino_exercicio_historico" table
 --
 ALTER TABLE ONLY "treino_exercicio_historico"
     ADD CONSTRAINT "treino_exercicio_historico_fk_0"
     FOREIGN KEY("treinoExercicioId")
     REFERENCES "treino_exercicio"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_exercicio_historico"
-    ADD CONSTRAINT "treino_exercicio_historico_fk_1"
-    FOREIGN KEY("_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId")
-    REFERENCES "treino_exercicio"("id")
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "treino_historico" table
 --
 ALTER TABLE ONLY "treino_historico"
     ADD CONSTRAINT "treino_historico_fk_0"
     FOREIGN KEY("treinoId")
     REFERENCES "treino"("id")
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
-ALTER TABLE ONLY "treino_historico"
-    ADD CONSTRAINT "treino_historico_fk_1"
-    FOREIGN KEY("_treinoTreinohistoricosTreinoId")
-    REFERENCES "treino"("id")
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "serverpod_log" table
 --
 ALTER TABLE ONLY "serverpod_log"
     ADD CONSTRAINT "serverpod_log_fk_0"
@@ -400,7 +390,7 @@ ALTER TABLE ONLY "serverpod_log"
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "serverpod_message_log" table
 --
 ALTER TABLE ONLY "serverpod_message_log"
     ADD CONSTRAINT "serverpod_message_log_fk_0"
@@ -410,7 +400,7 @@ ALTER TABLE ONLY "serverpod_message_log"
     ON UPDATE NO ACTION;
 
 --
--- ACTION CREATE FOREIGN KEY
+-- Foreign relations for "serverpod_query_log" table
 --
 ALTER TABLE ONLY "serverpod_query_log"
     ADD CONSTRAINT "serverpod_query_log_fk_0"
@@ -424,9 +414,9 @@ ALTER TABLE ONLY "serverpod_query_log"
 -- MIGRATION VERSION FOR h2_tracker
 --
 INSERT INTO "serverpod_migrations" ("module", "version", "timestamp")
-    VALUES ('h2_tracker', '20241022034628942', now())
+    VALUES ('h2_tracker', '20241025033331929', now())
     ON CONFLICT ("module")
-    DO UPDATE SET "version" = '20241022034628942', "timestamp" = now();
+    DO UPDATE SET "version" = '20241025033331929', "timestamp" = now();
 
 --
 -- MIGRATION VERSION FOR serverpod

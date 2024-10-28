@@ -8,20 +8,22 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Dieta extends _i1.TableRow implements _i1.ProtocolSerialization {
+abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
   Dieta._({
-    int? id,
+    this.id,
     required this.caloriasMaximasDia,
     required this.objetivo,
     required this.descricao,
     required this.dataFim,
     required this.pessoaId,
     this.refeicoes,
-  }) : super(id);
+  });
 
   factory Dieta({
     int? id,
@@ -50,6 +52,9 @@ abstract class Dieta extends _i1.TableRow implements _i1.ProtocolSerialization {
   static final t = DietaTable();
 
   static const db = DietaRepository._();
+
+  @override
+  int? id;
 
   int caloriasMaximasDia;
 
@@ -309,7 +314,7 @@ class DietaRepository {
   final attachRow = const DietaAttachRowRepository._();
 
   Future<List<Dieta>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<DietaTable>? where,
     int? limit,
     int? offset,
@@ -319,20 +324,20 @@ class DietaRepository {
     _i1.Transaction? transaction,
     DietaInclude? include,
   }) async {
-    return databaseAccessor.db.find<Dieta>(
+    return session.db.find<Dieta>(
       where: where?.call(Dieta.t),
       orderBy: orderBy?.call(Dieta.t),
       orderByList: orderByList?.call(Dieta.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Dieta?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<DietaTable>? where,
     int? offset,
     _i1.OrderByBuilder<DietaTable>? orderBy,
@@ -341,121 +346,121 @@ class DietaRepository {
     _i1.Transaction? transaction,
     DietaInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Dieta>(
+    return session.db.findFirstRow<Dieta>(
       where: where?.call(Dieta.t),
       orderBy: orderBy?.call(Dieta.t),
       orderByList: orderByList?.call(Dieta.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Dieta?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     DietaInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Dieta>(
+    return session.db.findById<Dieta>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Dieta>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Dieta> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Dieta>(
+    return session.db.insert<Dieta>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Dieta> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Dieta row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Dieta>(
+    return session.db.insertRow<Dieta>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Dieta>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Dieta> rows, {
     _i1.ColumnSelections<DietaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Dieta>(
+    return session.db.update<Dieta>(
       rows,
       columns: columns?.call(Dieta.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Dieta> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Dieta row, {
     _i1.ColumnSelections<DietaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Dieta>(
+    return session.db.updateRow<Dieta>(
       row,
       columns: columns?.call(Dieta.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Dieta>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Dieta> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Dieta>(
+    return session.db.delete<Dieta>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Dieta> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Dieta row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Dieta>(
+    return session.db.deleteRow<Dieta>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Dieta>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<DietaTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Dieta>(
+    return session.db.deleteWhere<Dieta>(
       where: where(Dieta.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<DietaTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Dieta>(
+    return session.db.count<Dieta>(
       where: where?.call(Dieta.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -464,7 +469,7 @@ class DietaAttachRepository {
   const DietaAttachRepository._();
 
   Future<void> refeicoes(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Dieta dieta,
     List<_i2.Refeicao> refeicao, {
     _i1.Transaction? transaction,
@@ -477,10 +482,10 @@ class DietaAttachRepository {
     }
 
     var $refeicao = refeicao.map((e) => e.copyWith(dietaId: dieta.id)).toList();
-    await databaseAccessor.db.update<_i2.Refeicao>(
+    await session.db.update<_i2.Refeicao>(
       $refeicao,
       columns: [_i2.Refeicao.t.dietaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -489,7 +494,7 @@ class DietaAttachRowRepository {
   const DietaAttachRowRepository._();
 
   Future<void> refeicoes(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Dieta dieta,
     _i2.Refeicao refeicao, {
     _i1.Transaction? transaction,
@@ -502,10 +507,10 @@ class DietaAttachRowRepository {
     }
 
     var $refeicao = refeicao.copyWith(dietaId: dieta.id);
-    await databaseAccessor.db.updateRow<_i2.Refeicao>(
+    await session.db.updateRow<_i2.Refeicao>(
       $refeicao,
       columns: [_i2.Refeicao.t.dietaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

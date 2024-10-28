@@ -17,6 +17,8 @@ abstract class Treino implements _i1.SerializableModel {
     this.id,
     required this.descricao,
     required this.objetivo,
+    required this.pessoaId,
+    this.pessoa,
     this.treinoExercicios,
     this.treinoHistoricos,
   });
@@ -25,6 +27,8 @@ abstract class Treino implements _i1.SerializableModel {
     int? id,
     required String descricao,
     required String objetivo,
+    required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   }) = _TreinoImpl;
@@ -34,6 +38,11 @@ abstract class Treino implements _i1.SerializableModel {
       id: jsonSerialization['id'] as int?,
       descricao: jsonSerialization['descricao'] as String,
       objetivo: jsonSerialization['objetivo'] as String,
+      pessoaId: jsonSerialization['pessoaId'] as int,
+      pessoa: jsonSerialization['pessoa'] == null
+          ? null
+          : _i2.Pessoa.fromJson(
+              (jsonSerialization['pessoa'] as Map<String, dynamic>)),
       treinoExercicios: (jsonSerialization['treinoExercicios'] as List?)
           ?.map(
               (e) => _i2.TreinoExercicio.fromJson((e as Map<String, dynamic>)))
@@ -54,6 +63,10 @@ abstract class Treino implements _i1.SerializableModel {
 
   String objetivo;
 
+  int pessoaId;
+
+  _i2.Pessoa? pessoa;
+
   List<_i2.TreinoExercicio>? treinoExercicios;
 
   List<_i2.TreinoHistorico>? treinoHistoricos;
@@ -62,6 +75,8 @@ abstract class Treino implements _i1.SerializableModel {
     int? id,
     String? descricao,
     String? objetivo,
+    int? pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   });
@@ -71,6 +86,8 @@ abstract class Treino implements _i1.SerializableModel {
       if (id != null) 'id': id,
       'descricao': descricao,
       'objetivo': objetivo,
+      'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJson(),
       if (treinoExercicios != null)
         'treinoExercicios':
             treinoExercicios?.toJson(valueToJson: (v) => v.toJson()),
@@ -93,12 +110,16 @@ class _TreinoImpl extends Treino {
     int? id,
     required String descricao,
     required String objetivo,
+    required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.TreinoExercicio>? treinoExercicios,
     List<_i2.TreinoHistorico>? treinoHistoricos,
   }) : super._(
           id: id,
           descricao: descricao,
           objetivo: objetivo,
+          pessoaId: pessoaId,
+          pessoa: pessoa,
           treinoExercicios: treinoExercicios,
           treinoHistoricos: treinoHistoricos,
         );
@@ -108,6 +129,8 @@ class _TreinoImpl extends Treino {
     Object? id = _Undefined,
     String? descricao,
     String? objetivo,
+    int? pessoaId,
+    Object? pessoa = _Undefined,
     Object? treinoExercicios = _Undefined,
     Object? treinoHistoricos = _Undefined,
   }) {
@@ -115,6 +138,8 @@ class _TreinoImpl extends Treino {
       id: id is int? ? id : this.id,
       descricao: descricao ?? this.descricao,
       objetivo: objetivo ?? this.objetivo,
+      pessoaId: pessoaId ?? this.pessoaId,
+      pessoa: pessoa is _i2.Pessoa? ? pessoa : this.pessoa?.copyWith(),
       treinoExercicios: treinoExercicios is List<_i2.TreinoExercicio>?
           ? treinoExercicios
           : this.treinoExercicios?.map((e0) => e0.copyWith()).toList(),

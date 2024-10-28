@@ -26,3 +26,4 @@ fields:
   cpf: String
   historicoPeso: List<Peso>?, relation(name=pessoa_pesos)
   historicoDietas: List<Dieta>?, relation(name=pessoa_dietas)
+  treinos: List<Treino>?, relation(name=pessoa_treinos)

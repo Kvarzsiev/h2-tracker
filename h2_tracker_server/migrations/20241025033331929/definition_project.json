@@ -354,9 +354,29 @@
           "columnType": 0,
           "isNullable": false,
           "dartType": "String"
+        },
+        {
+          "name": "pessoaId",
+          "columnType": 6,
+          "isNullable": false,
+          "dartType": "int"
         }
       ],
-      "foreignKeys": [],
+      "foreignKeys": [
+        {
+          "constraintName": "treino_fk_0",
+          "columns": [
+            "pessoaId"
+          ],
+          "referenceTable": "pessoa",
+          "referenceTableSchema": "public",
+          "referenceColumns": [
+            "id"
+          ],
+          "onUpdate": 3,
+          "onDelete": 4
+        }
+      ],
       "indexes": [
         {
           "indexName": "treino_pkey",
@@ -409,12 +429,6 @@
           "columnType": 6,
           "isNullable": false,
           "dartType": "int"
-        },
-        {
-          "name": "_treinoTreinoexerciciosTreinoId",
-          "columnType": 6,
-          "isNullable": true,
-          "dartType": "int?"
         }
       ],
       "foreignKeys": [
@@ -429,7 +443,7 @@
             "id"
           ],
           "onUpdate": 3,
-          "onDelete": 3
+          "onDelete": 4
         },
         {
           "constraintName": "treino_exercicio_fk_1",
@@ -437,19 +451,6 @@
             "exercicioId"
           ],
           "referenceTable": "exercicio",
-          "referenceTableSchema": "public",
-          "referenceColumns": [
-            "id"
-          ],
-          "onUpdate": 3,
-          "onDelete": 3
-        },
-        {
-          "constraintName": "treino_exercicio_fk_2",
-          "columns": [
-            "_treinoTreinoexerciciosTreinoId"
-          ],
-          "referenceTable": "treino",
           "referenceTableSchema": "public",
           "referenceColumns": [
             "id"
@@ -498,12 +499,6 @@
           "columnType": 6,
           "isNullable": false,
           "dartType": "int"
-        },
-        {
-          "name": "_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId",
-          "columnType": 6,
-          "isNullable": true,
-          "dartType": "int?"
         }
       ],
       "foreignKeys": [
@@ -518,20 +513,7 @@
             "id"
           ],
           "onUpdate": 3,
-          "onDelete": 3
-        },
-        {
-          "constraintName": "treino_exercicio_historico_fk_1",
-          "columns": [
-            "_treinoExercicioTreinoexerciciohistoricosTreinoExercicioId"
-          ],
-          "referenceTable": "treino_exercicio",
-          "referenceTableSchema": "public",
-          "referenceColumns": [
-            "id"
-          ],
-          "onUpdate": 3,
-          "onDelete": 3
+          "onDelete": 4
         }
       ],
       "indexes": [
@@ -580,12 +562,6 @@
           "columnType": 6,
           "isNullable": false,
           "dartType": "int"
-        },
-        {
-          "name": "_treinoTreinohistoricosTreinoId",
-          "columnType": 6,
-          "isNullable": true,
-          "dartType": "int?"
         }
       ],
       "foreignKeys": [
@@ -600,20 +576,7 @@
             "id"
           ],
           "onUpdate": 3,
-          "onDelete": 3
-        },
-        {
-          "constraintName": "treino_historico_fk_1",
-          "columns": [
-            "_treinoTreinohistoricosTreinoId"
-          ],
-          "referenceTable": "treino",
-          "referenceTableSchema": "public",
-          "referenceColumns": [
-            "id"
-          ],
-          "onUpdate": 3,
-          "onDelete": 3
+          "onDelete": 4
         }
       ],
       "indexes": [
@@ -637,6 +600,10 @@
     {
       "module": "serverpod",
       "version": "20240516151843329"
+    },
+    {
+      "module": "h2_tracker",
+      "version": "20241025014131828"
     }
   ],
   "migrationApiVersion": 1

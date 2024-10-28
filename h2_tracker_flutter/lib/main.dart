@@ -43,6 +43,20 @@ class MyApp extends StatelessWidget {
               onError: Colors.white,
               surface: Colors.white,
               onSurface: Colors.blue),
+          textTheme: const TextTheme(
+            titleLarge: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
+            titleMedium: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+            titleSmall: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           primarySwatch: Colors.blue,
           textSelectionTheme:
               const TextSelectionThemeData(cursorColor: Colors.blue),

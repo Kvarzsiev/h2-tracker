@@ -1,4 +1,4 @@
-import 'package:h2_tracker_server/src/generated/pessoa.dart';
+import 'package:h2_tracker_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class PessoaEndpoint extends Endpoint {
@@ -19,5 +19,21 @@ class PessoaEndpoint extends Endpoint {
     } else {
       throw Exception('Não autorizado');
     }
+  }
+
+  Future<List<Treino>> readUserTrainings(Session session, int userId) async {
+    final user = await Pessoa.db.findById(
+      session,
+      userId,
+      include: Pessoa.include(
+        treinos: Treino.includeList(
+          include: Treino.include(
+            treinoExercicios: TreinoExercicio.includeList(),
+          ),
+        ),
+      ),
+    );
+
+    return user?.treinos ?? [];
   }
 }
