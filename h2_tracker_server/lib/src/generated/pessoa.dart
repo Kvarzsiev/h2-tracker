@@ -8,14 +8,15 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Pessoa extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Pessoa implements _i1.TableRow, _i1.ProtocolSerialization {
   Pessoa._({
-    int? id,
+    this.id,
     required this.nome,
     required this.altura,
     required this.idade,
@@ -25,7 +26,7 @@ abstract class Pessoa extends _i1.TableRow
     this.historicoPeso,
     this.historicoDietas,
     this.treinos,
-  }) : super(id);
+  });
 
   factory Pessoa({
     int? id,
@@ -64,6 +65,9 @@ abstract class Pessoa extends _i1.TableRow
   static final t = PessoaTable();
 
   static const db = PessoaRepository._();
+
+  @override
+  int? id;
 
   String nome;
 
@@ -469,7 +473,7 @@ class PessoaRepository {
   final detachRow = const PessoaDetachRowRepository._();
 
   Future<List<Pessoa>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? limit,
     int? offset,
@@ -479,20 +483,20 @@ class PessoaRepository {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.find<Pessoa>(
+    return session.db.find<Pessoa>(
       where: where?.call(Pessoa.t),
       orderBy: orderBy?.call(Pessoa.t),
       orderByList: orderByList?.call(Pessoa.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Pessoa?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? offset,
     _i1.OrderByBuilder<PessoaTable>? orderBy,
@@ -501,121 +505,121 @@ class PessoaRepository {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<Pessoa>(
+    return session.db.findFirstRow<Pessoa>(
       where: where?.call(Pessoa.t),
       orderBy: orderBy?.call(Pessoa.t),
       orderByList: orderByList?.call(Pessoa.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<Pessoa?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     PessoaInclude? include,
   }) async {
-    return databaseAccessor.db.findById<Pessoa>(
+    return session.db.findById<Pessoa>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<Pessoa>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<Pessoa>(
+    return session.db.insert<Pessoa>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<Pessoa>(
+    return session.db.insertRow<Pessoa>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.ColumnSelections<PessoaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<Pessoa>(
+    return session.db.update<Pessoa>(
       rows,
       columns: columns?.call(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.ColumnSelections<PessoaTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<Pessoa>(
+    return session.db.updateRow<Pessoa>(
       row,
       columns: columns?.call(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<Pessoa> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<Pessoa>(
+    return session.db.delete<Pessoa>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<Pessoa> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<Pessoa>(
+    return session.db.deleteRow<Pessoa>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<Pessoa>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<PessoaTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<Pessoa>(
+    return session.db.deleteWhere<Pessoa>(
       where: where(Pessoa.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<PessoaTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<Pessoa>(
+    return session.db.count<Pessoa>(
       where: where?.call(Pessoa.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -624,7 +628,7 @@ class PessoaAttachRepository {
   const PessoaAttachRepository._();
 
   Future<void> historicoPeso(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     List<_i2.Peso> peso, {
     _i1.Transaction? transaction,
@@ -637,15 +641,15 @@ class PessoaAttachRepository {
     }
 
     var $peso = peso.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
-    await databaseAccessor.db.update<_i2.Peso>(
+    await session.db.update<_i2.Peso>(
       $peso,
       columns: [_i2.Peso.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> historicoDietas(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     List<_i2.Dieta> dieta, {
     _i1.Transaction? transaction,
@@ -658,15 +662,15 @@ class PessoaAttachRepository {
     }
 
     var $dieta = dieta.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
-    await databaseAccessor.db.update<_i2.Dieta>(
+    await session.db.update<_i2.Dieta>(
       $dieta,
       columns: [_i2.Dieta.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     List<_i2.Treino> treino, {
     _i1.Transaction? transaction,
@@ -679,10 +683,10 @@ class PessoaAttachRepository {
     }
 
     var $treino = treino.map((e) => e.copyWith(pessoaId: pessoa.id)).toList();
-    await databaseAccessor.db.update<_i2.Treino>(
+    await session.db.update<_i2.Treino>(
       $treino,
       columns: [_i2.Treino.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -691,7 +695,7 @@ class PessoaAttachRowRepository {
   const PessoaAttachRowRepository._();
 
   Future<void> historicoPeso(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     _i2.Peso peso, {
     _i1.Transaction? transaction,
@@ -704,15 +708,15 @@ class PessoaAttachRowRepository {
     }
 
     var $peso = peso.copyWith(pessoaId: pessoa.id);
-    await databaseAccessor.db.updateRow<_i2.Peso>(
+    await session.db.updateRow<_i2.Peso>(
       $peso,
       columns: [_i2.Peso.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> historicoDietas(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     _i2.Dieta dieta, {
     _i1.Transaction? transaction,
@@ -725,15 +729,15 @@ class PessoaAttachRowRepository {
     }
 
     var $dieta = dieta.copyWith(pessoaId: pessoa.id);
-    await databaseAccessor.db.updateRow<_i2.Dieta>(
+    await session.db.updateRow<_i2.Dieta>(
       $dieta,
       columns: [_i2.Dieta.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     Pessoa pessoa,
     _i2.Treino treino, {
     _i1.Transaction? transaction,
@@ -746,10 +750,10 @@ class PessoaAttachRowRepository {
     }
 
     var $treino = treino.copyWith(pessoaId: pessoa.id);
-    await databaseAccessor.db.updateRow<_i2.Treino>(
+    await session.db.updateRow<_i2.Treino>(
       $treino,
       columns: [_i2.Treino.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -758,7 +762,7 @@ class PessoaDetachRepository {
   const PessoaDetachRepository._();
 
   Future<void> treinos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.Treino> treino, {
     _i1.Transaction? transaction,
   }) async {
@@ -767,10 +771,10 @@ class PessoaDetachRepository {
     }
 
     var $treino = treino.map((e) => e.copyWith(pessoaId: null)).toList();
-    await databaseAccessor.db.update<_i2.Treino>(
+    await session.db.update<_i2.Treino>(
       $treino,
       columns: [_i2.Treino.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -779,7 +783,7 @@ class PessoaDetachRowRepository {
   const PessoaDetachRowRepository._();
 
   Future<void> treinos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.Treino treino, {
     _i1.Transaction? transaction,
   }) async {
@@ -788,10 +792,10 @@ class PessoaDetachRowRepository {
     }
 
     var $treino = treino.copyWith(pessoaId: null);
-    await databaseAccessor.db.updateRow<_i2.Treino>(
+    await session.db.updateRow<_i2.Treino>(
       $treino,
       columns: [_i2.Treino.t.pessoaId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }

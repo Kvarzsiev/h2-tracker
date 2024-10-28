@@ -24,7 +24,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  serverpod_flutter: 2.1.2
+  serverpod_flutter: 2.1.5
   h2_tracker_client:
     path: ../h2_tracker_client
 

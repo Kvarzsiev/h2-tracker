@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/main.dart';
+import 'package:h2_tracker_flutter/views/exercises_and_trainings/training_history_view.dart';
 import 'package:h2_tracker_flutter/views/exercises_and_trainings/training_view.dart';
 import 'package:h2_tracker_flutter/views/exercises_and_trainings/user_trainings_view.dart';
 
@@ -94,7 +95,9 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
         const VerticalDivider(thickness: 1, width: 1),
         // This is the main content.
         if (_selectedIndex == 0)
-          const Expanded(child: Text('Historico'))
+          TrainingHistoryView(
+            navigateToRailIndex: _navigateToRailIndex,
+          )
         else if (_selectedIndex == 1)
           TrainingView(
             navigateToRailIndex: _navigateToRailIndex,

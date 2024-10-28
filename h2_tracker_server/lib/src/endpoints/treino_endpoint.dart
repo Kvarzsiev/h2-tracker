@@ -3,7 +3,18 @@ import 'package:serverpod/serverpod.dart';
 
 class TreinoEndpoint extends Endpoint {
   Future<void> insert(Session session, Treino treino) async {
-    await Treino.db.insertRow(session, treino);
+    final treinoInstance = await Treino.db.insertRow(session, treino);
+
+    if (treino.treinoExercicios != null &&
+        treino.treinoExercicios!.isNotEmpty) {
+      for (final treinoExercicio in treino.treinoExercicios!) {
+        treinoExercicio.treinoId = treinoInstance.id!;
+      }
+
+      print(treino.treinoExercicios!.toJson());
+
+      TreinoExercicio.db.insert(session, treino.treinoExercicios!);
+    }
   }
 
   Future<void> update(Session session, Treino treino) async {

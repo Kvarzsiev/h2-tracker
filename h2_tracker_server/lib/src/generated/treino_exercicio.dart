@@ -8,14 +8,16 @@
 // ignore_for_file: type_literal_in_constant_pattern
 // ignore_for_file: use_super_parameters
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class TreinoExercicio extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class TreinoExercicio
+    implements _i1.TableRow, _i1.ProtocolSerialization {
   TreinoExercicio._({
-    int? id,
+    this.id,
     required this.repeticoes,
     required this.series,
     required this.treinoId,
@@ -23,7 +25,7 @@ abstract class TreinoExercicio extends _i1.TableRow
     required this.exercicioId,
     this.exercicio,
     this.treinoExercicioHistoricos,
-  }) : super(id);
+  });
 
   factory TreinoExercicio({
     int? id,
@@ -62,6 +64,9 @@ abstract class TreinoExercicio extends _i1.TableRow
   static final t = TreinoExercicioTable();
 
   static const db = TreinoExercicioRepository._();
+
+  @override
+  int? id;
 
   int repeticoes;
 
@@ -393,7 +398,7 @@ class TreinoExercicioRepository {
   final detachRow = const TreinoExercicioDetachRowRepository._();
 
   Future<List<TreinoExercicio>> find(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoExercicioTable>? where,
     int? limit,
     int? offset,
@@ -403,20 +408,20 @@ class TreinoExercicioRepository {
     _i1.Transaction? transaction,
     TreinoExercicioInclude? include,
   }) async {
-    return databaseAccessor.db.find<TreinoExercicio>(
+    return session.db.find<TreinoExercicio>(
       where: where?.call(TreinoExercicio.t),
       orderBy: orderBy?.call(TreinoExercicio.t),
       orderByList: orderByList?.call(TreinoExercicio.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<TreinoExercicio?> findFirstRow(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoExercicioTable>? where,
     int? offset,
     _i1.OrderByBuilder<TreinoExercicioTable>? orderBy,
@@ -425,121 +430,121 @@ class TreinoExercicioRepository {
     _i1.Transaction? transaction,
     TreinoExercicioInclude? include,
   }) async {
-    return databaseAccessor.db.findFirstRow<TreinoExercicio>(
+    return session.db.findFirstRow<TreinoExercicio>(
       where: where?.call(TreinoExercicio.t),
       orderBy: orderBy?.call(TreinoExercicio.t),
       orderByList: orderByList?.call(TreinoExercicio.t),
       orderDescending: orderDescending,
       offset: offset,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<TreinoExercicio?> findById(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
     TreinoExercicioInclude? include,
   }) async {
-    return databaseAccessor.db.findById<TreinoExercicio>(
+    return session.db.findById<TreinoExercicio>(
       id,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
   Future<List<TreinoExercicio>> insert(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<TreinoExercicio> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insert<TreinoExercicio>(
+    return session.db.insert<TreinoExercicio>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<TreinoExercicio> insertRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.insertRow<TreinoExercicio>(
+    return session.db.insertRow<TreinoExercicio>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<TreinoExercicio>> update(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<TreinoExercicio> rows, {
     _i1.ColumnSelections<TreinoExercicioTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.update<TreinoExercicio>(
+    return session.db.update<TreinoExercicio>(
       rows,
       columns: columns?.call(TreinoExercicio.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<TreinoExercicio> updateRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio row, {
     _i1.ColumnSelections<TreinoExercicioTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.updateRow<TreinoExercicio>(
+    return session.db.updateRow<TreinoExercicio>(
       row,
       columns: columns?.call(TreinoExercicio.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<TreinoExercicio>> delete(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<TreinoExercicio> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.delete<TreinoExercicio>(
+    return session.db.delete<TreinoExercicio>(
       rows,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<TreinoExercicio> deleteRow(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio row, {
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteRow<TreinoExercicio>(
+    return session.db.deleteRow<TreinoExercicio>(
       row,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<List<TreinoExercicio>> deleteWhere(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     required _i1.WhereExpressionBuilder<TreinoExercicioTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.deleteWhere<TreinoExercicio>(
+    return session.db.deleteWhere<TreinoExercicio>(
       where: where(TreinoExercicio.t),
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
-    _i1.DatabaseAccessor databaseAccessor, {
+    _i1.Session session, {
     _i1.WhereExpressionBuilder<TreinoExercicioTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return databaseAccessor.db.count<TreinoExercicio>(
+    return session.db.count<TreinoExercicio>(
       where: where?.call(TreinoExercicio.t),
       limit: limit,
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -548,7 +553,7 @@ class TreinoExercicioAttachRepository {
   const TreinoExercicioAttachRepository._();
 
   Future<void> treinoExercicioHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio treinoExercicio,
     List<_i2.TreinoExercicioHistorico> treinoExercicioHistorico, {
     _i1.Transaction? transaction,
@@ -563,10 +568,10 @@ class TreinoExercicioAttachRepository {
     var $treinoExercicioHistorico = treinoExercicioHistorico
         .map((e) => e.copyWith(treinoExercicioId: treinoExercicio.id))
         .toList();
-    await databaseAccessor.db.update<_i2.TreinoExercicioHistorico>(
+    await session.db.update<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
       columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -575,7 +580,7 @@ class TreinoExercicioAttachRowRepository {
   const TreinoExercicioAttachRowRepository._();
 
   Future<void> treino(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio treinoExercicio,
     _i2.Treino treino, {
     _i1.Transaction? transaction,
@@ -588,15 +593,15 @@ class TreinoExercicioAttachRowRepository {
     }
 
     var $treinoExercicio = treinoExercicio.copyWith(treinoId: treino.id);
-    await databaseAccessor.db.updateRow<TreinoExercicio>(
+    await session.db.updateRow<TreinoExercicio>(
       $treinoExercicio,
       columns: [TreinoExercicio.t.treinoId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> exercicio(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio treinoExercicio,
     _i2.Exercicio exercicio, {
     _i1.Transaction? transaction,
@@ -609,15 +614,15 @@ class TreinoExercicioAttachRowRepository {
     }
 
     var $treinoExercicio = treinoExercicio.copyWith(exercicioId: exercicio.id);
-    await databaseAccessor.db.updateRow<TreinoExercicio>(
+    await session.db.updateRow<TreinoExercicio>(
       $treinoExercicio,
       columns: [TreinoExercicio.t.exercicioId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 
   Future<void> treinoExercicioHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     TreinoExercicio treinoExercicio,
     _i2.TreinoExercicioHistorico treinoExercicioHistorico, {
     _i1.Transaction? transaction,
@@ -631,10 +636,10 @@ class TreinoExercicioAttachRowRepository {
 
     var $treinoExercicioHistorico = treinoExercicioHistorico.copyWith(
         treinoExercicioId: treinoExercicio.id);
-    await databaseAccessor.db.updateRow<_i2.TreinoExercicioHistorico>(
+    await session.db.updateRow<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
       columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -643,7 +648,7 @@ class TreinoExercicioDetachRepository {
   const TreinoExercicioDetachRepository._();
 
   Future<void> treinoExercicioHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     List<_i2.TreinoExercicioHistorico> treinoExercicioHistorico, {
     _i1.Transaction? transaction,
   }) async {
@@ -654,10 +659,10 @@ class TreinoExercicioDetachRepository {
     var $treinoExercicioHistorico = treinoExercicioHistorico
         .map((e) => e.copyWith(treinoExercicioId: null))
         .toList();
-    await databaseAccessor.db.update<_i2.TreinoExercicioHistorico>(
+    await session.db.update<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
       columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
@@ -666,7 +671,7 @@ class TreinoExercicioDetachRowRepository {
   const TreinoExercicioDetachRowRepository._();
 
   Future<void> treinoExercicioHistoricos(
-    _i1.DatabaseAccessor databaseAccessor,
+    _i1.Session session,
     _i2.TreinoExercicioHistorico treinoExercicioHistorico, {
     _i1.Transaction? transaction,
   }) async {
@@ -676,10 +681,10 @@ class TreinoExercicioDetachRowRepository {
 
     var $treinoExercicioHistorico =
         treinoExercicioHistorico.copyWith(treinoExercicioId: null);
-    await databaseAccessor.db.updateRow<_i2.TreinoExercicioHistorico>(
+    await session.db.updateRow<_i2.TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
       columns: [_i2.TreinoExercicioHistorico.t.treinoExercicioId],
-      transaction: transaction ?? databaseAccessor.transaction,
+      transaction: transaction ?? session.transaction,
     );
   }
 }
