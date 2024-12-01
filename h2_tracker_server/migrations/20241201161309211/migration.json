@@ -1,0 +1,78 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "exercicio"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "exercicio",
+        "dartName": "Exercicio",
+        "module": "h2_tracker",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('exercicio_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "nome",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "grupoMuscular",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "descricao",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "imagem",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "indexName": "exercicio_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"exercicio\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "exercicio",
+      "columns": [
+        "imagem"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

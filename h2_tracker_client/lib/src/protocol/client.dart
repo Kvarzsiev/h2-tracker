@@ -15,7 +15,8 @@ import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i3;
 import 'package:h2_tracker_client/src/protocol/peso.dart' as _i4;
 import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i5;
 import 'package:h2_tracker_client/src/protocol/treino.dart' as _i6;
-import 'protocol.dart' as _i7;
+import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i7;
+import 'protocol.dart' as _i8;
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -161,6 +162,34 @@ class EndpointTreino extends _i1.EndpointRef {
       );
 }
 
+/// {@category Endpoint}
+class EndpointTreinoHistorico extends _i1.EndpointRef {
+  EndpointTreinoHistorico(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'treinoHistorico';
+
+  _i2.Future<List<_i7.TreinoHistorico>> readUserTrainHistory(int userId) =>
+      caller.callServerEndpoint<List<_i7.TreinoHistorico>>(
+        'treinoHistorico',
+        'readUserTrainHistory',
+        {'userId': userId},
+      );
+
+  _i2.Future<void> insert(_i7.TreinoHistorico historico) =>
+      caller.callServerEndpoint<void>(
+        'treinoHistorico',
+        'insert',
+        {'historico': historico},
+      );
+
+  _i2.Future<void> update(_i6.Treino treino) => caller.callServerEndpoint<void>(
+        'treinoHistorico',
+        'update',
+        {'treino': treino},
+      );
+}
+
 class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
@@ -177,7 +206,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i7.Protocol(),
+          _i8.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -192,6 +221,7 @@ class Client extends _i1.ServerpodClientShared {
     peso = EndpointPeso(this);
     pessoa = EndpointPessoa(this);
     treino = EndpointTreino(this);
+    treinoHistorico = EndpointTreinoHistorico(this);
   }
 
   late final EndpointExample example;
@@ -204,6 +234,8 @@ class Client extends _i1.ServerpodClientShared {
 
   late final EndpointTreino treino;
 
+  late final EndpointTreinoHistorico treinoHistorico;
+
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
         'example': example,
@@ -211,6 +243,7 @@ class Client extends _i1.ServerpodClientShared {
         'peso': peso,
         'pessoa': pessoa,
         'treino': treino,
+        'treinoHistorico': treinoHistorico,
       };
 
   @override

@@ -17,3 +17,7 @@ treino:
   - update:
   - findById:
   - delete:
+treinoHistorico:
+  - readUserTrainHistory:
+  - insert:
+  - update:

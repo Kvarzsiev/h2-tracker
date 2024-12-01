@@ -283,26 +283,26 @@ packages:
     dependency: transitive
     description:
       name: serverpod_client
-      sha256: "0dc1ff41e2406299bcd9bf19c9fcfb4c80738496b62bc936d00028de1eeafb87"
+      sha256: a553d1dd6f2301d4549f41380193404361477b44952894b92a9f205a29456ed8
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.5"
   serverpod_flutter:
     dependency: "direct main"
     description:
       name: serverpod_flutter
-      sha256: b36c09bde8bcf514144b53ff6cf744fbd402342239aa6131521526f492d337f6
+      sha256: d092162aeae24b318cb0e175a91999e83499890b792362c7948ba547d58c8763
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.5"
   serverpod_serialization:
     dependency: transitive
     description:
       name: serverpod_serialization
-      sha256: "3cb991546d6a44710df28676b6e274a5a16bbebf722397e75b9217c7ea7d795e"
+      sha256: "54c91f1b8ae14a2402b41f2f019c21b72cc3ac2200be97da703ad83d4ab60bf1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.5"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -364,6 +364,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.2"
+  timelines_plus:
+    dependency: "direct main"
+    description:
+      name: timelines_plus
+      sha256: ad0d97a0ee21942ee749c603b117794eb97cc6788f0cadc7d76cf1bbb2c26fca
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   typed_data:
     dependency: transitive
     description:

@@ -15,10 +15,12 @@ import '../endpoints/exercicio_endpoint.dart' as _i3;
 import '../endpoints/peso_endpoint.dart' as _i4;
 import '../endpoints/pessoa_endpoint.dart' as _i5;
 import '../endpoints/treino_endpoint.dart' as _i6;
-import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i7;
-import 'package:h2_tracker_server/src/generated/peso.dart' as _i8;
-import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i9;
-import 'package:h2_tracker_server/src/generated/treino.dart' as _i10;
+import '../endpoints/treino_historico_endpoint.dart' as _i7;
+import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i8;
+import 'package:h2_tracker_server/src/generated/peso.dart' as _i9;
+import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i10;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i11;
+import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i12;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
@@ -52,6 +54,12 @@ class Endpoints extends _i1.EndpointDispatch {
         ..initialize(
           server,
           'treino',
+          null,
+        ),
+      'treinoHistorico': _i7.TreinoHistoricoEndpoint()
+        ..initialize(
+          server,
+          'treinoHistorico',
           null,
         ),
     };
@@ -88,7 +96,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'exercicio': _i1.ParameterDescription(
               name: 'exercicio',
-              type: _i1.getType<_i7.Exercicio>(),
+              type: _i1.getType<_i8.Exercicio>(),
               nullable: false,
             )
           },
@@ -115,7 +123,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'exercicio': _i1.ParameterDescription(
               name: 'exercicio',
-              type: _i1.getType<_i7.Exercicio>(),
+              type: _i1.getType<_i8.Exercicio>(),
               nullable: false,
             )
           },
@@ -149,7 +157,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'peso': _i1.ParameterDescription(
               name: 'peso',
-              type: _i1.getType<_i8.Peso>(),
+              type: _i1.getType<_i9.Peso>(),
               nullable: false,
             ),
             'height': _i1.ParameterDescription(
@@ -179,7 +187,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i9.Pessoa>(),
+              type: _i1.getType<_i10.Pessoa>(),
               nullable: false,
             )
           },
@@ -197,7 +205,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i9.Pessoa>(),
+              type: _i1.getType<_i10.Pessoa>(),
               nullable: false,
             )
           },
@@ -263,7 +271,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i10.Treino>(),
+              type: _i1.getType<_i11.Treino>(),
               nullable: false,
             )
           },
@@ -281,7 +289,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i10.Treino>(),
+              type: _i1.getType<_i11.Treino>(),
               nullable: false,
             )
           },
@@ -317,7 +325,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i10.Treino>(),
+              type: _i1.getType<_i11.Treino>(),
               nullable: false,
             )
           },
@@ -326,6 +334,69 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['treino'] as _i6.TreinoEndpoint).delete(
+            session,
+            params['treino'],
+          ),
+        ),
+      },
+    );
+    connectors['treinoHistorico'] = _i1.EndpointConnector(
+      name: 'treinoHistorico',
+      endpoint: endpoints['treinoHistorico']!,
+      methodConnectors: {
+        'readUserTrainHistory': _i1.MethodConnector(
+          name: 'readUserTrainHistory',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treinoHistorico'] as _i7.TreinoHistoricoEndpoint)
+                  .readUserTrainHistory(
+            session,
+            params['userId'],
+          ),
+        ),
+        'insert': _i1.MethodConnector(
+          name: 'insert',
+          params: {
+            'historico': _i1.ParameterDescription(
+              name: 'historico',
+              type: _i1.getType<_i12.TreinoHistorico>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treinoHistorico'] as _i7.TreinoHistoricoEndpoint)
+                  .insert(
+            session,
+            params['historico'],
+          ),
+        ),
+        'update': _i1.MethodConnector(
+          name: 'update',
+          params: {
+            'treino': _i1.ParameterDescription(
+              name: 'treino',
+              type: _i1.getType<_i11.Treino>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['treinoHistorico'] as _i7.TreinoHistoricoEndpoint)
+                  .update(
             session,
             params['treino'],
           ),

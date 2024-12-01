@@ -17,6 +17,7 @@ abstract class Exercicio implements _i1.SerializableModel {
     required this.nome,
     required this.grupoMuscular,
     required this.descricao,
+    required this.imagem,
   });
 
   factory Exercicio({
@@ -24,6 +25,7 @@ abstract class Exercicio implements _i1.SerializableModel {
     required String nome,
     required String grupoMuscular,
     required String descricao,
+    required String imagem,
   }) = _ExercicioImpl;
 
   factory Exercicio.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -32,6 +34,7 @@ abstract class Exercicio implements _i1.SerializableModel {
       nome: jsonSerialization['nome'] as String,
       grupoMuscular: jsonSerialization['grupoMuscular'] as String,
       descricao: jsonSerialization['descricao'] as String,
+      imagem: jsonSerialization['imagem'] as String,
     );
   }
 
@@ -46,11 +49,14 @@ abstract class Exercicio implements _i1.SerializableModel {
 
   String descricao;
 
+  String imagem;
+
   Exercicio copyWith({
     int? id,
     String? nome,
     String? grupoMuscular,
     String? descricao,
+    String? imagem,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -59,6 +65,7 @@ abstract class Exercicio implements _i1.SerializableModel {
       'nome': nome,
       'grupoMuscular': grupoMuscular,
       'descricao': descricao,
+      'imagem': imagem,
     };
   }
 
@@ -76,11 +83,13 @@ class _ExercicioImpl extends Exercicio {
     required String nome,
     required String grupoMuscular,
     required String descricao,
+    required String imagem,
   }) : super._(
           id: id,
           nome: nome,
           grupoMuscular: grupoMuscular,
           descricao: descricao,
+          imagem: imagem,
         );
 
   @override
@@ -89,12 +98,14 @@ class _ExercicioImpl extends Exercicio {
     String? nome,
     String? grupoMuscular,
     String? descricao,
+    String? imagem,
   }) {
     return Exercicio(
       id: id is int? ? id : this.id,
       nome: nome ?? this.nome,
       grupoMuscular: grupoMuscular ?? this.grupoMuscular,
       descricao: descricao ?? this.descricao,
+      imagem: imagem ?? this.imagem,
     );
   }
 }

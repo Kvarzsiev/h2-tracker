@@ -19,6 +19,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.nome,
     required this.grupoMuscular,
     required this.descricao,
+    required this.imagem,
   });
 
   factory Exercicio({
@@ -26,6 +27,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
     required String nome,
     required String grupoMuscular,
     required String descricao,
+    required String imagem,
   }) = _ExercicioImpl;
 
   factory Exercicio.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -34,6 +36,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
       nome: jsonSerialization['nome'] as String,
       grupoMuscular: jsonSerialization['grupoMuscular'] as String,
       descricao: jsonSerialization['descricao'] as String,
+      imagem: jsonSerialization['imagem'] as String,
     );
   }
 
@@ -50,6 +53,8 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
 
   String descricao;
 
+  String imagem;
+
   @override
   _i1.Table get table => t;
 
@@ -58,6 +63,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
     String? nome,
     String? grupoMuscular,
     String? descricao,
+    String? imagem,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -66,6 +72,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
       'nome': nome,
       'grupoMuscular': grupoMuscular,
       'descricao': descricao,
+      'imagem': imagem,
     };
   }
 
@@ -76,6 +83,7 @@ abstract class Exercicio implements _i1.TableRow, _i1.ProtocolSerialization {
       'nome': nome,
       'grupoMuscular': grupoMuscular,
       'descricao': descricao,
+      'imagem': imagem,
     };
   }
 
@@ -117,11 +125,13 @@ class _ExercicioImpl extends Exercicio {
     required String nome,
     required String grupoMuscular,
     required String descricao,
+    required String imagem,
   }) : super._(
           id: id,
           nome: nome,
           grupoMuscular: grupoMuscular,
           descricao: descricao,
+          imagem: imagem,
         );
 
   @override
@@ -130,12 +140,14 @@ class _ExercicioImpl extends Exercicio {
     String? nome,
     String? grupoMuscular,
     String? descricao,
+    String? imagem,
   }) {
     return Exercicio(
       id: id is int? ? id : this.id,
       nome: nome ?? this.nome,
       grupoMuscular: grupoMuscular ?? this.grupoMuscular,
       descricao: descricao ?? this.descricao,
+      imagem: imagem ?? this.imagem,
     );
   }
 }
@@ -154,6 +166,10 @@ class ExercicioTable extends _i1.Table {
       'descricao',
       this,
     );
+    imagem = _i1.ColumnString(
+      'imagem',
+      this,
+    );
   }
 
   late final _i1.ColumnString nome;
@@ -162,12 +178,15 @@ class ExercicioTable extends _i1.Table {
 
   late final _i1.ColumnString descricao;
 
+  late final _i1.ColumnString imagem;
+
   @override
   List<_i1.Column> get columns => [
         id,
         nome,
         grupoMuscular,
         descricao,
+        imagem,
       ];
 }
 

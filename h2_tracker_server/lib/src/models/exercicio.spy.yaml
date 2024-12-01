@@ -21,3 +21,4 @@ fields:
   nome: String
   grupoMuscular: String
   descricao: String
+  imagem: String
