@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
-import 'package:h2_tracker_flutter/functions/show_snack_bar.dart';
-import 'package:h2_tracker_flutter/functions/string.dart';
+import 'package:h2_tracker_flutter/extensions/show_snack_bar.dart';
+import 'package:h2_tracker_flutter/extensions/string.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 

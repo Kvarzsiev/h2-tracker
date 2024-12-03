@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_flutter/components/app_bar.dart';
+import 'package:h2_tracker_flutter/views/data/data_main_view.dart';
 import 'package:h2_tracker_flutter/views/exercises_and_trainings/exercises_main_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -42,9 +43,7 @@ class HomeViewState extends State<HomeView> {
           Center(
             child: Text('Dieta e Alimentação'),
           ),
-          Center(
-            child: Text('Dados e Estatísticas'),
-          ),
+          DataMainView()
         ],
       ),
     );

@@ -24,6 +24,8 @@ import 'protocol.dart' as _i11;
 import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i12;
 import 'package:h2_tracker_client/src/protocol/treino.dart' as _i13;
 import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i14;
+import 'package:h2_tracker_client/src/protocol/treino_exercicio_historico.dart'
+    as _i15;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -155,6 +157,11 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<_i14.TreinoHistorico>) {
       return (data as List)
           .map((e) => deserialize<_i14.TreinoHistorico>(e))
+          .toList() as dynamic;
+    }
+    if (t == List<_i15.TreinoExercicioHistorico>) {
+      return (data as List)
+          .map((e) => deserialize<_i15.TreinoExercicioHistorico>(e))
           .toList() as dynamic;
     }
     return super.deserialize<T>(data, t);

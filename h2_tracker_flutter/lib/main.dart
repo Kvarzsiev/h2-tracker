@@ -65,9 +65,13 @@ class MyApp extends StatelessWidget {
             focusedBorder: InputBorder.none,
             filled: true,
             fillColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
+            hintStyle: TextStyle(
+              fontSize: 13,
+              color: Colors.blueAccent[100],
+            ),
           ),
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.transparent,
             toolbarHeight: size.height * .1,
             iconTheme: IconThemeData(
               size: (size.height * .64 < 32) ? 32 : size.height * .64,
@@ -90,6 +94,16 @@ class MyApp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
+            ),
+          ),
+          cardTheme: CardTheme(
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Colors.grey.withOpacity(
+                  .2,
+                ),
+              ),
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),

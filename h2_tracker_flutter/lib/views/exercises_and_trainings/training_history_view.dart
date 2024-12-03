@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/components/exercise_card.dart';
-import 'package:h2_tracker_flutter/functions/date.dart';
-import 'package:h2_tracker_flutter/functions/show_snack_bar.dart';
-import 'package:h2_tracker_flutter/functions/string.dart';
+import 'package:h2_tracker_flutter/extensions/date.dart';
+import 'package:h2_tracker_flutter/extensions/show_snack_bar.dart';
+import 'package:h2_tracker_flutter/extensions/string.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 import 'package:timelines_plus/timelines_plus.dart';
@@ -51,8 +51,6 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
         await client.treinoHistorico.readUserTrainHistory(_userState.user!.id!);
 
     final treinos = await client.pessoa.readUserTrainings(_userState.user!.id!);
-
-    print(treinos);
 
     setState(() {
       _historico = historico;
@@ -202,7 +200,7 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
           title: const Text('Adicionar treino realizado'),
           content: SizedBox(
             height: size.height * .7,
-            width: size.width * .5,
+            width: size.width * .7,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -303,8 +301,6 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
               ),
               child: const Text('Salvar'),
               onPressed: () async {
-                print(_selectedTrain);
-
                 if (_selectedTrain != null && _start != null && _end != null) {
                   final newHistoryEntry = TreinoHistorico(
                     treinoId: _selectedTrain!.id!,
@@ -312,13 +308,31 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
                     horarioFim: _end!,
                   );
 
-                  await client.treinoHistorico.insert(newHistoryEntry);
+                  final newExerciseHistoryEntries = _selectedTrain!
+                      .treinoExercicios!
+                      .where((element) =>
+                          element.treinoExercicioHistoricos != null &&
+                          element.treinoExercicioHistoricos!.isNotEmpty)
+                      .map(
+                          (element) => element.treinoExercicioHistoricos!.first)
+                      .toList();
+
+                  await client.treinoHistorico
+                      .insert(newHistoryEntry, newExerciseHistoryEntries);
 
                   showSnackBar(
                     context: context,
                     message: 'Novo registro adicionado ao histórico!',
                     status: SnackBarStatus.success,
                   );
+
+                  setState(() {
+                    _selectedTrain = null;
+                    _startDateController.text = '';
+                    _start = null;
+                    _endDateController.text = '';
+                    _end = null;
+                  });
 
                   loadData();
                 } else {

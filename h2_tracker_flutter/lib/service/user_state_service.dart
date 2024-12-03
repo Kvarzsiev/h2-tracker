@@ -1,4 +1,5 @@
 import 'package:h2_tracker_client/h2_tracker_client.dart';
+import 'package:h2_tracker_flutter/main.dart';
 
 class UserStateService {
   // private static instance of the class
@@ -13,4 +14,13 @@ class UserStateService {
   }
 
   Pessoa? user;
+
+  Future<void> refresh() async {
+    final user = this.user;
+    if (user != null) {
+      final toRefresh = await client.pessoa.read(user.id!);
+      print(toRefresh);
+      this.user = toRefresh;
+    }
+  }
 }

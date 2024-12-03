@@ -1,3 +1,6 @@
+dieta:
+  - insert:
+  - update:
 example:
   - hello:
 exercicio:
@@ -7,11 +10,14 @@ exercicio:
   - insertDefault:
 peso:
   - insert:
+  - updateHeight:
 pessoa:
   - insert:
   - delete:
+  - update:
   - login:
   - readUserTrainings:
+  - read:
 treino:
   - insert:
   - update:

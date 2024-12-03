@@ -1,0 +1,96 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "pessoa"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "pessoa",
+        "dartName": "Pessoa",
+        "module": "h2_tracker",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('pessoa_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "nome",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "altura",
+            "columnType": 3,
+            "isNullable": false,
+            "dartType": "double"
+          },
+          {
+            "name": "idade",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "email",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "senha",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "cpf",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "sex",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          }
+        ],
+        "foreignKeys": [],
+        "indexes": [
+          {
+            "indexName": "pessoa_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"pessoa\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "pessoa",
+      "columns": [
+        "sex"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

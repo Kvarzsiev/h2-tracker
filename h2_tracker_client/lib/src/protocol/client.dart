@@ -11,12 +11,61 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
-import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i3;
-import 'package:h2_tracker_client/src/protocol/peso.dart' as _i4;
-import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i5;
-import 'package:h2_tracker_client/src/protocol/treino.dart' as _i6;
-import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i7;
-import 'protocol.dart' as _i8;
+import 'package:h2_tracker_client/src/protocol/dieta.dart' as _i3;
+import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i4;
+import 'package:h2_tracker_client/src/protocol/peso.dart' as _i5;
+import 'package:h2_tracker_client/src/protocol/pessoa.dart' as _i6;
+import 'package:h2_tracker_client/src/protocol/treino.dart' as _i7;
+import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i8;
+import 'package:h2_tracker_client/src/protocol/treino_exercicio_historico.dart'
+    as _i9;
+import 'protocol.dart' as _i10;
+
+/// {@category Endpoint}
+class EndpointDieta extends _i1.EndpointRef {
+  EndpointDieta(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'dieta';
+
+  _i2.Future<void> insert(
+    _i3.Dieta dieta,
+    double peso,
+    double altura,
+    int idade,
+    String sexo,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'dieta',
+        'insert',
+        {
+          'dieta': dieta,
+          'peso': peso,
+          'altura': altura,
+          'idade': idade,
+          'sexo': sexo,
+        },
+      );
+
+  _i2.Future<void> update(
+    _i3.Dieta dieta,
+    double peso,
+    double altura,
+    int idade,
+    String sexo,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'dieta',
+        'update',
+        {
+          'dieta': dieta,
+          'peso': peso,
+          'altura': altura,
+          'idade': idade,
+          'sexo': sexo,
+        },
+      );
+}
 
 /// {@category Endpoint}
 class EndpointExample extends _i1.EndpointRef {
@@ -39,21 +88,21 @@ class EndpointExercicio extends _i1.EndpointRef {
   @override
   String get name => 'exercicio';
 
-  _i2.Future<void> insert(_i3.Exercicio exercicio) =>
+  _i2.Future<void> insert(_i4.Exercicio exercicio) =>
       caller.callServerEndpoint<void>(
         'exercicio',
         'insert',
         {'exercicio': exercicio},
       );
 
-  _i2.Future<List<_i3.Exercicio>> read() =>
-      caller.callServerEndpoint<List<_i3.Exercicio>>(
+  _i2.Future<List<_i4.Exercicio>> read() =>
+      caller.callServerEndpoint<List<_i4.Exercicio>>(
         'exercicio',
         'read',
         {},
       );
 
-  _i2.Future<void> delete(_i3.Exercicio exercicio) =>
+  _i2.Future<void> delete(_i4.Exercicio exercicio) =>
       caller.callServerEndpoint<void>(
         'exercicio',
         'delete',
@@ -75,7 +124,7 @@ class EndpointPeso extends _i1.EndpointRef {
   String get name => 'peso';
 
   _i2.Future<void> insert(
-    _i4.Peso peso,
+    _i5.Peso peso,
     double height,
   ) =>
       caller.callServerEndpoint<void>(
@@ -83,6 +132,19 @@ class EndpointPeso extends _i1.EndpointRef {
         'insert',
         {
           'peso': peso,
+          'height': height,
+        },
+      );
+
+  _i2.Future<void> updateHeight(
+    int userId,
+    double height,
+  ) =>
+      caller.callServerEndpoint<void>(
+        'peso',
+        'updateHeight',
+        {
+          'userId': userId,
           'height': height,
         },
       );
@@ -95,24 +157,30 @@ class EndpointPessoa extends _i1.EndpointRef {
   @override
   String get name => 'pessoa';
 
-  _i2.Future<_i5.Pessoa> insert(_i5.Pessoa pessoa) =>
-      caller.callServerEndpoint<_i5.Pessoa>(
+  _i2.Future<_i6.Pessoa> insert(_i6.Pessoa pessoa) =>
+      caller.callServerEndpoint<_i6.Pessoa>(
         'pessoa',
         'insert',
         {'pessoa': pessoa},
       );
 
-  _i2.Future<void> delete(_i5.Pessoa pessoa) => caller.callServerEndpoint<void>(
+  _i2.Future<void> delete(_i6.Pessoa pessoa) => caller.callServerEndpoint<void>(
         'pessoa',
         'delete',
         {'pessoa': pessoa},
       );
 
-  _i2.Future<_i5.Pessoa> login(
+  _i2.Future<void> update(_i6.Pessoa pessoa) => caller.callServerEndpoint<void>(
+        'pessoa',
+        'update',
+        {'pessoa': pessoa},
+      );
+
+  _i2.Future<_i6.Pessoa> login(
     String email,
     String password,
   ) =>
-      caller.callServerEndpoint<_i5.Pessoa>(
+      caller.callServerEndpoint<_i6.Pessoa>(
         'pessoa',
         'login',
         {
@@ -121,11 +189,17 @@ class EndpointPessoa extends _i1.EndpointRef {
         },
       );
 
-  _i2.Future<List<_i6.Treino>> readUserTrainings(int userId) =>
-      caller.callServerEndpoint<List<_i6.Treino>>(
+  _i2.Future<List<_i7.Treino>> readUserTrainings(int userId) =>
+      caller.callServerEndpoint<List<_i7.Treino>>(
         'pessoa',
         'readUserTrainings',
         {'userId': userId},
+      );
+
+  _i2.Future<_i6.Pessoa> read(int id) => caller.callServerEndpoint<_i6.Pessoa>(
+        'pessoa',
+        'read',
+        {'id': id},
       );
 }
 
@@ -136,26 +210,26 @@ class EndpointTreino extends _i1.EndpointRef {
   @override
   String get name => 'treino';
 
-  _i2.Future<void> insert(_i6.Treino treino) => caller.callServerEndpoint<void>(
+  _i2.Future<void> insert(_i7.Treino treino) => caller.callServerEndpoint<void>(
         'treino',
         'insert',
         {'treino': treino},
       );
 
-  _i2.Future<void> update(_i6.Treino treino) => caller.callServerEndpoint<void>(
+  _i2.Future<void> update(_i7.Treino treino) => caller.callServerEndpoint<void>(
         'treino',
         'update',
         {'treino': treino},
       );
 
-  _i2.Future<_i6.Treino?> findById(int id) =>
-      caller.callServerEndpoint<_i6.Treino?>(
+  _i2.Future<_i7.Treino?> findById(int id) =>
+      caller.callServerEndpoint<_i7.Treino?>(
         'treino',
         'findById',
         {'id': id},
       );
 
-  _i2.Future<void> delete(_i6.Treino treino) => caller.callServerEndpoint<void>(
+  _i2.Future<void> delete(_i7.Treino treino) => caller.callServerEndpoint<void>(
         'treino',
         'delete',
         {'treino': treino},
@@ -169,21 +243,27 @@ class EndpointTreinoHistorico extends _i1.EndpointRef {
   @override
   String get name => 'treinoHistorico';
 
-  _i2.Future<List<_i7.TreinoHistorico>> readUserTrainHistory(int userId) =>
-      caller.callServerEndpoint<List<_i7.TreinoHistorico>>(
+  _i2.Future<List<_i8.TreinoHistorico>> readUserTrainHistory(int userId) =>
+      caller.callServerEndpoint<List<_i8.TreinoHistorico>>(
         'treinoHistorico',
         'readUserTrainHistory',
         {'userId': userId},
       );
 
-  _i2.Future<void> insert(_i7.TreinoHistorico historico) =>
+  _i2.Future<void> insert(
+    _i8.TreinoHistorico historico,
+    List<_i9.TreinoExercicioHistorico> treinoExercicioHistoricos,
+  ) =>
       caller.callServerEndpoint<void>(
         'treinoHistorico',
         'insert',
-        {'historico': historico},
+        {
+          'historico': historico,
+          'treinoExercicioHistoricos': treinoExercicioHistoricos,
+        },
       );
 
-  _i2.Future<void> update(_i6.Treino treino) => caller.callServerEndpoint<void>(
+  _i2.Future<void> update(_i7.Treino treino) => caller.callServerEndpoint<void>(
         'treinoHistorico',
         'update',
         {'treino': treino},
@@ -206,7 +286,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i8.Protocol(),
+          _i10.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -216,6 +296,7 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    dieta = EndpointDieta(this);
     example = EndpointExample(this);
     exercicio = EndpointExercicio(this);
     peso = EndpointPeso(this);
@@ -223,6 +304,8 @@ class Client extends _i1.ServerpodClientShared {
     treino = EndpointTreino(this);
     treinoHistorico = EndpointTreinoHistorico(this);
   }
+
+  late final EndpointDieta dieta;
 
   late final EndpointExample example;
 
@@ -238,6 +321,7 @@ class Client extends _i1.ServerpodClientShared {
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'dieta': dieta,
         'example': example,
         'exercicio': exercicio,
         'peso': peso,

@@ -25,6 +25,8 @@ import 'protocol.dart' as _i12;
 import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i13;
 import 'package:h2_tracker_server/src/generated/treino.dart' as _i14;
 import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i15;
+import 'package:h2_tracker_server/src/generated/treino_exercicio_historico.dart'
+    as _i16;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -284,6 +286,12 @@ class Protocol extends _i1.SerializationManagerServer {
         ),
         _i2.ColumnDefinition(
           name: 'cpf',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'sex',
           columnType: _i2.ColumnType.text,
           isNullable: false,
           dartType: 'String',
@@ -746,6 +754,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<_i15.TreinoHistorico>) {
       return (data as List)
           .map((e) => deserialize<_i15.TreinoHistorico>(e))
+          .toList() as dynamic;
+    }
+    if (t == List<_i16.TreinoExercicioHistorico>) {
+      return (data as List)
+          .map((e) => deserialize<_i16.TreinoExercicioHistorico>(e))
           .toList() as dynamic;
     }
     try {

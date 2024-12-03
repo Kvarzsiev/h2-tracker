@@ -3,7 +3,8 @@ import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/components/basic_form_field.dart';
 import 'package:h2_tracker_flutter/components/page_indicator.dart';
 import 'package:h2_tracker_flutter/components/select_goal.dart';
-import 'package:h2_tracker_flutter/functions/show_snack_bar.dart';
+import 'package:h2_tracker_flutter/extensions/show_snack_bar.dart';
+import 'package:h2_tracker_flutter/extensions/string.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +34,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _heightController = TextEditingController();
   final _weightController = TextEditingController();
   final _ageController = TextEditingController();
+  final _sexController = TextEditingController();
   final _dateController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   final UserStateService _userStateService = UserStateService();
 
@@ -64,23 +67,32 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         idade: int.parse(_ageController.text),
         email: _emailController.text,
         senha: _passwordController.text,
-        cpf: _cpfController.text);
+        cpf: _cpfController.text,
+        sex: _sexController.text.toUpperCase());
 
     final registeredUser = await client.pessoa.insert(user);
 
     _userStateService.user = registeredUser;
 
-    await _registerWeight(registeredUser.id!);
-  }
-
-  Future<void> _registerWeight(int userId) async {
     final weight = Peso(
         peso: double.parse(_weightController.text),
         dataPesagem: DateTime.now(),
-        pessoaId: userId,
+        pessoaId: registeredUser.id!,
         imc: 0);
 
     await client.peso.insert(weight, _userStateService.user!.altura);
+
+    final diet = Dieta(
+      dataFim: _selectedDate,
+      pessoaId: registeredUser.id!,
+      caloriasMaximasDia: 0,
+      objetivo: dropdownValue,
+      descricao:
+          'Dieta genérica com foco em: ${dropdownValue.toReadableTitle()} (não substitui a consulta com um profissional).',
+    );
+
+    await client.dieta
+        .insert(diet, weight.peso, user.altura, user.idade, user.sex);
   }
 
   void _handlePageViewChanged(int currentPageIndex) {
@@ -110,6 +122,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     if (picked != null) {
       setState(() {
         _dateController.text = DateFormat('dd-MM-yyyy').format(picked);
+        _selectedDate = picked;
       });
     }
   }
@@ -162,16 +175,26 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
               ),
             ),
           Container(
-              width: MediaQuery.sizeOf(context).width * .5,
-              decoration: BoxDecoration(
-                color: Colors.lightBlueAccent[100],
-              ))
+            width: MediaQuery.sizeOf(context).width * .5,
+            decoration: BoxDecoration(
+              color: Colors.lightBlueAccent[100],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Image.asset(
+                'assets/images/login.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 
   SizedBox _loginWidget(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       width: MediaQuery.sizeOf(context).width * .5,
       child: Column(
@@ -184,6 +207,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Healthy Habits Tracker',
+                      style: theme.textTheme.titleLarge?.copyWith(fontSize: 40),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
                     DecoratedBox(
                       decoration: BoxDecoration(
                           color: Colors.lightBlue[400],
@@ -369,13 +399,27 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
             ),
           ],
         ),
-        SizedBox(
-          width: MediaQuery.sizeOf(context).width * .144,
-          child: BasicFormField(
-            label: 'Idade',
-            controller: _ageController,
-            textInputType: InputType.age,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: BasicFormField(
+                label: 'Idade',
+                controller: _ageController,
+                textInputType: InputType.age,
+              ),
+            ),
+            const SizedBox(
+              width: 24,
+            ),
+            Expanded(
+              child: BasicFormField(
+                label: 'Sexo',
+                controller: _sexController,
+                textInputType: InputType.sex,
+                hint: 'M/F',
+              ),
+            )
+          ],
         ),
         Row(
           children: [
@@ -429,14 +473,13 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: TextFormField(
-            controller: _dateController, // Assign the controller
+            controller: _dateController,
             decoration: const InputDecoration(
-              labelText: 'Select Date',
-              suffixIcon: Icon(Icons.calendar_today), // Calendar icon
+              labelText: 'Selecione uma Data',
+              suffixIcon: Icon(Icons.calendar_today),
             ),
-            readOnly: true, // Make the field read-only
+            readOnly: true,
             onTap: () {
-              // Step 3: Show the date picker when the field is tapped
               _selectDate(context);
             },
           ),
