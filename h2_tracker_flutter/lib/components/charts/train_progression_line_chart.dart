@@ -1,7 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/extensions/color.dart';
+import 'package:h2_tracker_flutter/extensions/date.dart';
 import 'package:h2_tracker_flutter/main.dart';
 import 'package:h2_tracker_flutter/service/user_state_service.dart';
 
@@ -18,12 +20,15 @@ class TrainProgressionLineChart extends StatefulWidget {
 class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
   List<Color> gradientColors = [
     Colors.blue.darken(20),
-    Colors.blue.lighten(20),
+    Colors.blue.lighten(30),
   ];
 
   final UserStateService _userState = UserStateService();
 
   List<TreinoExercicioHistorico> _exerciseHistory = [];
+  List<Exercicio> _exercises = [];
+  Exercicio? _selectedExercise;
+  final TextEditingController _typeAheadController = TextEditingController();
 
   @override
   void initState() {
@@ -33,10 +38,17 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
   }
 
   Future<void> _loadData() async {
+    final exercises = await client.exercicio.read();
+
+    setState(() {
+      _exercises = exercises;
+    });
+
     final user = _userState.user;
-    if (user != null) {
+    final selectedExercise = _selectedExercise;
+    if (user != null && selectedExercise != null) {
       final exerciseHistory = await client.treinoExercicioHistorico
-          .readUserTrainHistory(user.id!, 2);
+          .readUserTrainHistory(user.id!, selectedExercise.id!);
 
       setState(() {
         _exerciseHistory = exerciseHistory;
@@ -46,10 +58,35 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: <Widget>[
+        TypeAheadField<Exercicio>(
+            itemBuilder: (context, exercise) {
+              return ListTile(
+                title: Text(exercise.nome),
+                subtitle: Text(exercise.grupoMuscular),
+              );
+            },
+            controller: _typeAheadController,
+            onSelected: (exercise) async {
+              setState(() {
+                _selectedExercise = exercise;
+                _typeAheadController.text = exercise.nome;
+              });
+              await _loadData();
+            },
+            suggestionsCallback: (searchVal) {
+              print('SEARCHVAL ${searchVal}');
+              return _exercises
+                  .where(
+                    (element) => element.nome.toLowerCase().contains(
+                          searchVal.toLowerCase(),
+                        ),
+                  )
+                  .toList();
+            }),
         AspectRatio(
-          aspectRatio: 1.70,
+          aspectRatio: 2,
           child: Padding(
             padding: const EdgeInsets.only(
               right: 18,
@@ -57,9 +94,18 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
               top: 24,
               bottom: 12,
             ),
-            child: LineChart(
-              mainData(),
-            ),
+            child: _exerciseHistory.isNotEmpty
+                ? LineChart(
+                    mainData(),
+                  )
+                : Center(
+                    child: Text(
+                      _selectedExercise == null
+                          ? 'Selecione um Exercício!'
+                          : 'Nenhum histórico encontrado para este exercício.',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
           ),
         ),
       ],
@@ -71,21 +117,12 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
       fontWeight: FontWeight.bold,
       fontSize: 16,
     );
-    Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('MAR', style: style);
-        break;
-      case 5:
-        text = const Text('JUN', style: style);
-        break;
-      case 8:
-        text = const Text('SEP', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
+    final text = Text(
+        _exerciseHistory[value.toInt()]
+            .treinoHistorico!
+            .horarioFim
+            .formatToPtBr(PtBrFormat.shortest),
+        style: style);
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -96,25 +133,9 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
-      fontSize: 15,
+      fontSize: 14,
     );
-    String text;
-
-    //text = _exerciseHistory[value.toInt()].progressao;
-
-    switch (value.toInt()) {
-      case 1:
-        text = '10K';
-        break;
-      case 3:
-        text = '30k';
-        break;
-      case 5:
-        text = '50k';
-        break;
-      default:
-        return Container();
-    }
+    String text = '${value.toInt()}kg';
 
     return Text(text, style: style, textAlign: TextAlign.left);
   }
@@ -124,15 +145,7 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
-        //horizontalInterval: 1,
-        //verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Colors.cyan,
-            strokeWidth: 1,
-          );
-        },
-        getDrawingVerticalLine: (value) {
           return const FlLine(
             color: Colors.cyan,
             strokeWidth: 1,
@@ -168,21 +181,19 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
         show: true,
         border: Border.all(color: const Color(0xff37434d)),
       ),
-      minX: 0,
-      maxX: 40,
-      minY: 0,
-      maxY: 40,
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipColor: (_) => Colors.blueGrey.withOpacity(.1),
+        ),
+      ),
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(1, 1),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(30, 40),
-          ],
+          spots: _exerciseHistory
+              .asMap()
+              .entries
+              .map((exercise) => FlSpot(exercise.key.toDouble(),
+                  double.parse(exercise.value.progressao)))
+              .toList(),
           isCurved: true,
           gradient: LinearGradient(
             colors: gradientColors,

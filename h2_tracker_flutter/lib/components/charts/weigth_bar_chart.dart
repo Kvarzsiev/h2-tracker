@@ -22,9 +22,12 @@ class WeightBarChartState extends State<WeightBarChart> {
         titlesData: titlesData,
         borderData: borderData,
         barGroups: barGroups,
-        gridData: const FlGridData(show: false),
+        gridData: const FlGridData(show: true),
         alignment: BarChartAlignment.spaceAround,
-        maxY: 150,
+        maxY: widget.weightHistory
+                .reduce((a, b) => a.peso > b.peso ? a : b)
+                .peso +
+            15,
       ),
     );
   }
@@ -95,7 +98,7 @@ class WeightBarChartState extends State<WeightBarChart> {
   LinearGradient get _barsGradient => LinearGradient(
         colors: [
           Colors.blue.darken(20),
-          Colors.blue.lighten(20),
+          Colors.blue.lighten(30),
         ],
         begin: Alignment.bottomCenter,
         end: Alignment.topCenter,

@@ -291,6 +291,13 @@ class EndpointTreinoHistorico extends _i1.EndpointRef {
         'update',
         {'treino': treino},
       );
+
+  _i2.Future<int?> queryTrainFrequencyThisWeek(int userId) =>
+      caller.callServerEndpoint<int?>(
+        'treinoHistorico',
+        'queryTrainFrequencyThisWeek',
+        {'userId': userId},
+      );
 }
 
 class Client extends _i1.ServerpodClientShared {

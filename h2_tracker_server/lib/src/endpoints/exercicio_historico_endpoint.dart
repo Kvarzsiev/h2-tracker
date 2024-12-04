@@ -29,7 +29,6 @@ class TreinoExercicioHistoricoEndpoint extends Endpoint {
           ),
         ),
       ),
-      orderDescending: true,
       orderBy: (table) => table.treinoHistorico.horarioFim,
     );
 

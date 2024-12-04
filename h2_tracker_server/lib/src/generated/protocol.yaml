@@ -30,3 +30,4 @@ treinoHistorico:
   - readUserTrainHistory:
   - insert:
   - update:
+  - queryTrainFrequencyThisWeek:

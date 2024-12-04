@@ -5,6 +5,7 @@ import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/components/basic_form_field.dart';
 import 'package:h2_tracker_flutter/components/charts/train_progression_line_chart.dart';
 import 'package:h2_tracker_flutter/components/charts/weigth_bar_chart.dart';
+import 'package:h2_tracker_flutter/extensions/color.dart';
 import 'package:h2_tracker_flutter/extensions/date.dart';
 import 'package:h2_tracker_flutter/extensions/string.dart';
 import 'package:h2_tracker_flutter/main.dart';
@@ -34,8 +35,17 @@ class DataMainViewState extends State<DataMainView> {
 
   Peso? _lastWeightIn;
 
+  int? _trainFrequency;
+
   Future<void> loadData() async {
     await _userState.refresh();
+
+    final frequency = await client.treinoHistorico
+        .queryTrainFrequencyThisWeek(_userState.user!.id!);
+
+    setState(() {
+      _trainFrequency = frequency;
+    });
 
     if (_userState.user?.historicoPeso?.first != null) {
       setState(() {
@@ -90,7 +100,38 @@ class DataMainViewState extends State<DataMainView> {
                             style: theme.textTheme.titleLarge!
                                 .copyWith(fontSize: 24),
                           ),
-                          Row()
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Text(
+                            'Últimos 7 dias',
+                            style: theme.textTheme.titleSmall!
+                                .copyWith(fontSize: 16),
+                          ),
+                          if (_trainFrequency != null)
+                            Center(
+                              child: ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return LinearGradient(
+                                    colors: [
+                                      Colors.blue.darken(20),
+                                      Colors.blue.lighten(30),
+                                    ],
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                  ).createShader(bounds);
+                                },
+                                child: Text(
+                                  _trainFrequency.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 80,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors
+                                        .white, // This color is ignored due to ShaderMask
+                                  ),
+                                ),
+                              ),
+                            )
                         ],
                       ),
                     ),
@@ -107,7 +148,7 @@ class DataMainViewState extends State<DataMainView> {
                 children: [
                   _weightHistory(theme),
                   const SizedBox(
-                    height: 24,
+                    height: 20,
                   ),
                   Card(
                     child: Padding(
@@ -117,12 +158,12 @@ class DataMainViewState extends State<DataMainView> {
                           Text('Progressão de Exercícios',
                               style: theme.textTheme.titleMedium!
                                   .copyWith(fontSize: 18)),
+                          const SizedBox(
+                            height: 16,
+                          ),
                           if (_userState.user?.historicoPeso != null)
-                            AspectRatio(
-                              aspectRatio: 2,
-                              child: Center(
-                                child: TrainProgressionLineChart(),
-                              ),
+                            const Center(
+                              child: TrainProgressionLineChart(),
                             ),
                         ],
                       ),
@@ -147,9 +188,12 @@ class DataMainViewState extends State<DataMainView> {
               'Histórico de Peso',
               style: theme.textTheme.titleMedium!.copyWith(fontSize: 18),
             ),
+            const SizedBox(
+              height: 16,
+            ),
             if (_userState.user?.historicoPeso != null)
               AspectRatio(
-                aspectRatio: 3,
+                aspectRatio: 4,
                 child: WeightBarChart(
                   weightHistory:
                       _userState.user!.historicoPeso!.reversed.toList(),

@@ -50,4 +50,16 @@ class TreinoHistoricoEndpoint extends Endpoint {
       await TreinoExercicio.db.insert(session, novosExercicios);
     }
   }
+
+  Future<int?> queryTrainFrequencyThisWeek(Session session, int userId) async {
+    final result = await session.db.unsafeQuery(
+        r'SELECT COUNT(DISTINCT DATE(h."horarioFim")) AS frequencia_diaria FROM Pessoa p JOIN Treino t ON t."pessoaId" = p.id JOIN treino_historico h ON h."treinoId" = t.id WHERE h."horarioFim" >= CURRENT_DATE - 7 and p.id = @userId',
+        parameters: QueryParameters.named({
+          'userId': userId,
+        }));
+    if (result.first.first != null) {
+      return result.first.first;
+    }
+    return null;
+  }
 }
