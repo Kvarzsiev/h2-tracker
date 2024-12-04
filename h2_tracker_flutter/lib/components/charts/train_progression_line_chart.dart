@@ -1,9 +1,14 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:h2_tracker_client/h2_tracker_client.dart';
 import 'package:h2_tracker_flutter/extensions/color.dart';
+import 'package:h2_tracker_flutter/main.dart';
+import 'package:h2_tracker_flutter/service/user_state_service.dart';
 
 class TrainProgressionLineChart extends StatefulWidget {
-  const TrainProgressionLineChart({super.key});
+  const TrainProgressionLineChart({
+    super.key,
+  });
 
   @override
   State<TrainProgressionLineChart> createState() =>
@@ -12,11 +17,32 @@ class TrainProgressionLineChart extends StatefulWidget {
 
 class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
   List<Color> gradientColors = [
-    Colors.blue.lighten(20),
     Colors.blue.darken(20),
+    Colors.blue.lighten(20),
   ];
 
-  bool showAvg = false;
+  final UserStateService _userState = UserStateService();
+
+  List<TreinoExercicioHistorico> _exerciseHistory = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final user = _userState.user;
+    if (user != null) {
+      final exerciseHistory = await client.treinoExercicioHistorico
+          .readUserTrainHistory(user.id!, 2);
+
+      setState(() {
+        _exerciseHistory = exerciseHistory;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +58,7 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
               bottom: 12,
             ),
             child: LineChart(
-              showAvg ? avgData() : mainData(),
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 60,
-          height: 34,
-          child: TextButton(
-            onPressed: () {
-              setState(() {
-                showAvg = !showAvg;
-              });
-            },
-            child: Text(
-              'avg',
-              style: TextStyle(
-                fontSize: 12,
-                color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
-              ),
+              mainData(),
             ),
           ),
         ),
@@ -91,6 +99,9 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
       fontSize: 15,
     );
     String text;
+
+    //text = _exerciseHistory[value.toInt()].progressao;
+
     switch (value.toInt()) {
       case 1:
         text = '10K';
@@ -113,8 +124,8 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
-        horizontalInterval: 1,
-        verticalInterval: 1,
+        //horizontalInterval: 1,
+        //verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return const FlLine(
             color: Colors.cyan,
@@ -158,19 +169,19 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
         border: Border.all(color: const Color(0xff37434d)),
       ),
       minX: 0,
-      maxX: 11,
+      maxX: 40,
       minY: 0,
-      maxY: 6,
+      maxY: 40,
       lineBarsData: [
         LineChartBarData(
           spots: const [
-            FlSpot(0, 3),
+            FlSpot(1, 1),
             FlSpot(2.6, 2),
             FlSpot(4.9, 5),
             FlSpot(6.8, 3.1),
             FlSpot(8, 4),
             FlSpot(9.5, 3),
-            FlSpot(11, 4),
+            FlSpot(30, 40),
           ],
           isCurved: true,
           gradient: LinearGradient(
@@ -187,103 +198,6 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
               colors: gradientColors
                   .map((color) => color.withOpacity(0.3))
                   .toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  LineChartData avgData() {
-    return LineChartData(
-      lineTouchData: const LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: true,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d)),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-            ],
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
             ),
           ),
         ),

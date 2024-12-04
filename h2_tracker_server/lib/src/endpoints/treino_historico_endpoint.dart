@@ -9,12 +9,14 @@ class TreinoHistoricoEndpoint extends Endpoint {
       where: (treinoHistorico) =>
           treinoHistorico.treino.pessoaId.equals(userId),
       include: TreinoHistorico.include(
+        treinoHistoricoExercicios: TreinoExercicioHistorico.includeList(),
         treino: Treino.include(
-            treinoExercicios: TreinoExercicio.includeList(
-          include: TreinoExercicio.include(
-            exercicio: Exercicio.include(),
+          treinoExercicios: TreinoExercicio.includeList(
+            include: TreinoExercicio.include(
+              exercicio: Exercicio.include(),
+            ),
           ),
-        )),
+        ),
       ),
       orderDescending: true,
       orderBy: (table) => table.horarioFim,
@@ -23,12 +25,11 @@ class TreinoHistoricoEndpoint extends Endpoint {
     return history;
   }
 
-  Future<void> insert(Session session, TreinoHistorico historico,
-      List<TreinoExercicioHistorico> treinoExercicioHistoricos) async {
-    await TreinoHistorico.db.insertRow(session, historico);
-
-    await TreinoExercicioHistorico.db
-        .insert(session, treinoExercicioHistoricos);
+  Future<TreinoHistorico> insert(
+    Session session,
+    TreinoHistorico historico,
+  ) async {
+    return await TreinoHistorico.db.insertRow(session, historico);
   }
 
   Future<void> update(Session session, Treino treino) async {

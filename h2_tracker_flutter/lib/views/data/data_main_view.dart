@@ -120,7 +120,9 @@ class DataMainViewState extends State<DataMainView> {
                           if (_userState.user?.historicoPeso != null)
                             AspectRatio(
                               aspectRatio: 2,
-                              child: TrainProgressionLineChart(),
+                              child: Center(
+                                child: TrainProgressionLineChart(),
+                              ),
                             ),
                         ],
                       ),

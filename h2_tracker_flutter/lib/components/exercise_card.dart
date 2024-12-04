@@ -8,14 +8,16 @@ class ExerciseCard extends StatelessWidget {
     required this.exercise,
     this.onTap,
     this.trainExercise,
-    this.trainExerciseHistory = false,
+    this.trainExerciseHistory,
+    this.insertTrainExerciseHistory = false,
     this.showTrainExercise = false,
   });
 
   final Exercicio exercise;
   final void Function()? onTap;
   final TreinoExercicio? trainExercise;
-  final bool trainExerciseHistory;
+  final TreinoExercicioHistorico? trainExerciseHistory;
+  final bool insertTrainExerciseHistory;
   final bool showTrainExercise;
 
   @override
@@ -41,40 +43,36 @@ class ExerciseCard extends StatelessWidget {
                 ? Stack(
                     children: [
                       _mainCardContent(size, theme),
-                      if (trainExercise != null && showTrainExercise)
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Container(
-                              width: size.width,
-                              height: 40,
-                              color: Colors.blue,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      'Séries ${trainExercise!.series.toString()}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Container(
+                            width: size.width,
+                            height: 40,
+                            color: Colors.blue,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    'Séries ${trainExercise!.series.toString()}',
+                                    style: const TextStyle(color: Colors.white),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Text(
-                                      'Repetições ${trainExercise!.repeticoes.toString()}',
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    'Repetições ${trainExercise!.repeticoes.toString()}',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                        )
+                        ),
+                      )
                     ],
                   )
                 : _mainCardContent(size, theme),
@@ -86,7 +84,8 @@ class ExerciseCard extends StatelessWidget {
 
   Column _mainCardContent(Size size, ThemeData theme) {
     final hasTrainExerciseHistory =
-        trainExerciseHistory && trainExercise != null;
+        (insertTrainExerciseHistory || trainExerciseHistory != null) &&
+            trainExercise != null;
 
     return Column(
       children: [
@@ -126,41 +125,46 @@ class ExerciseCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const Text(
-                    'Nova progressão: ',
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: const EdgeInsets.all(
-                          8,
-                        ),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
-                        ),
-                        hintText: 'kg',
-                        hintStyle: TextStyle(
-                          fontSize: 13,
-                          color: Colors.blueAccent[100],
-                        ),
-                      ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onChanged: (String newValue) {
-                        final newExerciseHistory = TreinoExercicioHistorico(
-                          treinoExercicioId: trainExercise!.id!,
-                          progressao: newValue,
-                        );
-
-                        trainExercise!.treinoExercicioHistoricos = [
-                          newExerciseHistory
-                        ];
-                      },
+                  if (trainExerciseHistory == null) ...[
+                    const Text(
+                      'Nova progressão: ',
                     ),
-                  ),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.all(
+                            8,
+                          ),
+                          enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                          focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                          hintText: 'kg',
+                          hintStyle: TextStyle(
+                            fontSize: 13,
+                            color: Colors.blueAccent[100],
+                          ),
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        onChanged: (String newValue) {
+                          final newExerciseHistory = TreinoExercicioHistorico(
+                              treinoExercicioId: trainExercise!.id!,
+                              progressao: newValue,
+                              treinoHistoricoId: -1);
+
+                          trainExercise!.treinoExercicioHistoricos = [
+                            newExerciseHistory
+                          ];
+                        },
+                      ),
+                    ),
+                  ] else
+                    Text('${trainExerciseHistory!.progressao} kg')
                 ],
               ),
             ),

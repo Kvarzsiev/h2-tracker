@@ -101,7 +101,7 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
                         iconAlignment: IconAlignment.end,
                         onPressed: () {
                           if (_treinos.isNotEmpty) {
-                            _dialogBuilder(context);
+                            _dialogBuilder(context, null);
                           } else {
                             showSnackBar(
                                 context: context,
@@ -139,40 +139,46 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          children: [
-                            Text(
-                              historyItem.treino!.descricao,
-                              style: theme.textTheme.titleLarge,
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Expanded(
-                              child: Image.network(
-                                historyItem.treino!.treinoExercicios!.first
-                                    .exercicio!.imagem,
+                      child: InkWell(
+                        onTap: () {
+                          _dialogBuilder(context, historyItem);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
+                          child: Column(
+                            children: [
+                              Text(
+                                historyItem.treino!.descricao,
+                                style: theme.textTheme.titleLarge,
                               ),
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Início ${historyItem.horarioInicio.formatToPtBr(PtBrFormat.medium)}',
-                                  style: theme.textTheme.titleMedium,
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Expanded(
+                                child: Image.network(
+                                  historyItem.treino!.treinoExercicios!.first
+                                      .exercicio!.imagem,
                                 ),
-                                Text(
-                                  'Fim ${historyItem.horarioFim.formatToPtBr(PtBrFormat.medium)}',
-                                  style: theme.textTheme.titleMedium,
-                                ),
-                              ],
-                            )
-                          ],
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Início ${historyItem.horarioInicio.formatToPtBr(PtBrFormat.medium)}',
+                                    style: theme.textTheme.titleMedium,
+                                  ),
+                                  Text(
+                                    'Fim ${historyItem.horarioFim.formatToPtBr(PtBrFormat.medium)}',
+                                    style: theme.textTheme.titleMedium,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -189,76 +195,111 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
   }
 
   Future<void> _dialogBuilder(
-    BuildContext context,
-  ) async {
+      BuildContext context, TreinoHistorico? historico) async {
     final size = MediaQuery.sizeOf(context);
+
+    final hasHistory = historico != null;
 
     await showDialog<TreinoExercicio>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Adicionar treino realizado'),
+          title: Text(hasHistory
+              ? 'Ver Histórico: ${historico.treino!.descricao} - Objetivo: ${historico.treino!.objetivo.toReadableTitle()}'
+              : 'Adicionar treino realizado'),
           content: SizedBox(
             height: size.height * .7,
             width: size.width * .7,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                DropdownButton<int>(
-                  value: _selectedTrain?.id ?? _treinos.first.id,
-                  padding: const EdgeInsets.all(8),
-                  isExpanded: true,
-                  onChanged: (int? value) {
-                    if (value != null) {
-                      setState(() {
-                        _selectedTrain =
-                            _treinos.firstWhere((treino) => treino.id == value);
-                      });
-                    }
-                  },
-                  focusColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
-                  items: _treinos
-                      .map(
-                        (treino) => DropdownMenuItem<int>(
-                          key: Key(treino.id!.toString()),
-                          value: treino.id,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                '${treino.descricao} - Objetivo: ${treino.objetivo.toReadableTitle()}'),
+                if (!hasHistory) ...[
+                  DropdownButton<int>(
+                    value: _selectedTrain?.id ?? _treinos.first.id,
+                    padding: const EdgeInsets.all(8),
+                    isExpanded: true,
+                    onChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          _selectedTrain = _treinos
+                              .firstWhere((treino) => treino.id == value);
+                        });
+                      }
+                    },
+                    focusColor: Colors.lightBlueAccent[100]?.withOpacity(0.1),
+                    items: _treinos
+                        .map(
+                          (treino) => DropdownMenuItem<int>(
+                            key: Key(treino.id!.toString()),
+                            value: treino.id,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  '${treino.descricao} - Objetivo: ${treino.objetivo.toReadableTitle()}'),
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: TextFormField(
-                    controller: _startDateController, // Assign the controller
-                    decoration: const InputDecoration(
-                      labelText: 'Select Date',
-                      suffixIcon: Icon(Icons.calendar_today), // Calendar icon
-                    ),
-                    readOnly: true, // Make the field read-only
-                    onTap: () {
-                      _selectDate(context, 'start');
-                    },
+                        )
+                        .toList(),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: TextFormField(
-                    controller: _endDateController, // Assign the controller
-                    decoration: const InputDecoration(
-                      labelText: 'Select Date',
-                      suffixIcon: Icon(Icons.calendar_today), // Calendar icon
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: TextFormField(
+                      controller: _startDateController,
+                      decoration: const InputDecoration(
+                        labelText: 'Select Date',
+                        suffixIcon: Icon(Icons.calendar_today), // Calendar icon
+                      ),
+                      readOnly: true,
+                      onTap: () {
+                        _selectDate(context, 'start');
+                      },
                     ),
-                    readOnly: true, // Make the field read-only
-                    onTap: () {
-                      _selectDate(context, 'end');
-                    },
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: TextFormField(
+                      controller: _endDateController, // Assign the controller
+                      decoration: const InputDecoration(
+                        labelText: 'Select Date',
+                        suffixIcon: Icon(Icons.calendar_today), // Calendar icon
+                      ),
+                      readOnly: true, // Make the field read-only
+                      onTap: () {
+                        _selectDate(context, 'end');
+                      },
+                    ),
+                  ),
+                ] else ...[
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Iniciado em: ${historico.horarioInicio.formatToPtBr(PtBrFormat.medium)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Finalizado em: ${historico.horarioFim.formatToPtBr(PtBrFormat.medium)}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(fontSize: 20),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                ],
                 if (_selectedTrain != null &&
                     _selectedTrain!.treinoExercicios != null)
                   Expanded(
@@ -273,12 +314,17 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
                       itemBuilder: (context, index) {
                         final exercise =
                             _selectedTrain!.treinoExercicios![index];
-
                         return ExerciseCard(
-                          exercise: exercise.exercicio!,
-                          trainExercise: exercise,
-                          trainExerciseHistory: true,
-                        );
+                            exercise: exercise.exercicio!,
+                            trainExercise: exercise,
+                            insertTrainExerciseHistory:
+                                hasHistory ? false : true,
+                            trainExerciseHistory: hasHistory
+                                ? historico.treinoHistoricoExercicios!
+                                    .firstWhere((element) =>
+                                        element.treinoExercicioId ==
+                                        exercise.id)
+                                : null);
                       },
                     ),
                   )
@@ -288,64 +334,80 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(fontSize: 24),
               ),
-              child: const Text('Cancelar'),
+              child: Text(
+                !hasHistory ? 'Cancelar' : 'Sair',
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+            if (!hasHistory)
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .labelLarge!
+                      .copyWith(fontSize: 24),
+                ),
+                child: const Text('Salvar'),
+                onPressed: () async {
+                  if (_selectedTrain != null &&
+                      _start != null &&
+                      _end != null) {
+                    var newHistoryEntry = TreinoHistorico(
+                      treinoId: _selectedTrain!.id!,
+                      horarioInicio: _start!,
+                      horarioFim: _end!,
+                    );
+
+                    newHistoryEntry =
+                        await client.treinoHistorico.insert(newHistoryEntry);
+
+                    final newExerciseHistoryEntries = _selectedTrain!
+                        .treinoExercicios!
+                        .where((element) =>
+                            element.treinoExercicioHistoricos != null &&
+                            element.treinoExercicioHistoricos!.isNotEmpty)
+                        .map((element) =>
+                            element.treinoExercicioHistoricos!.first)
+                        .toList()
+                      ..forEach((element) =>
+                          element.treinoHistoricoId = newHistoryEntry.id!);
+
+                    await client.treinoExercicioHistorico
+                        .insert(newExerciseHistoryEntries);
+
+                    showSnackBar(
+                      context: context,
+                      message: 'Novo registro adicionado ao histórico!',
+                      status: SnackBarStatus.success,
+                    );
+
+                    setState(() {
+                      _selectedTrain = null;
+                      _startDateController.text = '';
+                      _start = null;
+                      _endDateController.text = '';
+                      _end = null;
+                    });
+
+                    loadData();
+                  } else {
+                    showSnackBar(
+                      context: context,
+                      message: 'Preencha todos os campos!',
+                      status: SnackBarStatus.error,
+                    );
+                  }
+
+                  Navigator.of(context).pop();
+                },
               ),
-              child: const Text('Salvar'),
-              onPressed: () async {
-                if (_selectedTrain != null && _start != null && _end != null) {
-                  final newHistoryEntry = TreinoHistorico(
-                    treinoId: _selectedTrain!.id!,
-                    horarioInicio: _start!,
-                    horarioFim: _end!,
-                  );
-
-                  final newExerciseHistoryEntries = _selectedTrain!
-                      .treinoExercicios!
-                      .where((element) =>
-                          element.treinoExercicioHistoricos != null &&
-                          element.treinoExercicioHistoricos!.isNotEmpty)
-                      .map(
-                          (element) => element.treinoExercicioHistoricos!.first)
-                      .toList();
-
-                  await client.treinoHistorico
-                      .insert(newHistoryEntry, newExerciseHistoryEntries);
-
-                  showSnackBar(
-                    context: context,
-                    message: 'Novo registro adicionado ao histórico!',
-                    status: SnackBarStatus.success,
-                  );
-
-                  setState(() {
-                    _selectedTrain = null;
-                    _startDateController.text = '';
-                    _start = null;
-                    _endDateController.text = '';
-                    _end = null;
-                  });
-
-                  loadData();
-                } else {
-                  showSnackBar(
-                    context: context,
-                    message: 'Preencha todos os campos!',
-                    status: SnackBarStatus.error,
-                  );
-                }
-
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },

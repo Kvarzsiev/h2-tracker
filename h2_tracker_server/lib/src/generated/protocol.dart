@@ -23,10 +23,10 @@ import 'treino_exercicio_historico.dart' as _i10;
 import 'treino_historico.dart' as _i11;
 import 'protocol.dart' as _i12;
 import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i13;
-import 'package:h2_tracker_server/src/generated/treino.dart' as _i14;
-import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i15;
 import 'package:h2_tracker_server/src/generated/treino_exercicio_historico.dart'
-    as _i16;
+    as _i14;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i15;
+import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i16;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -546,6 +546,12 @@ class Protocol extends _i1.SerializationManagerServer {
           isNullable: false,
           dartType: 'int',
         ),
+        _i2.ColumnDefinition(
+          name: 'treinoHistoricoId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
       ],
       foreignKeys: [
         _i2.ForeignKeyDefinition(
@@ -557,7 +563,17 @@ class Protocol extends _i1.SerializationManagerServer {
           onUpdate: _i2.ForeignKeyAction.noAction,
           onDelete: _i2.ForeignKeyAction.cascade,
           matchType: null,
-        )
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'treino_exercicio_historico_fk_1',
+          columns: ['treinoHistoricoId'],
+          referenceTable: 'treino_historico',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
       ],
       indexes: [
         _i2.IndexDefinition(
@@ -743,22 +759,29 @@ class Protocol extends _i1.SerializationManagerServer {
               .toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<_i12.TreinoExercicioHistorico>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i12.TreinoExercicioHistorico>(e))
+              .toList()
+          : null) as dynamic;
+    }
     if (t == List<_i13.Exercicio>) {
       return (data as List).map((e) => deserialize<_i13.Exercicio>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i14.Treino>) {
-      return (data as List).map((e) => deserialize<_i14.Treino>(e)).toList()
-          as dynamic;
-    }
-    if (t == List<_i15.TreinoHistorico>) {
+    if (t == List<_i14.TreinoExercicioHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i15.TreinoHistorico>(e))
+          .map((e) => deserialize<_i14.TreinoExercicioHistorico>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i16.TreinoExercicioHistorico>) {
+    if (t == List<_i15.Treino>) {
+      return (data as List).map((e) => deserialize<_i15.Treino>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i16.TreinoHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i16.TreinoExercicioHistorico>(e))
+          .map((e) => deserialize<_i16.TreinoHistorico>(e))
           .toList() as dynamic;
     }
     try {

@@ -22,10 +22,10 @@ import 'treino_exercicio_historico.dart' as _i9;
 import 'treino_historico.dart' as _i10;
 import 'protocol.dart' as _i11;
 import 'package:h2_tracker_client/src/protocol/exercicio.dart' as _i12;
-import 'package:h2_tracker_client/src/protocol/treino.dart' as _i13;
-import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i14;
 import 'package:h2_tracker_client/src/protocol/treino_exercicio_historico.dart'
-    as _i15;
+    as _i13;
+import 'package:h2_tracker_client/src/protocol/treino.dart' as _i14;
+import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i15;
 export 'dieta.dart';
 export 'exercicio.dart';
 export 'peso.dart';
@@ -146,22 +146,29 @@ class Protocol extends _i1.SerializationManager {
               .toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<_i11.TreinoExercicioHistorico>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i11.TreinoExercicioHistorico>(e))
+              .toList()
+          : null) as dynamic;
+    }
     if (t == List<_i12.Exercicio>) {
       return (data as List).map((e) => deserialize<_i12.Exercicio>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i13.Treino>) {
-      return (data as List).map((e) => deserialize<_i13.Treino>(e)).toList()
-          as dynamic;
-    }
-    if (t == List<_i14.TreinoHistorico>) {
+    if (t == List<_i13.TreinoExercicioHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i14.TreinoHistorico>(e))
+          .map((e) => deserialize<_i13.TreinoExercicioHistorico>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i15.TreinoExercicioHistorico>) {
+    if (t == List<_i14.Treino>) {
+      return (data as List).map((e) => deserialize<_i14.Treino>(e)).toList()
+          as dynamic;
+    }
+    if (t == List<_i15.TreinoHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i15.TreinoExercicioHistorico>(e))
+          .map((e) => deserialize<_i15.TreinoHistorico>(e))
           .toList() as dynamic;
     }
     return super.deserialize<T>(data, t);

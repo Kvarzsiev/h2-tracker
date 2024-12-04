@@ -1,0 +1,99 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "treino_exercicio_historico"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "treino_exercicio_historico",
+        "dartName": "TreinoExercicioHistorico",
+        "module": "h2_tracker",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('treino_exercicio_historico_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "progressao",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "treinoExercicioId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "treinoHistoricoId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "treino_exercicio_historico_fk_0",
+            "columns": [
+              "treinoExercicioId"
+            ],
+            "referenceTable": "treino_exercicio",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          },
+          {
+            "constraintName": "treino_exercicio_historico_fk_1",
+            "columns": [
+              "treinoHistoricoId"
+            ],
+            "referenceTable": "treino_historico",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "treino_exercicio_historico_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"treino_exercicio_historico\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "treino_exercicio_historico",
+      "columns": [
+        "treinoHistoricoId"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

@@ -21,3 +21,4 @@ fields:
   horarioInicio: DateTime
   horarioFim: DateTime
   treino: Treino?, relation(name=treino_treino_historico, onDelete=Cascade)
+  treinoHistoricoExercicios: List<TreinoExercicioHistorico>?, relation(name=treino_historico_treino_exercicio_historico)

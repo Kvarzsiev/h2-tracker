@@ -18,6 +18,8 @@ abstract class TreinoExercicioHistorico implements _i1.SerializableModel {
     required this.progressao,
     required this.treinoExercicioId,
     this.treinoExercicio,
+    required this.treinoHistoricoId,
+    this.treinoHistorico,
   });
 
   factory TreinoExercicioHistorico({
@@ -25,6 +27,8 @@ abstract class TreinoExercicioHistorico implements _i1.SerializableModel {
     required String progressao,
     required int treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    required int treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   }) = _TreinoExercicioHistoricoImpl;
 
   factory TreinoExercicioHistorico.fromJson(
@@ -37,6 +41,11 @@ abstract class TreinoExercicioHistorico implements _i1.SerializableModel {
           ? null
           : _i2.TreinoExercicio.fromJson(
               (jsonSerialization['treinoExercicio'] as Map<String, dynamic>)),
+      treinoHistoricoId: jsonSerialization['treinoHistoricoId'] as int,
+      treinoHistorico: jsonSerialization['treinoHistorico'] == null
+          ? null
+          : _i2.TreinoHistorico.fromJson(
+              (jsonSerialization['treinoHistorico'] as Map<String, dynamic>)),
     );
   }
 
@@ -52,11 +61,17 @@ abstract class TreinoExercicioHistorico implements _i1.SerializableModel {
 
   _i2.TreinoExercicio? treinoExercicio;
 
+  int treinoHistoricoId;
+
+  _i2.TreinoHistorico? treinoHistorico;
+
   TreinoExercicioHistorico copyWith({
     int? id,
     String? progressao,
     int? treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    int? treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -65,6 +80,8 @@ abstract class TreinoExercicioHistorico implements _i1.SerializableModel {
       'progressao': progressao,
       'treinoExercicioId': treinoExercicioId,
       if (treinoExercicio != null) 'treinoExercicio': treinoExercicio?.toJson(),
+      'treinoHistoricoId': treinoHistoricoId,
+      if (treinoHistorico != null) 'treinoHistorico': treinoHistorico?.toJson(),
     };
   }
 
@@ -82,11 +99,15 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
     required String progressao,
     required int treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    required int treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   }) : super._(
           id: id,
           progressao: progressao,
           treinoExercicioId: treinoExercicioId,
           treinoExercicio: treinoExercicio,
+          treinoHistoricoId: treinoHistoricoId,
+          treinoHistorico: treinoHistorico,
         );
 
   @override
@@ -95,6 +116,8 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
     String? progressao,
     int? treinoExercicioId,
     Object? treinoExercicio = _Undefined,
+    int? treinoHistoricoId,
+    Object? treinoHistorico = _Undefined,
   }) {
     return TreinoExercicioHistorico(
       id: id is int? ? id : this.id,
@@ -103,6 +126,10 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
       treinoExercicio: treinoExercicio is _i2.TreinoExercicio?
           ? treinoExercicio
           : this.treinoExercicio?.copyWith(),
+      treinoHistoricoId: treinoHistoricoId ?? this.treinoHistoricoId,
+      treinoHistorico: treinoHistorico is _i2.TreinoHistorico?
+          ? treinoHistorico
+          : this.treinoHistorico?.copyWith(),
     );
   }
 }

@@ -21,6 +21,8 @@ abstract class TreinoExercicioHistorico
     required this.progressao,
     required this.treinoExercicioId,
     this.treinoExercicio,
+    required this.treinoHistoricoId,
+    this.treinoHistorico,
   });
 
   factory TreinoExercicioHistorico({
@@ -28,6 +30,8 @@ abstract class TreinoExercicioHistorico
     required String progressao,
     required int treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    required int treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   }) = _TreinoExercicioHistoricoImpl;
 
   factory TreinoExercicioHistorico.fromJson(
@@ -40,6 +44,11 @@ abstract class TreinoExercicioHistorico
           ? null
           : _i2.TreinoExercicio.fromJson(
               (jsonSerialization['treinoExercicio'] as Map<String, dynamic>)),
+      treinoHistoricoId: jsonSerialization['treinoHistoricoId'] as int,
+      treinoHistorico: jsonSerialization['treinoHistorico'] == null
+          ? null
+          : _i2.TreinoHistorico.fromJson(
+              (jsonSerialization['treinoHistorico'] as Map<String, dynamic>)),
     );
   }
 
@@ -57,6 +66,10 @@ abstract class TreinoExercicioHistorico
 
   _i2.TreinoExercicio? treinoExercicio;
 
+  int treinoHistoricoId;
+
+  _i2.TreinoHistorico? treinoHistorico;
+
   @override
   _i1.Table get table => t;
 
@@ -65,6 +78,8 @@ abstract class TreinoExercicioHistorico
     String? progressao,
     int? treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    int? treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -73,6 +88,8 @@ abstract class TreinoExercicioHistorico
       'progressao': progressao,
       'treinoExercicioId': treinoExercicioId,
       if (treinoExercicio != null) 'treinoExercicio': treinoExercicio?.toJson(),
+      'treinoHistoricoId': treinoHistoricoId,
+      if (treinoHistorico != null) 'treinoHistorico': treinoHistorico?.toJson(),
     };
   }
 
@@ -84,12 +101,20 @@ abstract class TreinoExercicioHistorico
       'treinoExercicioId': treinoExercicioId,
       if (treinoExercicio != null)
         'treinoExercicio': treinoExercicio?.toJsonForProtocol(),
+      'treinoHistoricoId': treinoHistoricoId,
+      if (treinoHistorico != null)
+        'treinoHistorico': treinoHistorico?.toJsonForProtocol(),
     };
   }
 
-  static TreinoExercicioHistoricoInclude include(
-      {_i2.TreinoExercicioInclude? treinoExercicio}) {
-    return TreinoExercicioHistoricoInclude._(treinoExercicio: treinoExercicio);
+  static TreinoExercicioHistoricoInclude include({
+    _i2.TreinoExercicioInclude? treinoExercicio,
+    _i2.TreinoHistoricoInclude? treinoHistorico,
+  }) {
+    return TreinoExercicioHistoricoInclude._(
+      treinoExercicio: treinoExercicio,
+      treinoHistorico: treinoHistorico,
+    );
   }
 
   static TreinoExercicioHistoricoIncludeList includeList({
@@ -126,11 +151,15 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
     required String progressao,
     required int treinoExercicioId,
     _i2.TreinoExercicio? treinoExercicio,
+    required int treinoHistoricoId,
+    _i2.TreinoHistorico? treinoHistorico,
   }) : super._(
           id: id,
           progressao: progressao,
           treinoExercicioId: treinoExercicioId,
           treinoExercicio: treinoExercicio,
+          treinoHistoricoId: treinoHistoricoId,
+          treinoHistorico: treinoHistorico,
         );
 
   @override
@@ -139,6 +168,8 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
     String? progressao,
     int? treinoExercicioId,
     Object? treinoExercicio = _Undefined,
+    int? treinoHistoricoId,
+    Object? treinoHistorico = _Undefined,
   }) {
     return TreinoExercicioHistorico(
       id: id is int? ? id : this.id,
@@ -147,6 +178,10 @@ class _TreinoExercicioHistoricoImpl extends TreinoExercicioHistorico {
       treinoExercicio: treinoExercicio is _i2.TreinoExercicio?
           ? treinoExercicio
           : this.treinoExercicio?.copyWith(),
+      treinoHistoricoId: treinoHistoricoId ?? this.treinoHistoricoId,
+      treinoHistorico: treinoHistorico is _i2.TreinoHistorico?
+          ? treinoHistorico
+          : this.treinoHistorico?.copyWith(),
     );
   }
 }
@@ -162,6 +197,10 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
       'treinoExercicioId',
       this,
     );
+    treinoHistoricoId = _i1.ColumnInt(
+      'treinoHistoricoId',
+      this,
+    );
   }
 
   /// Kg, ângulo, duração, tal e tal
@@ -170,6 +209,10 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
   late final _i1.ColumnInt treinoExercicioId;
 
   _i2.TreinoExercicioTable? _treinoExercicio;
+
+  late final _i1.ColumnInt treinoHistoricoId;
+
+  _i2.TreinoHistoricoTable? _treinoHistorico;
 
   _i2.TreinoExercicioTable get treinoExercicio {
     if (_treinoExercicio != null) return _treinoExercicio!;
@@ -184,11 +227,25 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
     return _treinoExercicio!;
   }
 
+  _i2.TreinoHistoricoTable get treinoHistorico {
+    if (_treinoHistorico != null) return _treinoHistorico!;
+    _treinoHistorico = _i1.createRelationTable(
+      relationFieldName: 'treinoHistorico',
+      field: TreinoExercicioHistorico.t.treinoHistoricoId,
+      foreignField: _i2.TreinoHistorico.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.TreinoHistoricoTable(tableRelation: foreignTableRelation),
+    );
+    return _treinoHistorico!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
         progressao,
         treinoExercicioId,
+        treinoHistoricoId,
       ];
 
   @override
@@ -196,21 +253,31 @@ class TreinoExercicioHistoricoTable extends _i1.Table {
     if (relationField == 'treinoExercicio') {
       return treinoExercicio;
     }
+    if (relationField == 'treinoHistorico') {
+      return treinoHistorico;
+    }
     return null;
   }
 }
 
 class TreinoExercicioHistoricoInclude extends _i1.IncludeObject {
-  TreinoExercicioHistoricoInclude._(
-      {_i2.TreinoExercicioInclude? treinoExercicio}) {
+  TreinoExercicioHistoricoInclude._({
+    _i2.TreinoExercicioInclude? treinoExercicio,
+    _i2.TreinoHistoricoInclude? treinoHistorico,
+  }) {
     _treinoExercicio = treinoExercicio;
+    _treinoHistorico = treinoHistorico;
   }
 
   _i2.TreinoExercicioInclude? _treinoExercicio;
 
+  _i2.TreinoHistoricoInclude? _treinoHistorico;
+
   @override
-  Map<String, _i1.Include?> get includes =>
-      {'treinoExercicio': _treinoExercicio};
+  Map<String, _i1.Include?> get includes => {
+        'treinoExercicio': _treinoExercicio,
+        'treinoHistorico': _treinoHistorico,
+      };
 
   @override
   _i1.Table get table => TreinoExercicioHistorico.t;
@@ -414,6 +481,28 @@ class TreinoExercicioHistoricoAttachRowRepository {
     await session.db.updateRow<TreinoExercicioHistorico>(
       $treinoExercicioHistorico,
       columns: [TreinoExercicioHistorico.t.treinoExercicioId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
+  Future<void> treinoHistorico(
+    _i1.Session session,
+    TreinoExercicioHistorico treinoExercicioHistorico,
+    _i2.TreinoHistorico treinoHistorico, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (treinoExercicioHistorico.id == null) {
+      throw ArgumentError.notNull('treinoExercicioHistorico.id');
+    }
+    if (treinoHistorico.id == null) {
+      throw ArgumentError.notNull('treinoHistorico.id');
+    }
+
+    var $treinoExercicioHistorico = treinoExercicioHistorico.copyWith(
+        treinoHistoricoId: treinoHistorico.id);
+    await session.db.updateRow<TreinoExercicioHistorico>(
+      $treinoExercicioHistorico,
+      columns: [TreinoExercicioHistorico.t.treinoHistoricoId],
       transaction: transaction ?? session.transaction,
     );
   }

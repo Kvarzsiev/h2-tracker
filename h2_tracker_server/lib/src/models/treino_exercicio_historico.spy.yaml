@@ -21,3 +21,4 @@ fields:
   ### Kg, ângulo, duração, tal e tal
   progressao: String
   treinoExercicio: TreinoExercicio?, relation(name=treino_exercicio_treino_exercicio_historico, onDelete=Cascade)
+  treinoHistorico: TreinoHistorico?, relation(name=treino_historico_treino_exercicio_historico, onDelete=Cascade)

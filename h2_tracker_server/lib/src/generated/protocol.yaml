@@ -8,6 +8,9 @@ exercicio:
   - read:
   - delete:
   - insertDefault:
+treinoExercicioHistorico:
+  - insert:
+  - readUserTrainHistory:
 peso:
   - insert:
   - updateHeight:
