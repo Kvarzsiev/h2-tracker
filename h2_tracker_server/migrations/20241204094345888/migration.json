@@ -1,0 +1,43 @@
+{
+  "actions": [
+    {
+      "type": "alterTable",
+      "alterTable": {
+        "name": "dieta",
+        "schema": "public",
+        "addColumns": [],
+        "deleteColumns": [
+          "imagem"
+        ],
+        "modifyColumns": [],
+        "addIndexes": [],
+        "deleteIndexes": [],
+        "addForeignKeys": [],
+        "deleteForeignKeys": [],
+        "warnings": [
+          {
+            "type": "columnDropped",
+            "message": "Column \"imagem\" of table \"dieta\" will be dropped.",
+            "table": "dieta",
+            "columns": [
+              "imagem"
+            ],
+            "destrucive": true
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "columnDropped",
+      "message": "Column \"imagem\" of table \"dieta\" will be dropped.",
+      "table": "dieta",
+      "columns": [
+        "imagem"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

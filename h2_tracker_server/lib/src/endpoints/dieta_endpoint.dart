@@ -45,7 +45,30 @@ class DietaEndpoint extends Endpoint {
         }
     }
 
+    if (dieta.ativa) {
+      await inactivateDiets(session, dieta);
+    }
+
     await Dieta.db.insertRow(session, dieta);
+  }
+
+  Future<void> activateDiet(Session session, Dieta soleActive) async {
+    await inactivateDiets(session, soleActive);
+
+    soleActive.ativa = true;
+
+    await Dieta.db.updateRow(session, soleActive);
+  }
+
+  Future<void> inactivateDiets(Session session, Dieta soleActive) async {
+    final toInactive = await Dieta.db.find(
+      session,
+      where: (dieta) => (dieta.pessoaId.equals(soleActive.pessoaId) &
+          dieta.id.notEquals(soleActive.id)),
+    )
+      ..forEach((dieta) => dieta.ativa = false);
+
+    await Dieta.db.update(session, toInactive);
   }
 
   Future<void> update(Session session, Dieta dieta, double peso, double altura,
@@ -83,5 +106,12 @@ class DietaEndpoint extends Endpoint {
     }
 
     await Dieta.db.updateRow(session, dieta);
+  }
+
+  Future<List<Dieta>> readUserDiets(Session session, int userId) async {
+    final diets = await Dieta.db
+        .find(session, where: (dieta) => dieta.pessoaId.equals(userId));
+
+    return diets;
   }
 }

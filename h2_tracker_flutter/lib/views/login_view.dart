@@ -87,6 +87,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       pessoaId: registeredUser.id!,
       caloriasMaximasDia: 0,
       objetivo: dropdownValue,
+      ativa: true,
       descricao:
           'Dieta genérica com foco em: ${dropdownValue.toReadableTitle()} (não substitui a consulta com um profissional).',
     );

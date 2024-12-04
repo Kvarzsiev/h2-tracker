@@ -1,6 +1,9 @@
 dieta:
   - insert:
+  - activateDiet:
+  - inactivateDiets:
   - update:
+  - readUserDiets:
 example:
   - hello:
 exercicio:

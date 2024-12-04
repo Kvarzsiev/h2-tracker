@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:h2_tracker_client/h2_tracker_client.dart';
+import 'package:h2_tracker_flutter/extensions/color.dart';
 
 class ExerciseCard extends StatelessWidget {
   const ExerciseCard({
@@ -11,6 +12,7 @@ class ExerciseCard extends StatelessWidget {
     this.trainExerciseHistory,
     this.insertTrainExerciseHistory = false,
     this.showTrainExercise = false,
+    this.peek = false,
   });
 
   final Exercicio exercise;
@@ -19,6 +21,7 @@ class ExerciseCard extends StatelessWidget {
   final TreinoExercicioHistorico? trainExerciseHistory;
   final bool insertTrainExerciseHistory;
   final bool showTrainExercise;
+  final bool peek;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class ExerciseCard extends StatelessWidget {
     return Card(
       child: Container(
         decoration: BoxDecoration(
+          color: Colors.grey.lighten(90).withOpacity(.5),
           border: Border.all(
             color: trainExercise != null ? Colors.blue : Colors.transparent,
             width: 1,
@@ -101,18 +105,21 @@ class ExerciseCard extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-            Text(exercise.nome, style: theme.textTheme.titleMedium),
-            Text(
-              exercise.grupoMuscular,
-              style: theme.textTheme.titleSmall,
-            ),
+            if (!peek) ...[
+              Text(exercise.nome, style: theme.textTheme.titleMedium),
+              Text(
+                exercise.grupoMuscular,
+                style: theme.textTheme.titleSmall,
+              )
+            ],
             if (!hasTrainExerciseHistory)
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   exercise.descricao,
-                  maxLines: 3,
+                  maxLines: !peek ? 3 : null,
                   textAlign: TextAlign.justify,
+                  style: TextStyle(fontSize: peek ? 20 : null),
                 ),
               ),
           ],

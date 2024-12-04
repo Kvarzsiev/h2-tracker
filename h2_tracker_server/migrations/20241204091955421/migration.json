@@ -1,0 +1,98 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "refeicao"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "refeicao",
+        "dartName": "Refeicao",
+        "module": "h2_tracker",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('refeicao_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "calorias",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "proteinas",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "descricao",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "imagem",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "dietaId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "refeicao_fk_0",
+            "columns": [
+              "dietaId"
+            ],
+            "referenceTable": "dieta",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "refeicao_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"refeicao\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "refeicao",
+      "columns": [
+        "imagem"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

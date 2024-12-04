@@ -22,5 +22,6 @@ fields:
   objetivo: String
   descricao: String
   dataFim: DateTime
-  pessoaId: int, relation(name=pessoa_dietas, parent=pessoa, onDelete=Cascade)
+  ativa: bool
+  pessoa: Pessoa?, relation(name=pessoa_dietas, onDelete=Cascade)
   refeicoes: List<Refeicao>?, relation(name=dieta_refeicoes)

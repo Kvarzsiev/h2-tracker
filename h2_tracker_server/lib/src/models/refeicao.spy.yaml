@@ -21,4 +21,4 @@ fields:
   calorias: int
   proteinas: int
   descricao: String
-  dietaId: int, relation(name=dieta_refeicoes, parent=dieta, onDelete=Cascade)
+  dieta: Dieta?, relation(name=dieta_refeicoes, onDelete=Cascade)

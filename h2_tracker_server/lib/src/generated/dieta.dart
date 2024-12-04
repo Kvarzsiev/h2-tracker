@@ -21,7 +21,9 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.objetivo,
     required this.descricao,
     required this.dataFim,
+    required this.ativa,
     required this.pessoaId,
+    this.pessoa,
     this.refeicoes,
   });
 
@@ -31,7 +33,9 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
     required String objetivo,
     required String descricao,
     required DateTime dataFim,
+    required bool ativa,
     required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   }) = _DietaImpl;
 
@@ -42,7 +46,12 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
       objetivo: jsonSerialization['objetivo'] as String,
       descricao: jsonSerialization['descricao'] as String,
       dataFim: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['dataFim']),
+      ativa: jsonSerialization['ativa'] as bool,
       pessoaId: jsonSerialization['pessoaId'] as int,
+      pessoa: jsonSerialization['pessoa'] == null
+          ? null
+          : _i2.Pessoa.fromJson(
+              (jsonSerialization['pessoa'] as Map<String, dynamic>)),
       refeicoes: (jsonSerialization['refeicoes'] as List?)
           ?.map((e) => _i2.Refeicao.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -64,7 +73,11 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
 
   DateTime dataFim;
 
+  bool ativa;
+
   int pessoaId;
+
+  _i2.Pessoa? pessoa;
 
   List<_i2.Refeicao>? refeicoes;
 
@@ -77,7 +90,9 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
     String? objetivo,
     String? descricao,
     DateTime? dataFim,
+    bool? ativa,
     int? pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   });
   @override
@@ -88,7 +103,9 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
       'objetivo': objetivo,
       'descricao': descricao,
       'dataFim': dataFim.toJson(),
+      'ativa': ativa,
       'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJson(),
       if (refeicoes != null)
         'refeicoes': refeicoes?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -102,15 +119,23 @@ abstract class Dieta implements _i1.TableRow, _i1.ProtocolSerialization {
       'objetivo': objetivo,
       'descricao': descricao,
       'dataFim': dataFim.toJson(),
+      'ativa': ativa,
       'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJsonForProtocol(),
       if (refeicoes != null)
         'refeicoes':
             refeicoes?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static DietaInclude include({_i2.RefeicaoIncludeList? refeicoes}) {
-    return DietaInclude._(refeicoes: refeicoes);
+  static DietaInclude include({
+    _i2.PessoaInclude? pessoa,
+    _i2.RefeicaoIncludeList? refeicoes,
+  }) {
+    return DietaInclude._(
+      pessoa: pessoa,
+      refeicoes: refeicoes,
+    );
   }
 
   static DietaIncludeList includeList({
@@ -148,7 +173,9 @@ class _DietaImpl extends Dieta {
     required String objetivo,
     required String descricao,
     required DateTime dataFim,
+    required bool ativa,
     required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   }) : super._(
           id: id,
@@ -156,7 +183,9 @@ class _DietaImpl extends Dieta {
           objetivo: objetivo,
           descricao: descricao,
           dataFim: dataFim,
+          ativa: ativa,
           pessoaId: pessoaId,
+          pessoa: pessoa,
           refeicoes: refeicoes,
         );
 
@@ -167,7 +196,9 @@ class _DietaImpl extends Dieta {
     String? objetivo,
     String? descricao,
     DateTime? dataFim,
+    bool? ativa,
     int? pessoaId,
+    Object? pessoa = _Undefined,
     Object? refeicoes = _Undefined,
   }) {
     return Dieta(
@@ -176,7 +207,9 @@ class _DietaImpl extends Dieta {
       objetivo: objetivo ?? this.objetivo,
       descricao: descricao ?? this.descricao,
       dataFim: dataFim ?? this.dataFim,
+      ativa: ativa ?? this.ativa,
       pessoaId: pessoaId ?? this.pessoaId,
+      pessoa: pessoa is _i2.Pessoa? ? pessoa : this.pessoa?.copyWith(),
       refeicoes: refeicoes is List<_i2.Refeicao>?
           ? refeicoes
           : this.refeicoes?.map((e0) => e0.copyWith()).toList(),
@@ -202,6 +235,10 @@ class DietaTable extends _i1.Table {
       'dataFim',
       this,
     );
+    ativa = _i1.ColumnBool(
+      'ativa',
+      this,
+    );
     pessoaId = _i1.ColumnInt(
       'pessoaId',
       this,
@@ -216,11 +253,28 @@ class DietaTable extends _i1.Table {
 
   late final _i1.ColumnDateTime dataFim;
 
+  late final _i1.ColumnBool ativa;
+
   late final _i1.ColumnInt pessoaId;
+
+  _i2.PessoaTable? _pessoa;
 
   _i2.RefeicaoTable? ___refeicoes;
 
   _i1.ManyRelation<_i2.RefeicaoTable>? _refeicoes;
+
+  _i2.PessoaTable get pessoa {
+    if (_pessoa != null) return _pessoa!;
+    _pessoa = _i1.createRelationTable(
+      relationFieldName: 'pessoa',
+      field: Dieta.t.pessoaId,
+      foreignField: _i2.Pessoa.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.PessoaTable(tableRelation: foreignTableRelation),
+    );
+    return _pessoa!;
+  }
 
   _i2.RefeicaoTable get __refeicoes {
     if (___refeicoes != null) return ___refeicoes!;
@@ -260,11 +314,15 @@ class DietaTable extends _i1.Table {
         objetivo,
         descricao,
         dataFim,
+        ativa,
         pessoaId,
       ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'pessoa') {
+      return pessoa;
+    }
     if (relationField == 'refeicoes') {
       return __refeicoes;
     }
@@ -273,14 +331,23 @@ class DietaTable extends _i1.Table {
 }
 
 class DietaInclude extends _i1.IncludeObject {
-  DietaInclude._({_i2.RefeicaoIncludeList? refeicoes}) {
+  DietaInclude._({
+    _i2.PessoaInclude? pessoa,
+    _i2.RefeicaoIncludeList? refeicoes,
+  }) {
+    _pessoa = pessoa;
     _refeicoes = refeicoes;
   }
+
+  _i2.PessoaInclude? _pessoa;
 
   _i2.RefeicaoIncludeList? _refeicoes;
 
   @override
-  Map<String, _i1.Include?> get includes => {'refeicoes': _refeicoes};
+  Map<String, _i1.Include?> get includes => {
+        'pessoa': _pessoa,
+        'refeicoes': _refeicoes,
+      };
 
   @override
   _i1.Table get table => Dieta.t;
@@ -312,6 +379,10 @@ class DietaRepository {
   final attach = const DietaAttachRepository._();
 
   final attachRow = const DietaAttachRowRepository._();
+
+  final detach = const DietaDetachRepository._();
+
+  final detachRow = const DietaDetachRowRepository._();
 
   Future<List<Dieta>> find(
     _i1.Session session, {
@@ -493,6 +564,27 @@ class DietaAttachRepository {
 class DietaAttachRowRepository {
   const DietaAttachRowRepository._();
 
+  Future<void> pessoa(
+    _i1.Session session,
+    Dieta dieta,
+    _i2.Pessoa pessoa, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (dieta.id == null) {
+      throw ArgumentError.notNull('dieta.id');
+    }
+    if (pessoa.id == null) {
+      throw ArgumentError.notNull('pessoa.id');
+    }
+
+    var $dieta = dieta.copyWith(pessoaId: pessoa.id);
+    await session.db.updateRow<Dieta>(
+      $dieta,
+      columns: [Dieta.t.pessoaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+
   Future<void> refeicoes(
     _i1.Session session,
     Dieta dieta,
@@ -507,6 +599,48 @@ class DietaAttachRowRepository {
     }
 
     var $refeicao = refeicao.copyWith(dietaId: dieta.id);
+    await session.db.updateRow<_i2.Refeicao>(
+      $refeicao,
+      columns: [_i2.Refeicao.t.dietaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class DietaDetachRepository {
+  const DietaDetachRepository._();
+
+  Future<void> refeicoes(
+    _i1.Session session,
+    List<_i2.Refeicao> refeicao, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (refeicao.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('refeicao.id');
+    }
+
+    var $refeicao = refeicao.map((e) => e.copyWith(dietaId: null)).toList();
+    await session.db.update<_i2.Refeicao>(
+      $refeicao,
+      columns: [_i2.Refeicao.t.dietaId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class DietaDetachRowRepository {
+  const DietaDetachRowRepository._();
+
+  Future<void> refeicoes(
+    _i1.Session session,
+    _i2.Refeicao refeicao, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (refeicao.id == null) {
+      throw ArgumentError.notNull('refeicao.id');
+    }
+
+    var $refeicao = refeicao.copyWith(dietaId: null);
     await session.db.updateRow<_i2.Refeicao>(
       $refeicao,
       columns: [_i2.Refeicao.t.dietaId],

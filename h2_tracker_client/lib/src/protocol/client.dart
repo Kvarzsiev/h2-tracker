@@ -47,6 +47,20 @@ class EndpointDieta extends _i1.EndpointRef {
         },
       );
 
+  _i2.Future<void> activateDiet(_i3.Dieta soleActive) =>
+      caller.callServerEndpoint<void>(
+        'dieta',
+        'activateDiet',
+        {'soleActive': soleActive},
+      );
+
+  _i2.Future<void> inactivateDiets(_i3.Dieta soleActive) =>
+      caller.callServerEndpoint<void>(
+        'dieta',
+        'inactivateDiets',
+        {'soleActive': soleActive},
+      );
+
   _i2.Future<void> update(
     _i3.Dieta dieta,
     double peso,
@@ -64,6 +78,13 @@ class EndpointDieta extends _i1.EndpointRef {
           'idade': idade,
           'sexo': sexo,
         },
+      );
+
+  _i2.Future<List<_i3.Dieta>> readUserDiets(int userId) =>
+      caller.callServerEndpoint<List<_i3.Dieta>>(
+        'dieta',
+        'readUserDiets',
+        {'userId': userId},
       );
 }
 

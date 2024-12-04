@@ -1,0 +1,110 @@
+{
+  "actions": [
+    {
+      "type": "deleteTable",
+      "deleteTable": "dieta"
+    },
+    {
+      "type": "createTable",
+      "createTable": {
+        "name": "dieta",
+        "dartName": "Dieta",
+        "module": "h2_tracker",
+        "schema": "public",
+        "columns": [
+          {
+            "name": "id",
+            "columnType": 6,
+            "isNullable": false,
+            "columnDefault": "nextval('dieta_id_seq'::regclass)",
+            "dartType": "int?"
+          },
+          {
+            "name": "caloriasMaximasDia",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          },
+          {
+            "name": "objetivo",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "descricao",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "dataFim",
+            "columnType": 4,
+            "isNullable": false,
+            "dartType": "DateTime"
+          },
+          {
+            "name": "imagem",
+            "columnType": 0,
+            "isNullable": false,
+            "dartType": "String"
+          },
+          {
+            "name": "ativa",
+            "columnType": 1,
+            "isNullable": false,
+            "dartType": "bool"
+          },
+          {
+            "name": "pessoaId",
+            "columnType": 6,
+            "isNullable": false,
+            "dartType": "int"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "constraintName": "dieta_fk_0",
+            "columns": [
+              "pessoaId"
+            ],
+            "referenceTable": "pessoa",
+            "referenceTableSchema": "public",
+            "referenceColumns": [
+              "id"
+            ],
+            "onUpdate": 3,
+            "onDelete": 4
+          }
+        ],
+        "indexes": [
+          {
+            "indexName": "dieta_pkey",
+            "elements": [
+              {
+                "type": 0,
+                "definition": "id"
+              }
+            ],
+            "type": "btree",
+            "isUnique": true,
+            "isPrimary": true
+          }
+        ],
+        "managed": true
+      }
+    }
+  ],
+  "warnings": [
+    {
+      "type": "tableDropped",
+      "message": "One or more columns are added to table \"dieta\" which cannot be added in a table migration. The complete table will be deleted and recreated.",
+      "table": "dieta",
+      "columns": [
+        "ativa"
+      ],
+      "destrucive": true
+    }
+  ],
+  "migrationApiVersion": 1
+}

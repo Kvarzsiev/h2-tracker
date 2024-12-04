@@ -126,6 +126,42 @@ class Endpoints extends _i1.EndpointDispatch {
             params['sexo'],
           ),
         ),
+        'activateDiet': _i1.MethodConnector(
+          name: 'activateDiet',
+          params: {
+            'soleActive': _i1.ParameterDescription(
+              name: 'soleActive',
+              type: _i1.getType<_i10.Dieta>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['dieta'] as _i2.DietaEndpoint).activateDiet(
+            session,
+            params['soleActive'],
+          ),
+        ),
+        'inactivateDiets': _i1.MethodConnector(
+          name: 'inactivateDiets',
+          params: {
+            'soleActive': _i1.ParameterDescription(
+              name: 'soleActive',
+              type: _i1.getType<_i10.Dieta>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['dieta'] as _i2.DietaEndpoint).inactivateDiets(
+            session,
+            params['soleActive'],
+          ),
+        ),
         'update': _i1.MethodConnector(
           name: 'update',
           params: {
@@ -166,6 +202,24 @@ class Endpoints extends _i1.EndpointDispatch {
             params['altura'],
             params['idade'],
             params['sexo'],
+          ),
+        ),
+        'readUserDiets': _i1.MethodConnector(
+          name: 'readUserDiets',
+          params: {
+            'userId': _i1.ParameterDescription(
+              name: 'userId',
+              type: _i1.getType<int>(),
+              nullable: false,
+            )
+          },
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['dieta'] as _i2.DietaEndpoint).readUserDiets(
+            session,
+            params['userId'],
           ),
         ),
       },

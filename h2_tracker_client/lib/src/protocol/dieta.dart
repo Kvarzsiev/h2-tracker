@@ -19,7 +19,9 @@ abstract class Dieta implements _i1.SerializableModel {
     required this.objetivo,
     required this.descricao,
     required this.dataFim,
+    required this.ativa,
     required this.pessoaId,
+    this.pessoa,
     this.refeicoes,
   });
 
@@ -29,7 +31,9 @@ abstract class Dieta implements _i1.SerializableModel {
     required String objetivo,
     required String descricao,
     required DateTime dataFim,
+    required bool ativa,
     required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   }) = _DietaImpl;
 
@@ -40,7 +44,12 @@ abstract class Dieta implements _i1.SerializableModel {
       objetivo: jsonSerialization['objetivo'] as String,
       descricao: jsonSerialization['descricao'] as String,
       dataFim: _i1.DateTimeJsonExtension.fromJson(jsonSerialization['dataFim']),
+      ativa: jsonSerialization['ativa'] as bool,
       pessoaId: jsonSerialization['pessoaId'] as int,
+      pessoa: jsonSerialization['pessoa'] == null
+          ? null
+          : _i2.Pessoa.fromJson(
+              (jsonSerialization['pessoa'] as Map<String, dynamic>)),
       refeicoes: (jsonSerialization['refeicoes'] as List?)
           ?.map((e) => _i2.Refeicao.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -60,7 +69,11 @@ abstract class Dieta implements _i1.SerializableModel {
 
   DateTime dataFim;
 
+  bool ativa;
+
   int pessoaId;
+
+  _i2.Pessoa? pessoa;
 
   List<_i2.Refeicao>? refeicoes;
 
@@ -70,7 +83,9 @@ abstract class Dieta implements _i1.SerializableModel {
     String? objetivo,
     String? descricao,
     DateTime? dataFim,
+    bool? ativa,
     int? pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   });
   @override
@@ -81,7 +96,9 @@ abstract class Dieta implements _i1.SerializableModel {
       'objetivo': objetivo,
       'descricao': descricao,
       'dataFim': dataFim.toJson(),
+      'ativa': ativa,
       'pessoaId': pessoaId,
+      if (pessoa != null) 'pessoa': pessoa?.toJson(),
       if (refeicoes != null)
         'refeicoes': refeicoes?.toJson(valueToJson: (v) => v.toJson()),
     };
@@ -102,7 +119,9 @@ class _DietaImpl extends Dieta {
     required String objetivo,
     required String descricao,
     required DateTime dataFim,
+    required bool ativa,
     required int pessoaId,
+    _i2.Pessoa? pessoa,
     List<_i2.Refeicao>? refeicoes,
   }) : super._(
           id: id,
@@ -110,7 +129,9 @@ class _DietaImpl extends Dieta {
           objetivo: objetivo,
           descricao: descricao,
           dataFim: dataFim,
+          ativa: ativa,
           pessoaId: pessoaId,
+          pessoa: pessoa,
           refeicoes: refeicoes,
         );
 
@@ -121,7 +142,9 @@ class _DietaImpl extends Dieta {
     String? objetivo,
     String? descricao,
     DateTime? dataFim,
+    bool? ativa,
     int? pessoaId,
+    Object? pessoa = _Undefined,
     Object? refeicoes = _Undefined,
   }) {
     return Dieta(
@@ -130,7 +153,9 @@ class _DietaImpl extends Dieta {
       objetivo: objetivo ?? this.objetivo,
       descricao: descricao ?? this.descricao,
       dataFim: dataFim ?? this.dataFim,
+      ativa: ativa ?? this.ativa,
       pessoaId: pessoaId ?? this.pessoaId,
+      pessoa: pessoa is _i2.Pessoa? ? pessoa : this.pessoa?.copyWith(),
       refeicoes: refeicoes is List<_i2.Refeicao>?
           ? refeicoes
           : this.refeicoes?.map((e0) => e0.copyWith()).toList(),

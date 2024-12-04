@@ -12,6 +12,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
+import 'protocol.dart' as _i2;
 
 abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
   Refeicao._({
@@ -20,6 +21,7 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
     required this.proteinas,
     required this.descricao,
     required this.dietaId,
+    this.dieta,
   });
 
   factory Refeicao({
@@ -28,6 +30,7 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
     required int proteinas,
     required String descricao,
     required int dietaId,
+    _i2.Dieta? dieta,
   }) = _RefeicaoImpl;
 
   factory Refeicao.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -37,6 +40,10 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
       proteinas: jsonSerialization['proteinas'] as int,
       descricao: jsonSerialization['descricao'] as String,
       dietaId: jsonSerialization['dietaId'] as int,
+      dieta: jsonSerialization['dieta'] == null
+          ? null
+          : _i2.Dieta.fromJson(
+              (jsonSerialization['dieta'] as Map<String, dynamic>)),
     );
   }
 
@@ -55,6 +62,8 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
 
   int dietaId;
 
+  _i2.Dieta? dieta;
+
   @override
   _i1.Table get table => t;
 
@@ -64,6 +73,7 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
     int? proteinas,
     String? descricao,
     int? dietaId,
+    _i2.Dieta? dieta,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -73,6 +83,7 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
       'proteinas': proteinas,
       'descricao': descricao,
       'dietaId': dietaId,
+      if (dieta != null) 'dieta': dieta?.toJson(),
     };
   }
 
@@ -84,11 +95,12 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
       'proteinas': proteinas,
       'descricao': descricao,
       'dietaId': dietaId,
+      if (dieta != null) 'dieta': dieta?.toJsonForProtocol(),
     };
   }
 
-  static RefeicaoInclude include() {
-    return RefeicaoInclude._();
+  static RefeicaoInclude include({_i2.DietaInclude? dieta}) {
+    return RefeicaoInclude._(dieta: dieta);
   }
 
   static RefeicaoIncludeList includeList({
@@ -126,12 +138,14 @@ class _RefeicaoImpl extends Refeicao {
     required int proteinas,
     required String descricao,
     required int dietaId,
+    _i2.Dieta? dieta,
   }) : super._(
           id: id,
           calorias: calorias,
           proteinas: proteinas,
           descricao: descricao,
           dietaId: dietaId,
+          dieta: dieta,
         );
 
   @override
@@ -141,6 +155,7 @@ class _RefeicaoImpl extends Refeicao {
     int? proteinas,
     String? descricao,
     int? dietaId,
+    Object? dieta = _Undefined,
   }) {
     return Refeicao(
       id: id is int? ? id : this.id,
@@ -148,6 +163,7 @@ class _RefeicaoImpl extends Refeicao {
       proteinas: proteinas ?? this.proteinas,
       descricao: descricao ?? this.descricao,
       dietaId: dietaId ?? this.dietaId,
+      dieta: dieta is _i2.Dieta? ? dieta : this.dieta?.copyWith(),
     );
   }
 }
@@ -180,6 +196,21 @@ class RefeicaoTable extends _i1.Table {
 
   late final _i1.ColumnInt dietaId;
 
+  _i2.DietaTable? _dieta;
+
+  _i2.DietaTable get dieta {
+    if (_dieta != null) return _dieta!;
+    _dieta = _i1.createRelationTable(
+      relationFieldName: 'dieta',
+      field: Refeicao.t.dietaId,
+      foreignField: _i2.Dieta.t.id,
+      tableRelation: tableRelation,
+      createTable: (foreignTableRelation) =>
+          _i2.DietaTable(tableRelation: foreignTableRelation),
+    );
+    return _dieta!;
+  }
+
   @override
   List<_i1.Column> get columns => [
         id,
@@ -188,13 +219,25 @@ class RefeicaoTable extends _i1.Table {
         descricao,
         dietaId,
       ];
+
+  @override
+  _i1.Table? getRelationTable(String relationField) {
+    if (relationField == 'dieta') {
+      return dieta;
+    }
+    return null;
+  }
 }
 
 class RefeicaoInclude extends _i1.IncludeObject {
-  RefeicaoInclude._();
+  RefeicaoInclude._({_i2.DietaInclude? dieta}) {
+    _dieta = dieta;
+  }
+
+  _i2.DietaInclude? _dieta;
 
   @override
-  Map<String, _i1.Include?> get includes => {};
+  Map<String, _i1.Include?> get includes => {'dieta': _dieta};
 
   @override
   _i1.Table get table => Refeicao.t;
@@ -223,6 +266,8 @@ class RefeicaoIncludeList extends _i1.IncludeList {
 class RefeicaoRepository {
   const RefeicaoRepository._();
 
+  final attachRow = const RefeicaoAttachRowRepository._();
+
   Future<List<Refeicao>> find(
     _i1.Session session, {
     _i1.WhereExpressionBuilder<RefeicaoTable>? where,
@@ -232,6 +277,7 @@ class RefeicaoRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<RefeicaoTable>? orderByList,
     _i1.Transaction? transaction,
+    RefeicaoInclude? include,
   }) async {
     return session.db.find<Refeicao>(
       where: where?.call(Refeicao.t),
@@ -241,6 +287,7 @@ class RefeicaoRepository {
       limit: limit,
       offset: offset,
       transaction: transaction ?? session.transaction,
+      include: include,
     );
   }
 
@@ -252,6 +299,7 @@ class RefeicaoRepository {
     bool orderDescending = false,
     _i1.OrderByListBuilder<RefeicaoTable>? orderByList,
     _i1.Transaction? transaction,
+    RefeicaoInclude? include,
   }) async {
     return session.db.findFirstRow<Refeicao>(
       where: where?.call(Refeicao.t),
@@ -260,6 +308,7 @@ class RefeicaoRepository {
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction ?? session.transaction,
+      include: include,
     );
   }
 
@@ -267,10 +316,12 @@ class RefeicaoRepository {
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
+    RefeicaoInclude? include,
   }) async {
     return session.db.findById<Refeicao>(
       id,
       transaction: transaction ?? session.transaction,
+      include: include,
     );
   }
 
@@ -364,6 +415,31 @@ class RefeicaoRepository {
     return session.db.count<Refeicao>(
       where: where?.call(Refeicao.t),
       limit: limit,
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class RefeicaoAttachRowRepository {
+  const RefeicaoAttachRowRepository._();
+
+  Future<void> dieta(
+    _i1.Session session,
+    Refeicao refeicao,
+    _i2.Dieta dieta, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (refeicao.id == null) {
+      throw ArgumentError.notNull('refeicao.id');
+    }
+    if (dieta.id == null) {
+      throw ArgumentError.notNull('dieta.id');
+    }
+
+    var $refeicao = refeicao.copyWith(dietaId: dieta.id);
+    await session.db.updateRow<Refeicao>(
+      $refeicao,
+      columns: [Refeicao.t.dietaId],
       transaction: transaction ?? session.transaction,
     );
   }

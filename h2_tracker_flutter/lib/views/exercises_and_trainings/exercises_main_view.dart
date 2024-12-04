@@ -112,11 +112,56 @@ class ExercisesMainViewState extends State<ExercisesMainView> {
                 mainAxisSpacing: 10,
                 crossAxisCount: 4,
                 children: _exercises
-                    .map((exercise) =>
-                        ExerciseCard(exercise: exercise, onTap: () {}))
+                    .map((exercise) => ExerciseCard(
+                        exercise: exercise,
+                        onTap: () {
+                          _showDialog(exercise);
+                        }))
                     .toList()),
           )
       ]),
+    );
+  }
+
+  void _showDialog(Exercicio exercise) {
+    final size = MediaQuery.sizeOf(context);
+
+    showDialog<TreinoExercicio>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(exercise.nome),
+          content: SizedBox(
+            height: size.height * .7,
+            width: size.width * .7,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ExerciseCard(exercise: exercise, peek: true),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(fontSize: 24),
+              ),
+              child: const Text(
+                'Fechar',
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
