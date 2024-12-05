@@ -1,3 +1,4 @@
+import 'package:h2_tracker_server/src/endpoints/refeicao_endpoint.dart';
 import 'package:h2_tracker_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
@@ -49,7 +50,9 @@ class DietaEndpoint extends Endpoint {
       await inactivateDiets(session, dieta);
     }
 
-    await Dieta.db.insertRow(session, dieta);
+    dieta = await Dieta.db.insertRow(session, dieta);
+
+    await StaticRefeicaoEndpoint.staticInsert(session, dieta);
   }
 
   Future<void> activateDiet(Session session, Dieta soleActive) async {
@@ -109,8 +112,21 @@ class DietaEndpoint extends Endpoint {
   }
 
   Future<List<Dieta>> readUserDiets(Session session, int userId) async {
-    final diets = await Dieta.db
-        .find(session, where: (dieta) => dieta.pessoaId.equals(userId));
+    final diets = await Dieta.db.find(
+      session,
+      where: (dieta) => dieta.pessoaId.equals(userId),
+      include: Dieta.include(
+        refeicoes: Refeicao.includeList(
+          include: Refeicao.include(
+            opcoesAlimentos: OpcaoAlimento.includeList(
+              include: OpcaoAlimento.include(
+                alimento: Alimento.include(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
     return diets;
   }

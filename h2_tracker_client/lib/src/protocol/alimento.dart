@@ -12,38 +12,32 @@
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Refeicao implements _i1.SerializableModel {
-  Refeicao._({
+abstract class Alimento implements _i1.SerializableModel {
+  Alimento._({
     this.id,
-    required this.calorias,
-    required this.proteinas,
+    required this.tipo,
+    required this.caloriasGrama,
+    required this.proteinasGrama,
     required this.descricao,
-    required this.dietaId,
-    this.dieta,
     this.opcoesAlimentos,
   });
 
-  factory Refeicao({
+  factory Alimento({
     int? id,
-    required int calorias,
-    required int proteinas,
+    required String tipo,
+    required int caloriasGrama,
+    required int proteinasGrama,
     required String descricao,
-    required int dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
-  }) = _RefeicaoImpl;
+  }) = _AlimentoImpl;
 
-  factory Refeicao.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Refeicao(
+  factory Alimento.fromJson(Map<String, dynamic> jsonSerialization) {
+    return Alimento(
       id: jsonSerialization['id'] as int?,
-      calorias: jsonSerialization['calorias'] as int,
-      proteinas: jsonSerialization['proteinas'] as int,
+      tipo: jsonSerialization['tipo'] as String,
+      caloriasGrama: jsonSerialization['caloriasGrama'] as int,
+      proteinasGrama: jsonSerialization['proteinasGrama'] as int,
       descricao: jsonSerialization['descricao'] as String,
-      dietaId: jsonSerialization['dietaId'] as int,
-      dieta: jsonSerialization['dieta'] == null
-          ? null
-          : _i2.Dieta.fromJson(
-              (jsonSerialization['dieta'] as Map<String, dynamic>)),
       opcoesAlimentos: (jsonSerialization['opcoesAlimentos'] as List?)
           ?.map((e) => _i2.OpcaoAlimento.fromJson((e as Map<String, dynamic>)))
           .toList(),
@@ -55,36 +49,32 @@ abstract class Refeicao implements _i1.SerializableModel {
   /// the id will be null.
   int? id;
 
-  int calorias;
+  String tipo;
 
-  int proteinas;
+  int caloriasGrama;
+
+  int proteinasGrama;
 
   String descricao;
 
-  int dietaId;
-
-  _i2.Dieta? dieta;
-
   List<_i2.OpcaoAlimento>? opcoesAlimentos;
 
-  Refeicao copyWith({
+  Alimento copyWith({
     int? id,
-    int? calorias,
-    int? proteinas,
+    String? tipo,
+    int? caloriasGrama,
+    int? proteinasGrama,
     String? descricao,
-    int? dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'calorias': calorias,
-      'proteinas': proteinas,
+      'tipo': tipo,
+      'caloriasGrama': caloriasGrama,
+      'proteinasGrama': proteinasGrama,
       'descricao': descricao,
-      'dietaId': dietaId,
-      if (dieta != null) 'dieta': dieta?.toJson(),
       if (opcoesAlimentos != null)
         'opcoesAlimentos':
             opcoesAlimentos?.toJson(valueToJson: (v) => v.toJson()),
@@ -99,42 +89,38 @@ abstract class Refeicao implements _i1.SerializableModel {
 
 class _Undefined {}
 
-class _RefeicaoImpl extends Refeicao {
-  _RefeicaoImpl({
+class _AlimentoImpl extends Alimento {
+  _AlimentoImpl({
     int? id,
-    required int calorias,
-    required int proteinas,
+    required String tipo,
+    required int caloriasGrama,
+    required int proteinasGrama,
     required String descricao,
-    required int dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
   }) : super._(
           id: id,
-          calorias: calorias,
-          proteinas: proteinas,
+          tipo: tipo,
+          caloriasGrama: caloriasGrama,
+          proteinasGrama: proteinasGrama,
           descricao: descricao,
-          dietaId: dietaId,
-          dieta: dieta,
           opcoesAlimentos: opcoesAlimentos,
         );
 
   @override
-  Refeicao copyWith({
+  Alimento copyWith({
     Object? id = _Undefined,
-    int? calorias,
-    int? proteinas,
+    String? tipo,
+    int? caloriasGrama,
+    int? proteinasGrama,
     String? descricao,
-    int? dietaId,
-    Object? dieta = _Undefined,
     Object? opcoesAlimentos = _Undefined,
   }) {
-    return Refeicao(
+    return Alimento(
       id: id is int? ? id : this.id,
-      calorias: calorias ?? this.calorias,
-      proteinas: proteinas ?? this.proteinas,
+      tipo: tipo ?? this.tipo,
+      caloriasGrama: caloriasGrama ?? this.caloriasGrama,
+      proteinasGrama: proteinasGrama ?? this.proteinasGrama,
       descricao: descricao ?? this.descricao,
-      dietaId: dietaId ?? this.dietaId,
-      dieta: dieta is _i2.Dieta? ? dieta : this.dieta?.copyWith(),
       opcoesAlimentos: opcoesAlimentos is List<_i2.OpcaoAlimento>?
           ? opcoesAlimentos
           : this.opcoesAlimentos?.map((e0) => e0.copyWith()).toList(),

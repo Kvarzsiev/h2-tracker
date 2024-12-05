@@ -10,76 +10,99 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod/serverpod.dart' as _i1;
-import '../endpoints/dieta_endpoint.dart' as _i2;
-import '../endpoints/example_endpoint.dart' as _i3;
-import '../endpoints/exercicio_endpoint.dart' as _i4;
-import '../endpoints/exercicio_historico_endpoint.dart' as _i5;
-import '../endpoints/peso_endpoint.dart' as _i6;
-import '../endpoints/pessoa_endpoint.dart' as _i7;
-import '../endpoints/treino_endpoint.dart' as _i8;
-import '../endpoints/treino_historico_endpoint.dart' as _i9;
-import 'package:h2_tracker_server/src/generated/dieta.dart' as _i10;
-import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i11;
+import '../endpoints/alimento_endpoint.dart' as _i2;
+import '../endpoints/dieta_endpoint.dart' as _i3;
+import '../endpoints/example_endpoint.dart' as _i4;
+import '../endpoints/exercicio_endpoint.dart' as _i5;
+import '../endpoints/exercicio_historico_endpoint.dart' as _i6;
+import '../endpoints/peso_endpoint.dart' as _i7;
+import '../endpoints/pessoa_endpoint.dart' as _i8;
+import '../endpoints/treino_endpoint.dart' as _i9;
+import '../endpoints/treino_historico_endpoint.dart' as _i10;
+import 'package:h2_tracker_server/src/generated/dieta.dart' as _i11;
+import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i12;
 import 'package:h2_tracker_server/src/generated/treino_exercicio_historico.dart'
-    as _i12;
-import 'package:h2_tracker_server/src/generated/peso.dart' as _i13;
-import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i14;
-import 'package:h2_tracker_server/src/generated/treino.dart' as _i15;
-import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i16;
+    as _i13;
+import 'package:h2_tracker_server/src/generated/peso.dart' as _i14;
+import 'package:h2_tracker_server/src/generated/pessoa.dart' as _i15;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i16;
+import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i17;
 
 class Endpoints extends _i1.EndpointDispatch {
   @override
   void initializeEndpoints(_i1.Server server) {
     var endpoints = <String, _i1.Endpoint>{
-      'dieta': _i2.DietaEndpoint()
+      'alimento': _i2.AlimentoEndpoint()
+        ..initialize(
+          server,
+          'alimento',
+          null,
+        ),
+      'dieta': _i3.DietaEndpoint()
         ..initialize(
           server,
           'dieta',
           null,
         ),
-      'example': _i3.ExampleEndpoint()
+      'example': _i4.ExampleEndpoint()
         ..initialize(
           server,
           'example',
           null,
         ),
-      'exercicio': _i4.ExercicioEndpoint()
+      'exercicio': _i5.ExercicioEndpoint()
         ..initialize(
           server,
           'exercicio',
           null,
         ),
-      'treinoExercicioHistorico': _i5.TreinoExercicioHistoricoEndpoint()
+      'treinoExercicioHistorico': _i6.TreinoExercicioHistoricoEndpoint()
         ..initialize(
           server,
           'treinoExercicioHistorico',
           null,
         ),
-      'peso': _i6.PesoEndpoint()
+      'peso': _i7.PesoEndpoint()
         ..initialize(
           server,
           'peso',
           null,
         ),
-      'pessoa': _i7.PessoaEndpoint()
+      'pessoa': _i8.PessoaEndpoint()
         ..initialize(
           server,
           'pessoa',
           null,
         ),
-      'treino': _i8.TreinoEndpoint()
+      'treino': _i9.TreinoEndpoint()
         ..initialize(
           server,
           'treino',
           null,
         ),
-      'treinoHistorico': _i9.TreinoHistoricoEndpoint()
+      'treinoHistorico': _i10.TreinoHistoricoEndpoint()
         ..initialize(
           server,
           'treinoHistorico',
           null,
         ),
     };
+    connectors['alimento'] = _i1.EndpointConnector(
+      name: 'alimento',
+      endpoint: endpoints['alimento']!,
+      methodConnectors: {
+        'insertDefault': _i1.MethodConnector(
+          name: 'insertDefault',
+          params: {},
+          call: (
+            _i1.Session session,
+            Map<String, dynamic> params,
+          ) async =>
+              (endpoints['alimento'] as _i2.AlimentoEndpoint)
+                  .insertDefault(session),
+        )
+      },
+    );
     connectors['dieta'] = _i1.EndpointConnector(
       name: 'dieta',
       endpoint: endpoints['dieta']!,
@@ -89,7 +112,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'dieta': _i1.ParameterDescription(
               name: 'dieta',
-              type: _i1.getType<_i10.Dieta>(),
+              type: _i1.getType<_i11.Dieta>(),
               nullable: false,
             ),
             'peso': _i1.ParameterDescription(
@@ -117,7 +140,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dieta'] as _i2.DietaEndpoint).insert(
+              (endpoints['dieta'] as _i3.DietaEndpoint).insert(
             session,
             params['dieta'],
             params['peso'],
@@ -131,7 +154,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'soleActive': _i1.ParameterDescription(
               name: 'soleActive',
-              type: _i1.getType<_i10.Dieta>(),
+              type: _i1.getType<_i11.Dieta>(),
               nullable: false,
             )
           },
@@ -139,7 +162,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dieta'] as _i2.DietaEndpoint).activateDiet(
+              (endpoints['dieta'] as _i3.DietaEndpoint).activateDiet(
             session,
             params['soleActive'],
           ),
@@ -149,7 +172,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'soleActive': _i1.ParameterDescription(
               name: 'soleActive',
-              type: _i1.getType<_i10.Dieta>(),
+              type: _i1.getType<_i11.Dieta>(),
               nullable: false,
             )
           },
@@ -157,7 +180,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dieta'] as _i2.DietaEndpoint).inactivateDiets(
+              (endpoints['dieta'] as _i3.DietaEndpoint).inactivateDiets(
             session,
             params['soleActive'],
           ),
@@ -167,7 +190,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'dieta': _i1.ParameterDescription(
               name: 'dieta',
-              type: _i1.getType<_i10.Dieta>(),
+              type: _i1.getType<_i11.Dieta>(),
               nullable: false,
             ),
             'peso': _i1.ParameterDescription(
@@ -195,7 +218,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dieta'] as _i2.DietaEndpoint).update(
+              (endpoints['dieta'] as _i3.DietaEndpoint).update(
             session,
             params['dieta'],
             params['peso'],
@@ -217,7 +240,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['dieta'] as _i2.DietaEndpoint).readUserDiets(
+              (endpoints['dieta'] as _i3.DietaEndpoint).readUserDiets(
             session,
             params['userId'],
           ),
@@ -241,7 +264,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['example'] as _i3.ExampleEndpoint).hello(
+              (endpoints['example'] as _i4.ExampleEndpoint).hello(
             session,
             params['name'],
           ),
@@ -257,7 +280,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'exercicio': _i1.ParameterDescription(
               name: 'exercicio',
-              type: _i1.getType<_i11.Exercicio>(),
+              type: _i1.getType<_i12.Exercicio>(),
               nullable: false,
             )
           },
@@ -265,7 +288,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['exercicio'] as _i4.ExercicioEndpoint).insert(
+              (endpoints['exercicio'] as _i5.ExercicioEndpoint).insert(
             session,
             params['exercicio'],
           ),
@@ -277,14 +300,14 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['exercicio'] as _i4.ExercicioEndpoint).read(session),
+              (endpoints['exercicio'] as _i5.ExercicioEndpoint).read(session),
         ),
         'delete': _i1.MethodConnector(
           name: 'delete',
           params: {
             'exercicio': _i1.ParameterDescription(
               name: 'exercicio',
-              type: _i1.getType<_i11.Exercicio>(),
+              type: _i1.getType<_i12.Exercicio>(),
               nullable: false,
             )
           },
@@ -292,7 +315,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['exercicio'] as _i4.ExercicioEndpoint).delete(
+              (endpoints['exercicio'] as _i5.ExercicioEndpoint).delete(
             session,
             params['exercicio'],
           ),
@@ -304,7 +327,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['exercicio'] as _i4.ExercicioEndpoint)
+              (endpoints['exercicio'] as _i5.ExercicioEndpoint)
                   .insertDefault(session),
         ),
       },
@@ -318,7 +341,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treinoExercicioHistoricos': _i1.ParameterDescription(
               name: 'treinoExercicioHistoricos',
-              type: _i1.getType<List<_i12.TreinoExercicioHistorico>>(),
+              type: _i1.getType<List<_i13.TreinoExercicioHistorico>>(),
               nullable: false,
             )
           },
@@ -327,7 +350,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['treinoExercicioHistorico']
-                      as _i5.TreinoExercicioHistoricoEndpoint)
+                      as _i6.TreinoExercicioHistoricoEndpoint)
                   .insert(
             session,
             params['treinoExercicioHistoricos'],
@@ -352,7 +375,7 @@ class Endpoints extends _i1.EndpointDispatch {
             Map<String, dynamic> params,
           ) async =>
               (endpoints['treinoExercicioHistorico']
-                      as _i5.TreinoExercicioHistoricoEndpoint)
+                      as _i6.TreinoExercicioHistoricoEndpoint)
                   .readUserTrainHistory(
             session,
             params['userId'],
@@ -370,7 +393,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'peso': _i1.ParameterDescription(
               name: 'peso',
-              type: _i1.getType<_i13.Peso>(),
+              type: _i1.getType<_i14.Peso>(),
               nullable: false,
             ),
             'height': _i1.ParameterDescription(
@@ -383,7 +406,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['peso'] as _i6.PesoEndpoint).insert(
+              (endpoints['peso'] as _i7.PesoEndpoint).insert(
             session,
             params['peso'],
             params['height'],
@@ -407,7 +430,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['peso'] as _i6.PesoEndpoint).updateHeight(
+              (endpoints['peso'] as _i7.PesoEndpoint).updateHeight(
             session,
             params['userId'],
             params['height'],
@@ -424,7 +447,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i14.Pessoa>(),
+              type: _i1.getType<_i15.Pessoa>(),
               nullable: false,
             )
           },
@@ -432,7 +455,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).insert(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).insert(
             session,
             params['pessoa'],
           ),
@@ -442,7 +465,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i14.Pessoa>(),
+              type: _i1.getType<_i15.Pessoa>(),
               nullable: false,
             )
           },
@@ -450,7 +473,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).delete(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).delete(
             session,
             params['pessoa'],
           ),
@@ -460,7 +483,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'pessoa': _i1.ParameterDescription(
               name: 'pessoa',
-              type: _i1.getType<_i14.Pessoa>(),
+              type: _i1.getType<_i15.Pessoa>(),
               nullable: false,
             )
           },
@@ -468,7 +491,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).update(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).update(
             session,
             params['pessoa'],
           ),
@@ -491,7 +514,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).login(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).login(
             session,
             params['email'],
             params['password'],
@@ -510,7 +533,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).readUserTrainings(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).readUserTrainings(
             session,
             params['userId'],
           ),
@@ -528,7 +551,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['pessoa'] as _i7.PessoaEndpoint).read(
+              (endpoints['pessoa'] as _i8.PessoaEndpoint).read(
             session,
             params['id'],
           ),
@@ -544,7 +567,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i15.Treino>(),
+              type: _i1.getType<_i16.Treino>(),
               nullable: false,
             )
           },
@@ -552,7 +575,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treino'] as _i8.TreinoEndpoint).insert(
+              (endpoints['treino'] as _i9.TreinoEndpoint).insert(
             session,
             params['treino'],
           ),
@@ -562,7 +585,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i15.Treino>(),
+              type: _i1.getType<_i16.Treino>(),
               nullable: false,
             )
           },
@@ -570,7 +593,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treino'] as _i8.TreinoEndpoint).update(
+              (endpoints['treino'] as _i9.TreinoEndpoint).update(
             session,
             params['treino'],
           ),
@@ -588,7 +611,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treino'] as _i8.TreinoEndpoint).findById(
+              (endpoints['treino'] as _i9.TreinoEndpoint).findById(
             session,
             params['id'],
           ),
@@ -598,7 +621,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i15.Treino>(),
+              type: _i1.getType<_i16.Treino>(),
               nullable: false,
             )
           },
@@ -606,7 +629,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treino'] as _i8.TreinoEndpoint).delete(
+              (endpoints['treino'] as _i9.TreinoEndpoint).delete(
             session,
             params['treino'],
           ),
@@ -630,7 +653,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treinoHistorico'] as _i9.TreinoHistoricoEndpoint)
+              (endpoints['treinoHistorico'] as _i10.TreinoHistoricoEndpoint)
                   .readUserTrainHistory(
             session,
             params['userId'],
@@ -641,7 +664,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'historico': _i1.ParameterDescription(
               name: 'historico',
-              type: _i1.getType<_i16.TreinoHistorico>(),
+              type: _i1.getType<_i17.TreinoHistorico>(),
               nullable: false,
             )
           },
@@ -649,7 +672,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treinoHistorico'] as _i9.TreinoHistoricoEndpoint)
+              (endpoints['treinoHistorico'] as _i10.TreinoHistoricoEndpoint)
                   .insert(
             session,
             params['historico'],
@@ -660,7 +683,7 @@ class Endpoints extends _i1.EndpointDispatch {
           params: {
             'treino': _i1.ParameterDescription(
               name: 'treino',
-              type: _i1.getType<_i15.Treino>(),
+              type: _i1.getType<_i16.Treino>(),
               nullable: false,
             )
           },
@@ -668,7 +691,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treinoHistorico'] as _i9.TreinoHistoricoEndpoint)
+              (endpoints['treinoHistorico'] as _i10.TreinoHistoricoEndpoint)
                   .update(
             session,
             params['treino'],
@@ -687,7 +710,7 @@ class Endpoints extends _i1.EndpointDispatch {
             _i1.Session session,
             Map<String, dynamic> params,
           ) async =>
-              (endpoints['treinoHistorico'] as _i9.TreinoHistoricoEndpoint)
+              (endpoints['treinoHistorico'] as _i10.TreinoHistoricoEndpoint)
                   .queryTrainFrequencyThisWeek(
             session,
             params['userId'],

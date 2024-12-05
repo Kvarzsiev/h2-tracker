@@ -12,24 +12,28 @@ library protocol; // ignore_for_file: no_leading_underscores_for_library_prefixe
 
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
-import 'dieta.dart' as _i3;
-import 'exercicio.dart' as _i4;
-import 'peso.dart' as _i5;
-import 'pessoa.dart' as _i6;
-import 'refeicao.dart' as _i7;
-import 'treino.dart' as _i8;
-import 'treino_exercicio.dart' as _i9;
-import 'treino_exercicio_historico.dart' as _i10;
-import 'treino_historico.dart' as _i11;
-import 'protocol.dart' as _i12;
-import 'package:h2_tracker_server/src/generated/dieta.dart' as _i13;
-import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i14;
+import 'alimento.dart' as _i3;
+import 'dieta.dart' as _i4;
+import 'exercicio.dart' as _i5;
+import 'opcao_alimento.dart' as _i6;
+import 'peso.dart' as _i7;
+import 'pessoa.dart' as _i8;
+import 'refeicao.dart' as _i9;
+import 'treino.dart' as _i10;
+import 'treino_exercicio.dart' as _i11;
+import 'treino_exercicio_historico.dart' as _i12;
+import 'treino_historico.dart' as _i13;
+import 'protocol.dart' as _i14;
+import 'package:h2_tracker_server/src/generated/dieta.dart' as _i15;
+import 'package:h2_tracker_server/src/generated/exercicio.dart' as _i16;
 import 'package:h2_tracker_server/src/generated/treino_exercicio_historico.dart'
-    as _i15;
-import 'package:h2_tracker_server/src/generated/treino.dart' as _i16;
-import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i17;
+    as _i17;
+import 'package:h2_tracker_server/src/generated/treino.dart' as _i18;
+import 'package:h2_tracker_server/src/generated/treino_historico.dart' as _i19;
+export 'alimento.dart';
 export 'dieta.dart';
 export 'exercicio.dart';
+export 'opcao_alimento.dart';
 export 'peso.dart';
 export 'pessoa.dart';
 export 'refeicao.dart';
@@ -46,6 +50,62 @@ class Protocol extends _i1.SerializationManagerServer {
   static final Protocol _instance = Protocol._();
 
   static final List<_i2.TableDefinition> targetTableDefinitions = [
+    _i2.TableDefinition(
+      name: 'alimento',
+      dartName: 'Alimento',
+      schema: 'public',
+      module: 'h2_tracker',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'alimento_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'tipo',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+        _i2.ColumnDefinition(
+          name: 'caloriasGrama',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'proteinasGrama',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'descricao',
+          columnType: _i2.ColumnType.text,
+          isNullable: false,
+          dartType: 'String',
+        ),
+      ],
+      foreignKeys: [],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'alimento_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
     _i2.TableDefinition(
       name: 'dieta',
       dartName: 'Dieta',
@@ -167,6 +227,77 @@ class Protocol extends _i1.SerializationManagerServer {
       indexes: [
         _i2.IndexDefinition(
           indexName: 'exercicio_pkey',
+          tableSpace: null,
+          elements: [
+            _i2.IndexElementDefinition(
+              type: _i2.IndexElementDefinitionType.column,
+              definition: 'id',
+            )
+          ],
+          type: 'btree',
+          isUnique: true,
+          isPrimary: true,
+        )
+      ],
+      managed: true,
+    ),
+    _i2.TableDefinition(
+      name: 'opcao_alimento',
+      dartName: 'OpcaoAlimento',
+      schema: 'public',
+      module: 'h2_tracker',
+      columns: [
+        _i2.ColumnDefinition(
+          name: 'id',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int?',
+          columnDefault: 'nextval(\'opcao_alimento_id_seq\'::regclass)',
+        ),
+        _i2.ColumnDefinition(
+          name: 'quantidade',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'refeicaoId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+        _i2.ColumnDefinition(
+          name: 'alimentoId',
+          columnType: _i2.ColumnType.bigint,
+          isNullable: false,
+          dartType: 'int',
+        ),
+      ],
+      foreignKeys: [
+        _i2.ForeignKeyDefinition(
+          constraintName: 'opcao_alimento_fk_0',
+          columns: ['refeicaoId'],
+          referenceTable: 'refeicao',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+        _i2.ForeignKeyDefinition(
+          constraintName: 'opcao_alimento_fk_1',
+          columns: ['alimentoId'],
+          referenceTable: 'alimento',
+          referenceTableSchema: 'public',
+          referenceColumns: ['id'],
+          onUpdate: _i2.ForeignKeyAction.noAction,
+          onDelete: _i2.ForeignKeyAction.cascade,
+          matchType: null,
+        ),
+      ],
+      indexes: [
+        _i2.IndexDefinition(
+          indexName: 'opcao_alimento_pkey',
           tableSpace: null,
           elements: [
             _i2.IndexElementDefinition(
@@ -669,130 +800,156 @@ class Protocol extends _i1.SerializationManagerServer {
     Type? t,
   ]) {
     t ??= T;
-    if (t == _i3.Dieta) {
-      return _i3.Dieta.fromJson(data) as T;
+    if (t == _i3.Alimento) {
+      return _i3.Alimento.fromJson(data) as T;
     }
-    if (t == _i4.Exercicio) {
-      return _i4.Exercicio.fromJson(data) as T;
+    if (t == _i4.Dieta) {
+      return _i4.Dieta.fromJson(data) as T;
     }
-    if (t == _i5.Peso) {
-      return _i5.Peso.fromJson(data) as T;
+    if (t == _i5.Exercicio) {
+      return _i5.Exercicio.fromJson(data) as T;
     }
-    if (t == _i6.Pessoa) {
-      return _i6.Pessoa.fromJson(data) as T;
+    if (t == _i6.OpcaoAlimento) {
+      return _i6.OpcaoAlimento.fromJson(data) as T;
     }
-    if (t == _i7.Refeicao) {
-      return _i7.Refeicao.fromJson(data) as T;
+    if (t == _i7.Peso) {
+      return _i7.Peso.fromJson(data) as T;
     }
-    if (t == _i8.Treino) {
-      return _i8.Treino.fromJson(data) as T;
+    if (t == _i8.Pessoa) {
+      return _i8.Pessoa.fromJson(data) as T;
     }
-    if (t == _i9.TreinoExercicio) {
-      return _i9.TreinoExercicio.fromJson(data) as T;
+    if (t == _i9.Refeicao) {
+      return _i9.Refeicao.fromJson(data) as T;
     }
-    if (t == _i10.TreinoExercicioHistorico) {
-      return _i10.TreinoExercicioHistorico.fromJson(data) as T;
+    if (t == _i10.Treino) {
+      return _i10.Treino.fromJson(data) as T;
     }
-    if (t == _i11.TreinoHistorico) {
-      return _i11.TreinoHistorico.fromJson(data) as T;
+    if (t == _i11.TreinoExercicio) {
+      return _i11.TreinoExercicio.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i3.Dieta?>()) {
-      return (data != null ? _i3.Dieta.fromJson(data) : null) as T;
+    if (t == _i12.TreinoExercicioHistorico) {
+      return _i12.TreinoExercicioHistorico.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i4.Exercicio?>()) {
-      return (data != null ? _i4.Exercicio.fromJson(data) : null) as T;
+    if (t == _i13.TreinoHistorico) {
+      return _i13.TreinoHistorico.fromJson(data) as T;
     }
-    if (t == _i1.getType<_i5.Peso?>()) {
-      return (data != null ? _i5.Peso.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i3.Alimento?>()) {
+      return (data != null ? _i3.Alimento.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i6.Pessoa?>()) {
-      return (data != null ? _i6.Pessoa.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.Dieta?>()) {
+      return (data != null ? _i4.Dieta.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i7.Refeicao?>()) {
-      return (data != null ? _i7.Refeicao.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i5.Exercicio?>()) {
+      return (data != null ? _i5.Exercicio.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i8.Treino?>()) {
-      return (data != null ? _i8.Treino.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i6.OpcaoAlimento?>()) {
+      return (data != null ? _i6.OpcaoAlimento.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i9.TreinoExercicio?>()) {
-      return (data != null ? _i9.TreinoExercicio.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i7.Peso?>()) {
+      return (data != null ? _i7.Peso.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i10.TreinoExercicioHistorico?>()) {
+    if (t == _i1.getType<_i8.Pessoa?>()) {
+      return (data != null ? _i8.Pessoa.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i9.Refeicao?>()) {
+      return (data != null ? _i9.Refeicao.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i10.Treino?>()) {
+      return (data != null ? _i10.Treino.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i11.TreinoExercicio?>()) {
+      return (data != null ? _i11.TreinoExercicio.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i12.TreinoExercicioHistorico?>()) {
       return (data != null
-          ? _i10.TreinoExercicioHistorico.fromJson(data)
+          ? _i12.TreinoExercicioHistorico.fromJson(data)
           : null) as T;
     }
-    if (t == _i1.getType<_i11.TreinoHistorico?>()) {
-      return (data != null ? _i11.TreinoHistorico.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i13.TreinoHistorico?>()) {
+      return (data != null ? _i13.TreinoHistorico.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<List<_i12.Refeicao>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i12.Refeicao>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i12.Peso>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i12.Peso>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i12.Dieta>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i12.Dieta>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i12.Treino>?>()) {
-      return (data != null
-          ? (data as List).map((e) => deserialize<_i12.Treino>(e)).toList()
-          : null) as dynamic;
-    }
-    if (t == _i1.getType<List<_i12.TreinoExercicio>?>()) {
+    if (t == _i1.getType<List<_i14.OpcaoAlimento>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i12.TreinoExercicio>(e))
+              .map((e) => deserialize<_i14.OpcaoAlimento>(e))
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i12.TreinoHistorico>?>()) {
+    if (t == _i1.getType<List<_i14.Refeicao>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i14.Refeicao>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i14.Peso>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i14.Peso>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i14.Dieta>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i14.Dieta>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i14.Treino>?>()) {
+      return (data != null
+          ? (data as List).map((e) => deserialize<_i14.Treino>(e)).toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i14.OpcaoAlimento>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i12.TreinoHistorico>(e))
+              .map((e) => deserialize<_i14.OpcaoAlimento>(e))
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i12.TreinoExercicioHistorico>?>()) {
+    if (t == _i1.getType<List<_i14.TreinoExercicio>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i12.TreinoExercicioHistorico>(e))
+              .map((e) => deserialize<_i14.TreinoExercicio>(e))
               .toList()
           : null) as dynamic;
     }
-    if (t == _i1.getType<List<_i12.TreinoExercicioHistorico>?>()) {
+    if (t == _i1.getType<List<_i14.TreinoHistorico>?>()) {
       return (data != null
           ? (data as List)
-              .map((e) => deserialize<_i12.TreinoExercicioHistorico>(e))
+              .map((e) => deserialize<_i14.TreinoHistorico>(e))
               .toList()
           : null) as dynamic;
     }
-    if (t == List<_i13.Dieta>) {
-      return (data as List).map((e) => deserialize<_i13.Dieta>(e)).toList()
+    if (t == _i1.getType<List<_i14.TreinoExercicioHistorico>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i14.TreinoExercicioHistorico>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == _i1.getType<List<_i14.TreinoExercicioHistorico>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i14.TreinoExercicioHistorico>(e))
+              .toList()
+          : null) as dynamic;
+    }
+    if (t == List<_i15.Dieta>) {
+      return (data as List).map((e) => deserialize<_i15.Dieta>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i14.Exercicio>) {
-      return (data as List).map((e) => deserialize<_i14.Exercicio>(e)).toList()
+    if (t == List<_i16.Exercicio>) {
+      return (data as List).map((e) => deserialize<_i16.Exercicio>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i15.TreinoExercicioHistorico>) {
+    if (t == List<_i17.TreinoExercicioHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i15.TreinoExercicioHistorico>(e))
+          .map((e) => deserialize<_i17.TreinoExercicioHistorico>(e))
           .toList() as dynamic;
     }
-    if (t == List<_i16.Treino>) {
-      return (data as List).map((e) => deserialize<_i16.Treino>(e)).toList()
+    if (t == List<_i18.Treino>) {
+      return (data as List).map((e) => deserialize<_i18.Treino>(e)).toList()
           as dynamic;
     }
-    if (t == List<_i17.TreinoHistorico>) {
+    if (t == List<_i19.TreinoHistorico>) {
       return (data as List)
-          .map((e) => deserialize<_i17.TreinoHistorico>(e))
+          .map((e) => deserialize<_i19.TreinoHistorico>(e))
           .toList() as dynamic;
     }
     try {
@@ -805,31 +962,37 @@ class Protocol extends _i1.SerializationManagerServer {
   String? getClassNameForObject(Object? data) {
     String? className = super.getClassNameForObject(data);
     if (className != null) return className;
-    if (data is _i3.Dieta) {
+    if (data is _i3.Alimento) {
+      return 'Alimento';
+    }
+    if (data is _i4.Dieta) {
       return 'Dieta';
     }
-    if (data is _i4.Exercicio) {
+    if (data is _i5.Exercicio) {
       return 'Exercicio';
     }
-    if (data is _i5.Peso) {
+    if (data is _i6.OpcaoAlimento) {
+      return 'OpcaoAlimento';
+    }
+    if (data is _i7.Peso) {
       return 'Peso';
     }
-    if (data is _i6.Pessoa) {
+    if (data is _i8.Pessoa) {
       return 'Pessoa';
     }
-    if (data is _i7.Refeicao) {
+    if (data is _i9.Refeicao) {
       return 'Refeicao';
     }
-    if (data is _i8.Treino) {
+    if (data is _i10.Treino) {
       return 'Treino';
     }
-    if (data is _i9.TreinoExercicio) {
+    if (data is _i11.TreinoExercicio) {
       return 'TreinoExercicio';
     }
-    if (data is _i10.TreinoExercicioHistorico) {
+    if (data is _i12.TreinoExercicioHistorico) {
       return 'TreinoExercicioHistorico';
     }
-    if (data is _i11.TreinoHistorico) {
+    if (data is _i13.TreinoHistorico) {
       return 'TreinoHistorico';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -841,32 +1004,38 @@ class Protocol extends _i1.SerializationManagerServer {
 
   @override
   dynamic deserializeByClassName(Map<String, dynamic> data) {
+    if (data['className'] == 'Alimento') {
+      return deserialize<_i3.Alimento>(data['data']);
+    }
     if (data['className'] == 'Dieta') {
-      return deserialize<_i3.Dieta>(data['data']);
+      return deserialize<_i4.Dieta>(data['data']);
     }
     if (data['className'] == 'Exercicio') {
-      return deserialize<_i4.Exercicio>(data['data']);
+      return deserialize<_i5.Exercicio>(data['data']);
+    }
+    if (data['className'] == 'OpcaoAlimento') {
+      return deserialize<_i6.OpcaoAlimento>(data['data']);
     }
     if (data['className'] == 'Peso') {
-      return deserialize<_i5.Peso>(data['data']);
+      return deserialize<_i7.Peso>(data['data']);
     }
     if (data['className'] == 'Pessoa') {
-      return deserialize<_i6.Pessoa>(data['data']);
+      return deserialize<_i8.Pessoa>(data['data']);
     }
     if (data['className'] == 'Refeicao') {
-      return deserialize<_i7.Refeicao>(data['data']);
+      return deserialize<_i9.Refeicao>(data['data']);
     }
     if (data['className'] == 'Treino') {
-      return deserialize<_i8.Treino>(data['data']);
+      return deserialize<_i10.Treino>(data['data']);
     }
     if (data['className'] == 'TreinoExercicio') {
-      return deserialize<_i9.TreinoExercicio>(data['data']);
+      return deserialize<_i11.TreinoExercicio>(data['data']);
     }
     if (data['className'] == 'TreinoExercicioHistorico') {
-      return deserialize<_i10.TreinoExercicioHistorico>(data['data']);
+      return deserialize<_i12.TreinoExercicioHistorico>(data['data']);
     }
     if (data['className'] == 'TreinoHistorico') {
-      return deserialize<_i11.TreinoHistorico>(data['data']);
+      return deserialize<_i13.TreinoHistorico>(data['data']);
     }
     if (data['className'].startsWith('serverpod.')) {
       data['className'] = data['className'].substring(10);
@@ -884,24 +1053,28 @@ class Protocol extends _i1.SerializationManagerServer {
       }
     }
     switch (t) {
-      case _i3.Dieta:
-        return _i3.Dieta.t;
-      case _i4.Exercicio:
-        return _i4.Exercicio.t;
-      case _i5.Peso:
-        return _i5.Peso.t;
-      case _i6.Pessoa:
-        return _i6.Pessoa.t;
-      case _i7.Refeicao:
-        return _i7.Refeicao.t;
-      case _i8.Treino:
-        return _i8.Treino.t;
-      case _i9.TreinoExercicio:
-        return _i9.TreinoExercicio.t;
-      case _i10.TreinoExercicioHistorico:
-        return _i10.TreinoExercicioHistorico.t;
-      case _i11.TreinoHistorico:
-        return _i11.TreinoHistorico.t;
+      case _i3.Alimento:
+        return _i3.Alimento.t;
+      case _i4.Dieta:
+        return _i4.Dieta.t;
+      case _i5.Exercicio:
+        return _i5.Exercicio.t;
+      case _i6.OpcaoAlimento:
+        return _i6.OpcaoAlimento.t;
+      case _i7.Peso:
+        return _i7.Peso.t;
+      case _i8.Pessoa:
+        return _i8.Pessoa.t;
+      case _i9.Refeicao:
+        return _i9.Refeicao.t;
+      case _i10.Treino:
+        return _i10.Treino.t;
+      case _i11.TreinoExercicio:
+        return _i11.TreinoExercicio.t;
+      case _i12.TreinoExercicioHistorico:
+        return _i12.TreinoExercicioHistorico.t;
+      case _i13.TreinoHistorico:
+        return _i13.TreinoHistorico.t;
     }
     return null;
   }

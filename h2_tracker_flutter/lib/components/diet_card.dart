@@ -95,6 +95,14 @@ class DietCard extends StatelessWidget {
           children: [
             Text(diet.objetivo.toReadableTitle(),
                 style: theme.textTheme.titleMedium),
+            const SizedBox(
+              height: 8,
+            ),
+            Text('Calorias diárias ${diet.caloriasMaximasDia}',
+                style: theme.textTheme.labelMedium),
+            const SizedBox(
+              height: 8,
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(

@@ -22,6 +22,20 @@ import 'package:h2_tracker_client/src/protocol/treino_historico.dart' as _i9;
 import 'protocol.dart' as _i10;
 
 /// {@category Endpoint}
+class EndpointAlimento extends _i1.EndpointRef {
+  EndpointAlimento(_i1.EndpointCaller caller) : super(caller);
+
+  @override
+  String get name => 'alimento';
+
+  _i2.Future<void> insertDefault() => caller.callServerEndpoint<void>(
+        'alimento',
+        'insertDefault',
+        {},
+      );
+}
+
+/// {@category Endpoint}
 class EndpointDieta extends _i1.EndpointRef {
   EndpointDieta(_i1.EndpointCaller caller) : super(caller);
 
@@ -347,6 +361,7 @@ class Client extends _i1.ServerpodClientShared {
           disconnectStreamsOnLostInternetConnection:
               disconnectStreamsOnLostInternetConnection,
         ) {
+    alimento = EndpointAlimento(this);
     dieta = EndpointDieta(this);
     example = EndpointExample(this);
     exercicio = EndpointExercicio(this);
@@ -356,6 +371,8 @@ class Client extends _i1.ServerpodClientShared {
     treino = EndpointTreino(this);
     treinoHistorico = EndpointTreinoHistorico(this);
   }
+
+  late final EndpointAlimento alimento;
 
   late final EndpointDieta dieta;
 
@@ -375,6 +392,7 @@ class Client extends _i1.ServerpodClientShared {
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
+        'alimento': alimento,
         'dieta': dieta,
         'example': example,
         'exercicio': exercicio,

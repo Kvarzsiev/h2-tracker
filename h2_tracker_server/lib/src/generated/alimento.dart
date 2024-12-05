@@ -14,84 +14,74 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'protocol.dart' as _i2;
 
-abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
-  Refeicao._({
+abstract class Alimento implements _i1.TableRow, _i1.ProtocolSerialization {
+  Alimento._({
     this.id,
-    required this.calorias,
-    required this.proteinas,
+    required this.tipo,
+    required this.caloriasGrama,
+    required this.proteinasGrama,
     required this.descricao,
-    required this.dietaId,
-    this.dieta,
     this.opcoesAlimentos,
   });
 
-  factory Refeicao({
+  factory Alimento({
     int? id,
-    required int calorias,
-    required int proteinas,
+    required String tipo,
+    required int caloriasGrama,
+    required int proteinasGrama,
     required String descricao,
-    required int dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
-  }) = _RefeicaoImpl;
+  }) = _AlimentoImpl;
 
-  factory Refeicao.fromJson(Map<String, dynamic> jsonSerialization) {
-    return Refeicao(
+  factory Alimento.fromJson(Map<String, dynamic> jsonSerialization) {
+    return Alimento(
       id: jsonSerialization['id'] as int?,
-      calorias: jsonSerialization['calorias'] as int,
-      proteinas: jsonSerialization['proteinas'] as int,
+      tipo: jsonSerialization['tipo'] as String,
+      caloriasGrama: jsonSerialization['caloriasGrama'] as int,
+      proteinasGrama: jsonSerialization['proteinasGrama'] as int,
       descricao: jsonSerialization['descricao'] as String,
-      dietaId: jsonSerialization['dietaId'] as int,
-      dieta: jsonSerialization['dieta'] == null
-          ? null
-          : _i2.Dieta.fromJson(
-              (jsonSerialization['dieta'] as Map<String, dynamic>)),
       opcoesAlimentos: (jsonSerialization['opcoesAlimentos'] as List?)
           ?.map((e) => _i2.OpcaoAlimento.fromJson((e as Map<String, dynamic>)))
           .toList(),
     );
   }
 
-  static final t = RefeicaoTable();
+  static final t = AlimentoTable();
 
-  static const db = RefeicaoRepository._();
+  static const db = AlimentoRepository._();
 
   @override
   int? id;
 
-  int calorias;
+  String tipo;
 
-  int proteinas;
+  int caloriasGrama;
+
+  int proteinasGrama;
 
   String descricao;
-
-  int dietaId;
-
-  _i2.Dieta? dieta;
 
   List<_i2.OpcaoAlimento>? opcoesAlimentos;
 
   @override
   _i1.Table get table => t;
 
-  Refeicao copyWith({
+  Alimento copyWith({
     int? id,
-    int? calorias,
-    int? proteinas,
+    String? tipo,
+    int? caloriasGrama,
+    int? proteinasGrama,
     String? descricao,
-    int? dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
   });
   @override
   Map<String, dynamic> toJson() {
     return {
       if (id != null) 'id': id,
-      'calorias': calorias,
-      'proteinas': proteinas,
+      'tipo': tipo,
+      'caloriasGrama': caloriasGrama,
+      'proteinasGrama': proteinasGrama,
       'descricao': descricao,
-      'dietaId': dietaId,
-      if (dieta != null) 'dieta': dieta?.toJson(),
       if (opcoesAlimentos != null)
         'opcoesAlimentos':
             opcoesAlimentos?.toJson(valueToJson: (v) => v.toJson()),
@@ -102,43 +92,37 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
   Map<String, dynamic> toJsonForProtocol() {
     return {
       if (id != null) 'id': id,
-      'calorias': calorias,
-      'proteinas': proteinas,
+      'tipo': tipo,
+      'caloriasGrama': caloriasGrama,
+      'proteinasGrama': proteinasGrama,
       'descricao': descricao,
-      'dietaId': dietaId,
-      if (dieta != null) 'dieta': dieta?.toJsonForProtocol(),
       if (opcoesAlimentos != null)
         'opcoesAlimentos':
             opcoesAlimentos?.toJson(valueToJson: (v) => v.toJsonForProtocol()),
     };
   }
 
-  static RefeicaoInclude include({
-    _i2.DietaInclude? dieta,
-    _i2.OpcaoAlimentoIncludeList? opcoesAlimentos,
-  }) {
-    return RefeicaoInclude._(
-      dieta: dieta,
-      opcoesAlimentos: opcoesAlimentos,
-    );
+  static AlimentoInclude include(
+      {_i2.OpcaoAlimentoIncludeList? opcoesAlimentos}) {
+    return AlimentoInclude._(opcoesAlimentos: opcoesAlimentos);
   }
 
-  static RefeicaoIncludeList includeList({
-    _i1.WhereExpressionBuilder<RefeicaoTable>? where,
+  static AlimentoIncludeList includeList({
+    _i1.WhereExpressionBuilder<AlimentoTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<RefeicaoTable>? orderBy,
+    _i1.OrderByBuilder<AlimentoTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RefeicaoTable>? orderByList,
-    RefeicaoInclude? include,
+    _i1.OrderByListBuilder<AlimentoTable>? orderByList,
+    AlimentoInclude? include,
   }) {
-    return RefeicaoIncludeList._(
+    return AlimentoIncludeList._(
       where: where,
       limit: limit,
       offset: offset,
-      orderBy: orderBy?.call(Refeicao.t),
+      orderBy: orderBy?.call(Alimento.t),
       orderDescending: orderDescending,
-      orderByList: orderByList?.call(Refeicao.t),
+      orderByList: orderByList?.call(Alimento.t),
       include: include,
     );
   }
@@ -151,42 +135,38 @@ abstract class Refeicao implements _i1.TableRow, _i1.ProtocolSerialization {
 
 class _Undefined {}
 
-class _RefeicaoImpl extends Refeicao {
-  _RefeicaoImpl({
+class _AlimentoImpl extends Alimento {
+  _AlimentoImpl({
     int? id,
-    required int calorias,
-    required int proteinas,
+    required String tipo,
+    required int caloriasGrama,
+    required int proteinasGrama,
     required String descricao,
-    required int dietaId,
-    _i2.Dieta? dieta,
     List<_i2.OpcaoAlimento>? opcoesAlimentos,
   }) : super._(
           id: id,
-          calorias: calorias,
-          proteinas: proteinas,
+          tipo: tipo,
+          caloriasGrama: caloriasGrama,
+          proteinasGrama: proteinasGrama,
           descricao: descricao,
-          dietaId: dietaId,
-          dieta: dieta,
           opcoesAlimentos: opcoesAlimentos,
         );
 
   @override
-  Refeicao copyWith({
+  Alimento copyWith({
     Object? id = _Undefined,
-    int? calorias,
-    int? proteinas,
+    String? tipo,
+    int? caloriasGrama,
+    int? proteinasGrama,
     String? descricao,
-    int? dietaId,
-    Object? dieta = _Undefined,
     Object? opcoesAlimentos = _Undefined,
   }) {
-    return Refeicao(
+    return Alimento(
       id: id is int? ? id : this.id,
-      calorias: calorias ?? this.calorias,
-      proteinas: proteinas ?? this.proteinas,
+      tipo: tipo ?? this.tipo,
+      caloriasGrama: caloriasGrama ?? this.caloriasGrama,
+      proteinasGrama: proteinasGrama ?? this.proteinasGrama,
       descricao: descricao ?? this.descricao,
-      dietaId: dietaId ?? this.dietaId,
-      dieta: dieta is _i2.Dieta? ? dieta : this.dieta?.copyWith(),
       opcoesAlimentos: opcoesAlimentos is List<_i2.OpcaoAlimento>?
           ? opcoesAlimentos
           : this.opcoesAlimentos?.map((e0) => e0.copyWith()).toList(),
@@ -194,59 +174,44 @@ class _RefeicaoImpl extends Refeicao {
   }
 }
 
-class RefeicaoTable extends _i1.Table {
-  RefeicaoTable({super.tableRelation}) : super(tableName: 'refeicao') {
-    calorias = _i1.ColumnInt(
-      'calorias',
+class AlimentoTable extends _i1.Table {
+  AlimentoTable({super.tableRelation}) : super(tableName: 'alimento') {
+    tipo = _i1.ColumnString(
+      'tipo',
       this,
     );
-    proteinas = _i1.ColumnInt(
-      'proteinas',
+    caloriasGrama = _i1.ColumnInt(
+      'caloriasGrama',
+      this,
+    );
+    proteinasGrama = _i1.ColumnInt(
+      'proteinasGrama',
       this,
     );
     descricao = _i1.ColumnString(
       'descricao',
       this,
     );
-    dietaId = _i1.ColumnInt(
-      'dietaId',
-      this,
-    );
   }
 
-  late final _i1.ColumnInt calorias;
+  late final _i1.ColumnString tipo;
 
-  late final _i1.ColumnInt proteinas;
+  late final _i1.ColumnInt caloriasGrama;
+
+  late final _i1.ColumnInt proteinasGrama;
 
   late final _i1.ColumnString descricao;
-
-  late final _i1.ColumnInt dietaId;
-
-  _i2.DietaTable? _dieta;
 
   _i2.OpcaoAlimentoTable? ___opcoesAlimentos;
 
   _i1.ManyRelation<_i2.OpcaoAlimentoTable>? _opcoesAlimentos;
 
-  _i2.DietaTable get dieta {
-    if (_dieta != null) return _dieta!;
-    _dieta = _i1.createRelationTable(
-      relationFieldName: 'dieta',
-      field: Refeicao.t.dietaId,
-      foreignField: _i2.Dieta.t.id,
-      tableRelation: tableRelation,
-      createTable: (foreignTableRelation) =>
-          _i2.DietaTable(tableRelation: foreignTableRelation),
-    );
-    return _dieta!;
-  }
-
   _i2.OpcaoAlimentoTable get __opcoesAlimentos {
     if (___opcoesAlimentos != null) return ___opcoesAlimentos!;
     ___opcoesAlimentos = _i1.createRelationTable(
       relationFieldName: '__opcoesAlimentos',
-      field: Refeicao.t.id,
-      foreignField: _i2.OpcaoAlimento.t.refeicaoId,
+      field: Alimento.t.id,
+      foreignField: _i2.OpcaoAlimento.t.alimentoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.OpcaoAlimentoTable(tableRelation: foreignTableRelation),
@@ -258,8 +223,8 @@ class RefeicaoTable extends _i1.Table {
     if (_opcoesAlimentos != null) return _opcoesAlimentos!;
     var relationTable = _i1.createRelationTable(
       relationFieldName: 'opcoesAlimentos',
-      field: Refeicao.t.id,
-      foreignField: _i2.OpcaoAlimento.t.refeicaoId,
+      field: Alimento.t.id,
+      foreignField: _i2.OpcaoAlimento.t.alimentoId,
       tableRelation: tableRelation,
       createTable: (foreignTableRelation) =>
           _i2.OpcaoAlimentoTable(tableRelation: foreignTableRelation),
@@ -275,17 +240,14 @@ class RefeicaoTable extends _i1.Table {
   @override
   List<_i1.Column> get columns => [
         id,
-        calorias,
-        proteinas,
+        tipo,
+        caloriasGrama,
+        proteinasGrama,
         descricao,
-        dietaId,
       ];
 
   @override
   _i1.Table? getRelationTable(String relationField) {
-    if (relationField == 'dieta') {
-      return dieta;
-    }
     if (relationField == 'opcoesAlimentos') {
       return __opcoesAlimentos;
     }
@@ -293,32 +255,24 @@ class RefeicaoTable extends _i1.Table {
   }
 }
 
-class RefeicaoInclude extends _i1.IncludeObject {
-  RefeicaoInclude._({
-    _i2.DietaInclude? dieta,
-    _i2.OpcaoAlimentoIncludeList? opcoesAlimentos,
-  }) {
-    _dieta = dieta;
+class AlimentoInclude extends _i1.IncludeObject {
+  AlimentoInclude._({_i2.OpcaoAlimentoIncludeList? opcoesAlimentos}) {
     _opcoesAlimentos = opcoesAlimentos;
   }
-
-  _i2.DietaInclude? _dieta;
 
   _i2.OpcaoAlimentoIncludeList? _opcoesAlimentos;
 
   @override
-  Map<String, _i1.Include?> get includes => {
-        'dieta': _dieta,
-        'opcoesAlimentos': _opcoesAlimentos,
-      };
+  Map<String, _i1.Include?> get includes =>
+      {'opcoesAlimentos': _opcoesAlimentos};
 
   @override
-  _i1.Table get table => Refeicao.t;
+  _i1.Table get table => Alimento.t;
 }
 
-class RefeicaoIncludeList extends _i1.IncludeList {
-  RefeicaoIncludeList._({
-    _i1.WhereExpressionBuilder<RefeicaoTable>? where,
+class AlimentoIncludeList extends _i1.IncludeList {
+  AlimentoIncludeList._({
+    _i1.WhereExpressionBuilder<AlimentoTable>? where,
     super.limit,
     super.offset,
     super.orderBy,
@@ -326,38 +280,42 @@ class RefeicaoIncludeList extends _i1.IncludeList {
     super.orderByList,
     super.include,
   }) {
-    super.where = where?.call(Refeicao.t);
+    super.where = where?.call(Alimento.t);
   }
 
   @override
   Map<String, _i1.Include?> get includes => include?.includes ?? {};
 
   @override
-  _i1.Table get table => Refeicao.t;
+  _i1.Table get table => Alimento.t;
 }
 
-class RefeicaoRepository {
-  const RefeicaoRepository._();
+class AlimentoRepository {
+  const AlimentoRepository._();
 
-  final attach = const RefeicaoAttachRepository._();
+  final attach = const AlimentoAttachRepository._();
 
-  final attachRow = const RefeicaoAttachRowRepository._();
+  final attachRow = const AlimentoAttachRowRepository._();
 
-  Future<List<Refeicao>> find(
+  final detach = const AlimentoDetachRepository._();
+
+  final detachRow = const AlimentoDetachRowRepository._();
+
+  Future<List<Alimento>> find(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RefeicaoTable>? where,
+    _i1.WhereExpressionBuilder<AlimentoTable>? where,
     int? limit,
     int? offset,
-    _i1.OrderByBuilder<RefeicaoTable>? orderBy,
+    _i1.OrderByBuilder<AlimentoTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RefeicaoTable>? orderByList,
+    _i1.OrderByListBuilder<AlimentoTable>? orderByList,
     _i1.Transaction? transaction,
-    RefeicaoInclude? include,
+    AlimentoInclude? include,
   }) async {
-    return session.db.find<Refeicao>(
-      where: where?.call(Refeicao.t),
-      orderBy: orderBy?.call(Refeicao.t),
-      orderByList: orderByList?.call(Refeicao.t),
+    return session.db.find<Alimento>(
+      where: where?.call(Alimento.t),
+      orderBy: orderBy?.call(Alimento.t),
+      orderByList: orderByList?.call(Alimento.t),
       orderDescending: orderDescending,
       limit: limit,
       offset: offset,
@@ -366,20 +324,20 @@ class RefeicaoRepository {
     );
   }
 
-  Future<Refeicao?> findFirstRow(
+  Future<Alimento?> findFirstRow(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RefeicaoTable>? where,
+    _i1.WhereExpressionBuilder<AlimentoTable>? where,
     int? offset,
-    _i1.OrderByBuilder<RefeicaoTable>? orderBy,
+    _i1.OrderByBuilder<AlimentoTable>? orderBy,
     bool orderDescending = false,
-    _i1.OrderByListBuilder<RefeicaoTable>? orderByList,
+    _i1.OrderByListBuilder<AlimentoTable>? orderByList,
     _i1.Transaction? transaction,
-    RefeicaoInclude? include,
+    AlimentoInclude? include,
   }) async {
-    return session.db.findFirstRow<Refeicao>(
-      where: where?.call(Refeicao.t),
-      orderBy: orderBy?.call(Refeicao.t),
-      orderByList: orderByList?.call(Refeicao.t),
+    return session.db.findFirstRow<Alimento>(
+      where: where?.call(Alimento.t),
+      orderBy: orderBy?.call(Alimento.t),
+      orderByList: orderByList?.call(Alimento.t),
       orderDescending: orderDescending,
       offset: offset,
       transaction: transaction ?? session.transaction,
@@ -387,181 +345,203 @@ class RefeicaoRepository {
     );
   }
 
-  Future<Refeicao?> findById(
+  Future<Alimento?> findById(
     _i1.Session session,
     int id, {
     _i1.Transaction? transaction,
-    RefeicaoInclude? include,
+    AlimentoInclude? include,
   }) async {
-    return session.db.findById<Refeicao>(
+    return session.db.findById<Alimento>(
       id,
       transaction: transaction ?? session.transaction,
       include: include,
     );
   }
 
-  Future<List<Refeicao>> insert(
+  Future<List<Alimento>> insert(
     _i1.Session session,
-    List<Refeicao> rows, {
+    List<Alimento> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insert<Refeicao>(
+    return session.db.insert<Alimento>(
       rows,
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<Refeicao> insertRow(
+  Future<Alimento> insertRow(
     _i1.Session session,
-    Refeicao row, {
+    Alimento row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.insertRow<Refeicao>(
+    return session.db.insertRow<Alimento>(
       row,
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<List<Refeicao>> update(
+  Future<List<Alimento>> update(
     _i1.Session session,
-    List<Refeicao> rows, {
-    _i1.ColumnSelections<RefeicaoTable>? columns,
+    List<Alimento> rows, {
+    _i1.ColumnSelections<AlimentoTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.update<Refeicao>(
+    return session.db.update<Alimento>(
       rows,
-      columns: columns?.call(Refeicao.t),
+      columns: columns?.call(Alimento.t),
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<Refeicao> updateRow(
+  Future<Alimento> updateRow(
     _i1.Session session,
-    Refeicao row, {
-    _i1.ColumnSelections<RefeicaoTable>? columns,
+    Alimento row, {
+    _i1.ColumnSelections<AlimentoTable>? columns,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.updateRow<Refeicao>(
+    return session.db.updateRow<Alimento>(
       row,
-      columns: columns?.call(Refeicao.t),
+      columns: columns?.call(Alimento.t),
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<List<Refeicao>> delete(
+  Future<List<Alimento>> delete(
     _i1.Session session,
-    List<Refeicao> rows, {
+    List<Alimento> rows, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.delete<Refeicao>(
+    return session.db.delete<Alimento>(
       rows,
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<Refeicao> deleteRow(
+  Future<Alimento> deleteRow(
     _i1.Session session,
-    Refeicao row, {
+    Alimento row, {
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteRow<Refeicao>(
+    return session.db.deleteRow<Alimento>(
       row,
       transaction: transaction ?? session.transaction,
     );
   }
 
-  Future<List<Refeicao>> deleteWhere(
+  Future<List<Alimento>> deleteWhere(
     _i1.Session session, {
-    required _i1.WhereExpressionBuilder<RefeicaoTable> where,
+    required _i1.WhereExpressionBuilder<AlimentoTable> where,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.deleteWhere<Refeicao>(
-      where: where(Refeicao.t),
+    return session.db.deleteWhere<Alimento>(
+      where: where(Alimento.t),
       transaction: transaction ?? session.transaction,
     );
   }
 
   Future<int> count(
     _i1.Session session, {
-    _i1.WhereExpressionBuilder<RefeicaoTable>? where,
+    _i1.WhereExpressionBuilder<AlimentoTable>? where,
     int? limit,
     _i1.Transaction? transaction,
   }) async {
-    return session.db.count<Refeicao>(
-      where: where?.call(Refeicao.t),
+    return session.db.count<Alimento>(
+      where: where?.call(Alimento.t),
       limit: limit,
       transaction: transaction ?? session.transaction,
     );
   }
 }
 
-class RefeicaoAttachRepository {
-  const RefeicaoAttachRepository._();
+class AlimentoAttachRepository {
+  const AlimentoAttachRepository._();
 
   Future<void> opcoesAlimentos(
     _i1.Session session,
-    Refeicao refeicao,
+    Alimento alimento,
     List<_i2.OpcaoAlimento> opcaoAlimento, {
     _i1.Transaction? transaction,
   }) async {
     if (opcaoAlimento.any((e) => e.id == null)) {
       throw ArgumentError.notNull('opcaoAlimento.id');
     }
-    if (refeicao.id == null) {
-      throw ArgumentError.notNull('refeicao.id');
+    if (alimento.id == null) {
+      throw ArgumentError.notNull('alimento.id');
     }
 
     var $opcaoAlimento =
-        opcaoAlimento.map((e) => e.copyWith(refeicaoId: refeicao.id)).toList();
+        opcaoAlimento.map((e) => e.copyWith(alimentoId: alimento.id)).toList();
     await session.db.update<_i2.OpcaoAlimento>(
       $opcaoAlimento,
-      columns: [_i2.OpcaoAlimento.t.refeicaoId],
+      columns: [_i2.OpcaoAlimento.t.alimentoId],
       transaction: transaction ?? session.transaction,
     );
   }
 }
 
-class RefeicaoAttachRowRepository {
-  const RefeicaoAttachRowRepository._();
-
-  Future<void> dieta(
-    _i1.Session session,
-    Refeicao refeicao,
-    _i2.Dieta dieta, {
-    _i1.Transaction? transaction,
-  }) async {
-    if (refeicao.id == null) {
-      throw ArgumentError.notNull('refeicao.id');
-    }
-    if (dieta.id == null) {
-      throw ArgumentError.notNull('dieta.id');
-    }
-
-    var $refeicao = refeicao.copyWith(dietaId: dieta.id);
-    await session.db.updateRow<Refeicao>(
-      $refeicao,
-      columns: [Refeicao.t.dietaId],
-      transaction: transaction ?? session.transaction,
-    );
-  }
+class AlimentoAttachRowRepository {
+  const AlimentoAttachRowRepository._();
 
   Future<void> opcoesAlimentos(
     _i1.Session session,
-    Refeicao refeicao,
+    Alimento alimento,
     _i2.OpcaoAlimento opcaoAlimento, {
     _i1.Transaction? transaction,
   }) async {
     if (opcaoAlimento.id == null) {
       throw ArgumentError.notNull('opcaoAlimento.id');
     }
-    if (refeicao.id == null) {
-      throw ArgumentError.notNull('refeicao.id');
+    if (alimento.id == null) {
+      throw ArgumentError.notNull('alimento.id');
     }
 
-    var $opcaoAlimento = opcaoAlimento.copyWith(refeicaoId: refeicao.id);
+    var $opcaoAlimento = opcaoAlimento.copyWith(alimentoId: alimento.id);
     await session.db.updateRow<_i2.OpcaoAlimento>(
       $opcaoAlimento,
-      columns: [_i2.OpcaoAlimento.t.refeicaoId],
+      columns: [_i2.OpcaoAlimento.t.alimentoId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class AlimentoDetachRepository {
+  const AlimentoDetachRepository._();
+
+  Future<void> opcoesAlimentos(
+    _i1.Session session,
+    List<_i2.OpcaoAlimento> opcaoAlimento, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (opcaoAlimento.any((e) => e.id == null)) {
+      throw ArgumentError.notNull('opcaoAlimento.id');
+    }
+
+    var $opcaoAlimento =
+        opcaoAlimento.map((e) => e.copyWith(alimentoId: null)).toList();
+    await session.db.update<_i2.OpcaoAlimento>(
+      $opcaoAlimento,
+      columns: [_i2.OpcaoAlimento.t.alimentoId],
+      transaction: transaction ?? session.transaction,
+    );
+  }
+}
+
+class AlimentoDetachRowRepository {
+  const AlimentoDetachRowRepository._();
+
+  Future<void> opcoesAlimentos(
+    _i1.Session session,
+    _i2.OpcaoAlimento opcaoAlimento, {
+    _i1.Transaction? transaction,
+  }) async {
+    if (opcaoAlimento.id == null) {
+      throw ArgumentError.notNull('opcaoAlimento.id');
+    }
+
+    var $opcaoAlimento = opcaoAlimento.copyWith(alimentoId: null);
+    await session.db.updateRow<_i2.OpcaoAlimento>(
+      $opcaoAlimento,
+      columns: [_i2.OpcaoAlimento.t.alimentoId],
       transaction: transaction ?? session.transaction,
     );
   }

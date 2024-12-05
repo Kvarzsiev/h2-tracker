@@ -7,10 +7,10 @@
 # your yaml-files.
 
 # Name of the class to generate.
-class: Refeicao
+class: Alimento
 
 # Add the table key, if this class represents a row in the database.
-table: refeicao
+table: alimento
 
 # The fields (and columns if connected to the database) of the class. Supported types are
 # `bool`, `int`, `double`, `String`, `UuidValue`, `Duration`, `DateTime`, `ByteData`,
@@ -18,8 +18,8 @@ table: refeicao
 # You can also add lists of objects and types have support for null safety.
 # Eg. `List<int>?` or `List<MyOtherClass?>`.
 fields:
-  calorias: int
-  proteinas: int
+  tipo: String
+  caloriasGrama: int
+  proteinasGrama: int
   descricao: String
-  dieta: Dieta?, relation(name=dieta_refeicoes, onDelete=Cascade)
-  opcoesAlimentos: List<OpcaoAlimento>?, relation(name=refeicao_opcoes_alimentos)
+  opcoesAlimentos: List<OpcaoAlimento>?, relation(name=alimento_opcoes_alimentos)

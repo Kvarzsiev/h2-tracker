@@ -1,3 +1,5 @@
+alimento:
+  - insertDefault:
 dieta:
   - insert:
   - activateDiet:
