@@ -46,6 +46,8 @@ class TrainingHistoryViewState extends State<TrainingHistoryView> {
   final TextEditingController _typeAheadController = TextEditingController();
 
   Future<void> loadData() async {
+    _userState.refresh();
+
     final historico =
         await client.treinoHistorico.readUserTrainHistory(_userState.user!.id!);
 

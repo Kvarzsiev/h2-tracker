@@ -10,6 +10,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:serverpod_client/serverpod_client.dart' as _i1;
+import 'protocol.dart' as _i2;
 
 abstract class Exercicio implements _i1.SerializableModel {
   Exercicio._({
@@ -18,6 +19,7 @@ abstract class Exercicio implements _i1.SerializableModel {
     required this.grupoMuscular,
     required this.descricao,
     required this.imagem,
+    this.treinoExercicios,
   });
 
   factory Exercicio({
@@ -26,6 +28,7 @@ abstract class Exercicio implements _i1.SerializableModel {
     required String grupoMuscular,
     required String descricao,
     required String imagem,
+    List<_i2.TreinoExercicio>? treinoExercicios,
   }) = _ExercicioImpl;
 
   factory Exercicio.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -35,6 +38,10 @@ abstract class Exercicio implements _i1.SerializableModel {
       grupoMuscular: jsonSerialization['grupoMuscular'] as String,
       descricao: jsonSerialization['descricao'] as String,
       imagem: jsonSerialization['imagem'] as String,
+      treinoExercicios: (jsonSerialization['treinoExercicios'] as List?)
+          ?.map(
+              (e) => _i2.TreinoExercicio.fromJson((e as Map<String, dynamic>)))
+          .toList(),
     );
   }
 
@@ -51,12 +58,15 @@ abstract class Exercicio implements _i1.SerializableModel {
 
   String imagem;
 
+  List<_i2.TreinoExercicio>? treinoExercicios;
+
   Exercicio copyWith({
     int? id,
     String? nome,
     String? grupoMuscular,
     String? descricao,
     String? imagem,
+    List<_i2.TreinoExercicio>? treinoExercicios,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -66,6 +76,9 @@ abstract class Exercicio implements _i1.SerializableModel {
       'grupoMuscular': grupoMuscular,
       'descricao': descricao,
       'imagem': imagem,
+      if (treinoExercicios != null)
+        'treinoExercicios':
+            treinoExercicios?.toJson(valueToJson: (v) => v.toJson()),
     };
   }
 
@@ -84,12 +97,14 @@ class _ExercicioImpl extends Exercicio {
     required String grupoMuscular,
     required String descricao,
     required String imagem,
+    List<_i2.TreinoExercicio>? treinoExercicios,
   }) : super._(
           id: id,
           nome: nome,
           grupoMuscular: grupoMuscular,
           descricao: descricao,
           imagem: imagem,
+          treinoExercicios: treinoExercicios,
         );
 
   @override
@@ -99,6 +114,7 @@ class _ExercicioImpl extends Exercicio {
     String? grupoMuscular,
     String? descricao,
     String? imagem,
+    Object? treinoExercicios = _Undefined,
   }) {
     return Exercicio(
       id: id is int? ? id : this.id,
@@ -106,6 +122,9 @@ class _ExercicioImpl extends Exercicio {
       grupoMuscular: grupoMuscular ?? this.grupoMuscular,
       descricao: descricao ?? this.descricao,
       imagem: imagem ?? this.imagem,
+      treinoExercicios: treinoExercicios is List<_i2.TreinoExercicio>?
+          ? treinoExercicios
+          : this.treinoExercicios?.map((e0) => e0.copyWith()).toList(),
     );
   }
 }

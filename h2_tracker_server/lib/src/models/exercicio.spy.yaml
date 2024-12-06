@@ -22,3 +22,4 @@ fields:
   grupoMuscular: String
   descricao: String
   imagem: String
+  treinoExercicios: List<TreinoExercicio>?, relation(name=treino_exercicio_exercicio)

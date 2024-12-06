@@ -135,6 +135,13 @@ class Protocol extends _i1.SerializationManager {
           ? (data as List).map((e) => deserialize<_i13.Refeicao>(e)).toList()
           : null) as dynamic;
     }
+    if (t == _i1.getType<List<_i13.TreinoExercicio>?>()) {
+      return (data != null
+          ? (data as List)
+              .map((e) => deserialize<_i13.TreinoExercicio>(e))
+              .toList()
+          : null) as dynamic;
+    }
     if (t == _i1.getType<List<_i13.Peso>?>()) {
       return (data != null
           ? (data as List).map((e) => deserialize<_i13.Peso>(e)).toList()
