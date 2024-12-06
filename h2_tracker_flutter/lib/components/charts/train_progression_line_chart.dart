@@ -76,7 +76,6 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
               await _loadData();
             },
             suggestionsCallback: (searchVal) {
-              print('SEARCHVAL ${searchVal}');
               return _exercises
                   .where(
                     (element) => element.nome.toLowerCase().contains(
@@ -171,7 +170,6 @@ class _TrainProgressionLineChartState extends State<TrainProgressionLineChart> {
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            interval: 1,
             getTitlesWidget: leftTitleWidgets,
             reservedSize: 42,
           ),
