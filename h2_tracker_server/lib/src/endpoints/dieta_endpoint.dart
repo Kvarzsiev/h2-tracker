@@ -3,19 +3,25 @@ import 'package:h2_tracker_server/src/generated/protocol.dart';
 import 'package:serverpod/serverpod.dart';
 
 class DietaEndpoint extends Endpoint {
-  int _taxaMetabolicaBasalGerica(
-      double peso, double altura, int idade, String sexo) {
+  int _taxaMetabolicaBasal(double peso, double altura, int idade, String sexo) {
+    final lightActivityMultiplier = 1.375;
+    double metabolicRate;
     if (sexo == 'M') {
-      return (88.36 + (13.4 * peso) + (4.8 * altura) - (5.7 * idade)).round();
+      final base = (88.36 + (13.4 * peso) + (4.8 * altura) - (5.7 * idade));
+      print(base);
+      metabolicRate = base * lightActivityMultiplier;
+      print(metabolicRate);
     } else {
-      return (447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * idade)).round();
+      final base = (447.6 + (9.2 * peso) + (3.1 * altura) - (4.3 * idade));
+      metabolicRate = base * lightActivityMultiplier;
     }
+    return metabolicRate.round();
   }
 
   Future<void> insert(Session session, Dieta dieta, double peso, double altura,
       int idade, String sexo) async {
     final taxaMetabolicaBasalGenerica =
-        _taxaMetabolicaBasalGerica(peso, altura, idade, sexo);
+        _taxaMetabolicaBasal(peso, altura, idade, sexo);
 
     switch (dieta.objetivo) {
       case 'PERDA_DE_PESO':
@@ -77,7 +83,7 @@ class DietaEndpoint extends Endpoint {
   Future<void> update(Session session, Dieta dieta, double peso, double altura,
       int idade, String sexo) async {
     final taxaMetabolicaBasalGenerica =
-        _taxaMetabolicaBasalGerica(peso, altura, idade, sexo);
+        _taxaMetabolicaBasal(peso, altura, idade, sexo);
 
     switch (dieta.objetivo) {
       case 'PERDA_DE_PESO':

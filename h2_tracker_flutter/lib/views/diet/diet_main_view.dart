@@ -207,45 +207,14 @@ class DietMainViewState extends State<DietMainView> {
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(24),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Opções Proteína',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelMedium!
-                                            .copyWith(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600),
-                                      ),
-                                      Spacer(),
-                                      ...refeicao.value.opcoesAlimentos!
-                                          .where((el) =>
-                                              el.alimento!.tipo == 'Proteína')
-                                          .map(
-                                            (opcao) => Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '${opcao.alimento!.descricao} - ${opcao.quantidade}g',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium!
-                                                    .copyWith(
-                                                      fontSize: 16,
-                                                    ),
-                                              ),
-                                            ),
-                                          ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
+                            _foodOptionCard(context,
+                                refeicao.value.opcoesAlimentos!, 'Proteína'),
+                            _foodOptionCard(context,
+                                refeicao.value.opcoesAlimentos!, 'Carboidrato'),
+                            _foodOptionCard(
+                                context,
+                                refeicao.value.opcoesAlimentos!,
+                                'Acompanhamento'),
                           ],
                         ),
                       ),
@@ -271,6 +240,49 @@ class DietMainViewState extends State<DietMainView> {
           ],
         );
       },
+    );
+  }
+
+  Expanded _foodOptionCard(
+    BuildContext context,
+    List<OpcaoAlimento> opcoesAlimentos,
+    String tipoAlimento,
+  ) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Text(
+                  'Opções $tipoAlimento',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+                const Spacer(),
+                ...opcoesAlimentos
+                    .where((el) => el.alimento!.tipo == tipoAlimento)
+                    .map(
+                      (opcao) => Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${opcao.alimento!.descricao} - ${opcao.quantidade}g',
+                          style:
+                              Theme.of(context).textTheme.labelMedium!.copyWith(
+                                    fontSize: 16,
+                                  ),
+                        ),
+                      ),
+                    ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
