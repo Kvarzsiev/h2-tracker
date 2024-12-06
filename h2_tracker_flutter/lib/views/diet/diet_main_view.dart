@@ -34,6 +34,7 @@ class DietMainViewState extends State<DietMainView> {
   }
 
   Future<void> loadData() async {
+    await _userState.refresh();
     final user = _userState.user;
 
     setState(() {
